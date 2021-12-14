@@ -7,20 +7,15 @@ public class ConsoleAppMain
 {
 	public static void main(String[] args) throws InterruptedException
 	{
-		ConsoleExecutor.startConsoleExecutor();
+		ConsoleExecutor.instance().startConsoleExecutor();
 		
 		List<Class<? extends ConsoleCommandExecutor>> chain_executors = new ArrayList<Class<? extends ConsoleCommandExecutor>>();
 		chain_executors.add(AnyCommandExecutor.class);
 		chain_executors.add(ExitCommandExecutor.class);
 		
-		ConsoleExecutor.setCommandExecutors(chain_executors);
+		ConsoleExecutor.instance().setExecutorChain(chain_executors);
 		
 		System.out.println("Already");
-		while(!Thread.currentThread().isInterrupted())
-		{
-			
-		}
-		
-		ConsoleExecutor.stopConsoleExecutor();
+		ConsoleExecutor.instance().joinConsoleExecutor();		
 	}
 }
