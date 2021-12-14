@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>410</x>
+      <y>120</y>
+      <w>340</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>User
+--
+  Follow(User);
+
+--
+  username;
+  tags;
+  </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>860</x>
+      <y>180</y>
+      <w>240</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>Post
+--
+  content;
+  user;
+  timestamp;
+  comments;
+  likes;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>490</x>
+      <y>470</y>
+      <w>270</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>/LoginClientAPI/
+--
+  login(username, password);
+  register(username, password, tags);
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>790</x>
+      <y>470</y>
+      <w>340</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>/ClientAPI/
+--
+  listUsers();
+  followUser();
+  unfollowUser();
+  post(text);
+  rewin(post);
+  getFeed();
+  showPost();
+  likePost();
+  unlikePost();
+  commentPost();
+  getWallet();
+  getBitcoins();
+  logout(username); //wtf username!
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>180</x>
+      <y>470</y>
+      <w>290</w>
+      <h>320</h>
+    </coordinates>
+    <panel_attributes>CONSOLE COMMANDS
+--
+  register &lt;username&gt; &lt;password&gt; &lt;tag[s]&gt;
+  login &lt;username&gt; &lt;password&gt;
+  logout
+  list users
+  list followers
+  list following
+  follow &lt;username&gt;
+  unfollow &lt;username&gt;
+  blog
+  post &lt;title&gt; &lt;content&gt;
+  show feed
+  show post &lt;id&gt;
+  delete &lt;id&gt;
+  rewin &lt;id&gt;
+  rate &lt;id&gt; &lt;vote&gt;[+1, -1]
+  comment &lt;id&gt; &lt;comment&gt;
+  wallet
+  wallet btc</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

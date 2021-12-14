@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>50</x>
+      <y>320</y>
+      <w>290</w>
+      <h>320</h>
+    </coordinates>
+    <panel_attributes>lt=.
+CONSOLE COMMANDS
+--
+  register &lt;username&gt; &lt;password&gt; &lt;tag[s]&gt;
+  login &lt;username&gt; &lt;password&gt;
+  logout
+  list users
+  list followers
+  list following
+  follow &lt;username&gt;
+  unfollow &lt;username&gt;
+  blog
+  post &lt;title&gt; &lt;content&gt;
+  show feed
+  show post &lt;id&gt;
+  delete &lt;id&gt;
+  rewin &lt;id&gt;
+  rate &lt;id&gt; &lt;vote&gt;[+1, -1]
+  comment &lt;id&gt; &lt;comment&gt;
+  wallet
+  wallet btc</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>730</x>
+      <y>640</y>
+      <w>130</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>RegisterExecutor</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>660</x>
+      <y>440</y>
+      <w>310</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>EmptyConsoleExecutor
+(Chain of Responsibility)
+--
+  constructor(ConsoleExecutorInterface next);
+  
+  String executeCommand(String);
+
+# boolean canExecute(String);
+# String execute(String);
+--
+- next_executor;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>550</x>
+      <y>460</y>
+      <w>130</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-
+next_executor</panel_attributes>
+    <additional_attributes>10.0;20.0;110.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1040</x>
+      <y>510</y>
+      <w>310</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>if canExecute()
+  then return execute()
+else if next_executor is valid
+  then next_executor.executeCommand()
+else
+  throw cannotExecuteException()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>870</x>
+      <y>510</y>
+      <w>190</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=..</panel_attributes>
+    <additional_attributes>10.0;10.0;170.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>600</y>
+      <w>30</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;210.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>640</y>
+      <w>70</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>360</x>
+      <y>320</y>
+      <w>230</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>ConsoleExecutor
+(Singleton)
+--
+  startConsoleExecutorThread();
+  stopConsoleExecutorThread();
+--
+  static instance();</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1040</x>
+      <y>470</y>
+      <w>220</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>next_executor = next;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>940</x>
+      <y>480</y>
+      <w>120</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=..</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>550</x>
+      <y>470</y>
+      <w>130</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>110.0;90.0;10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>730</x>
+      <y>680</y>
+      <w>110</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>LoginExecutor</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>680</y>
+      <w>70</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>580</x>
+      <y>340</y>
+      <w>130</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>110.0;100.0;110.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>730</x>
+      <y>720</y>
+      <w>110</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>LogoutExecutor</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>720</y>
+      <w>70</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>730</x>
+      <y>800</y>
+      <w>140</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>WalletBtcExecutor</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>800</y>
+      <w>70</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>770</x>
+      <y>760</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>...
+
+fontsize=20</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
