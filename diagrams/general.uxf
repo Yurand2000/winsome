@@ -4,8 +4,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>410</x>
-      <y>120</y>
+      <x>360</x>
+      <y>20</y>
       <w>340</w>
       <h>250</h>
     </coordinates>
@@ -22,8 +22,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>860</x>
-      <y>180</y>
+      <x>810</x>
+      <y>80</y>
       <w>240</w>
       <h>150</h>
     </coordinates>
@@ -39,8 +39,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>490</x>
-      <y>470</y>
+      <x>440</x>
+      <y>370</y>
       <w>270</w>
       <h>120</h>
     </coordinates>
@@ -54,34 +54,34 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>790</x>
-      <y>470</y>
+      <x>740</x>
+      <y>370</y>
       <w>340</w>
       <h>250</h>
     </coordinates>
     <panel_attributes>/ClientAPI/
 --
   listUsers();
-  followUser();
-  unfollowUser();
-  post(text);
+  followUser(userid);
+  unfollowUser(userid);
+  post(text, content);
   rewin(post);
   getFeed();
-  showPost();
-  likePost();
-  unlikePost();
-  commentPost();
+  showPost(postid);
+  likePost(postid);
+  unlikePost(postid);
+  commentPost(postid, comment);
   getWallet();
   getBitcoins();
-  logout(username); //wtf username!
+  logout();
 </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>180</x>
-      <y>470</y>
+      <x>130</x>
+      <y>370</y>
       <w>290</w>
       <h>320</h>
     </coordinates>
