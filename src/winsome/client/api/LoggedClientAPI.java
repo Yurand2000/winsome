@@ -4,7 +4,6 @@ import java.util.List;
 
 public interface LoggedClientAPI
 {
-	void logout();
 	List<User> listUsers();
 	List<User> listFollowers();
 	List<User> listFollowing();
@@ -16,5 +15,8 @@ public interface LoggedClientAPI
 	Post showPost(Integer postId);
 	void deletePost(Integer postId);
 	void rewinPost(Integer postId);
-	void ratePost(Integer postId, Post.Rating rating);
+	void ratePost(Integer postId, boolean rating);
+	void addComment(Integer postId, String comment);
+	Wallet getWallet();
+	Integer getWalletInBitcoin();
 }

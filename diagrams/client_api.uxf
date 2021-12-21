@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>170</x>
+      <y>170</y>
+      <w>250</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>/ClientAPI/
+--
+  register(username, password, tags);
+  login(username, password);
+  logout();
+
+  getLoggedAPI();
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>170</x>
+      <y>330</y>
+      <w>250</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>/LoggedClientAPI/
+--
+  listUsers();
+  listFollowed();
+  listFollowing();
+  followUser(userid);
+  unfollowUser(userid);
+  viewBlog();
+  createPost(title, content);
+  showFeed();
+  showPost(postid);
+  deletePost(postid);
+  rewinPost(postid);
+  ratePost(postid, positive);
+  addComment(postid, comment);
+  getWallet();
+  getWalletInBitcoin();
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>290</x>
+      <y>280</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>470</x>
+      <y>400</y>
+      <w>120</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>User
+--
+  username;
+  tags;
+
+{innerclass
+Tag
+innerclass}
+  </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>610</x>
+      <y>400</y>
+      <w>160</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>Post
+--
+  postId;
+  author;
+  title;
+  content;
+  positive_ratings;
+  negative_ratings;
+  comments;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>910</x>
+      <y>400</y>
+      <w>140</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>Wallet
+--
+  current_total;
+  transactions
+
+{innerclass
+Transaction
+--
+  timestamp;
+  amount;
+innerclass}</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>790</x>
+      <y>400</y>
+      <w>100</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>PostShort
+--
+  postId;
+  author;
+  title;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>410</x>
+      <y>360</y>
+      <w>590</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>570.0;40.0;570.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>520</x>
+      <y>360</y>
+      <w>30</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>360</y>
+      <w>30</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>830</x>
+      <y>360</y>
+      <w>30</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
