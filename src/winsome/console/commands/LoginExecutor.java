@@ -6,13 +6,13 @@ import winsome.client.Connection;
 import winsome.console.CannotExecuteException;
 import winsome.console.ConsoleCommandExecutor;
 
-public class LoginCommandExecutor extends ConsoleCommandExecutor
+public class LoginExecutor extends ConsoleCommandExecutor
 {
 	//Regular expression: login {username} {password}
-	private static final String regex_string = "^(?:login) (\\w+) (\\w+)$";
+	private static final String regex_string = "^(?:login) ([^\\s]+) ([^\\s]+)$";
 	private final Pattern regex;
 	
-	public LoginCommandExecutor(ConsoleCommandExecutor next)
+	public LoginExecutor(ConsoleCommandExecutor next)
 	{
 		super(next);
 		regex = Pattern.compile(regex_string);

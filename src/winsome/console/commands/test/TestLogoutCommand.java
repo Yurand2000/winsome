@@ -7,17 +7,17 @@ import org.junit.jupiter.api.Test;
 import winsome.client.Connection;
 import winsome.client.api.exceptions.NotLoggedInException;
 import winsome.console.CannotExecuteException;
-import winsome.console.commands.LogoutCommandExecutor;
+import winsome.console.commands.LogoutExecutor;
 
 class TestLogoutCommand
 {
-	LogoutCommandExecutor command;
+	LogoutExecutor command;
 	TestClientAPI client_api;
 
 	@BeforeEach
 	void setup() throws Exception
 	{
-		command = new LogoutCommandExecutor(null);
+		command = new LogoutExecutor(null);
 		client_api = new TestClientAPI();
 		
 		//sets the api via reflex

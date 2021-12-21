@@ -17,4 +17,10 @@ public class PostShort
 	{
 		this(post.postId, post.author, post.title);
 	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("ID: %8d; Author: %s; Title: %s", postId.intValue(), author, title);
+	}
 }

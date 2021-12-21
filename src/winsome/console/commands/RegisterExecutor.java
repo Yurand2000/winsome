@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.ArrayList;
 
-public class RegisterCommandExecutor extends ConsoleCommandExecutor
+public class RegisterExecutor extends ConsoleCommandExecutor
 {
 	//Regular expression: register {username} {password} {tag} {tag}[0-4]
 	private static final String regex_string = 
@@ -17,7 +17,7 @@ public class RegisterCommandExecutor extends ConsoleCommandExecutor
 	private final Pattern regex;
 	private final Pattern charset_regex;
 	
-	public RegisterCommandExecutor(ConsoleCommandExecutor next)
+	public RegisterExecutor(ConsoleCommandExecutor next)
 	{
 		super(next);
 		regex = Pattern.compile(regex_string);

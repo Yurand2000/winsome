@@ -1,7 +1,5 @@
 package winsome.client.api;
 
-import static java.util.Arrays.copyOf;
-
 public class User
 {
 	public final String username;
@@ -10,7 +8,11 @@ public class User
 	public User(String username, Tag[] tags)
 	{
 		this.username = username;
-		this.tags = copyOf(tags, tags.length);
+		this.tags = new Tag[tags.length];
+		for(int i = 0; i < tags.length; i++)
+		{
+			this.tags[i] = new Tag(tags[i]);
+		}
 	}
 	
 	public static class Tag
@@ -20,6 +22,11 @@ public class User
 		public Tag(String tag)
 		{
 			this.tag = tag;
+		}
+		
+		public Tag(Tag tag)
+		{
+			this(tag.tag);
 		}
 		
 		@Override

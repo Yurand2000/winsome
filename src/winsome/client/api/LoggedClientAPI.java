@@ -10,11 +10,11 @@ public interface LoggedClientAPI
 	void followUser(String username);
 	void unfollowUser(String username);
 	List<PostShort> viewBlog();
-	void createPost(String title, String content);
+	Integer createPost(String title, String content);
 	List<PostShort> showFeed();
 	Post showPost(Integer postId);
 	void deletePost(Integer postId);
-	void rewinPost(Integer postId);
+	Integer rewinPost(Integer postId);
 	void ratePost(Integer postId, boolean rating);
 	void addComment(Integer postId, String comment);
 	Wallet getWallet();

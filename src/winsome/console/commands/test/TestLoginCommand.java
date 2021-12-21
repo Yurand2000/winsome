@@ -7,17 +7,17 @@ import org.junit.jupiter.api.Test;
 import winsome.client.Connection;
 import winsome.client.api.exceptions.*;
 import winsome.console.CannotExecuteException;
-import winsome.console.commands.LoginCommandExecutor;
+import winsome.console.commands.LoginExecutor;
 
 class TestLoginCommand
 {
-	LoginCommandExecutor command;
+	LoginExecutor command;
 	TestClientAPI client_api;
 
 	@BeforeEach
 	void setup() throws Exception
 	{
-		command = new LoginCommandExecutor(null);
+		command = new LoginExecutor(null);
 		client_api = new TestClientAPI();
 		
 		//sets the api via reflex

@@ -5,20 +5,20 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import java.lang.reflect.Field;
 import winsome.console.CannotExecuteException;
-import winsome.console.commands.RegisterCommandExecutor;
+import winsome.console.commands.RegisterExecutor;
 import winsome.client.Connection;
 import winsome.client.api.User;
 import winsome.client.api.exceptions.UsernameAlreadyTakenException;
 
 class TestRegisterCommand
 {
-	RegisterCommandExecutor command;
+	RegisterExecutor command;
 	TestClientAPI client_api;
 
 	@BeforeEach
 	void setup() throws Exception
 	{
-		command = new RegisterCommandExecutor(null);
+		command = new RegisterExecutor(null);
 		client_api = new TestClientAPI();
 		
 		//sets the api via reflex

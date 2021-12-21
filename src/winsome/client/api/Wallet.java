@@ -13,7 +13,12 @@ public class Wallet
 	public Wallet(Double current_total, List<Transaction> transactions)
 	{
 		this.current_total = current_total;
-		this.transactions = unmodifiableList(new ArrayList<Transaction>(transactions));
+		List<Transaction> copy_transactions = new ArrayList<Transaction>(transactions.size());
+		for(Transaction t : transactions)
+		{
+			copy_transactions.add(new Transaction(t));
+		}
+		this.transactions = unmodifiableList(copy_transactions);
 	}
 	
 	@Override
@@ -42,6 +47,11 @@ public class Wallet
 		{
 			this.timestamp = timestamp;
 			this.amount = amount;
+		}
+		
+		public Transaction(Transaction transaction)
+		{
+			this(transaction.timestamp, transaction.amount);
 		}
 		
 		@Override
