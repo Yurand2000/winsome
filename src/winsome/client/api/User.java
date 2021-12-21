@@ -13,13 +13,22 @@ public class User
 		this.tags = copyOf(tags, tags.length);
 	}
 	
-	public class Tag
+	public static class Tag
 	{
 		public final String tag;
 		
 		public Tag(String tag)
 		{
 			this.tag = tag;
+		}
+		
+		@Override
+		public boolean equals(Object o)
+		{
+			return
+				o != null &&
+				o.getClass() == this.getClass() &&
+				((Tag)o).tag.equals(tag);
 		}
 	}
 }

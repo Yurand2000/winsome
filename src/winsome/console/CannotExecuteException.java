@@ -4,8 +4,8 @@ public class CannotExecuteException extends RuntimeException
 {
 	private static final long serialVersionUID = 1L;
 	
-	public CannotExecuteException()
+	public CannotExecuteException(String error)
 	{
-		super("Cannot execute: Unknown command.");
+		super("Cannot execute: " + error);
 	}
 }

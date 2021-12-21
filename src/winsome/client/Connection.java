@@ -16,10 +16,5 @@ public class Connection
 		return client_api.getLoggedAPI();
 	}
 	
-	static void setClientAPI(ClientAPI api)
-	{
-		client_api = api;
-	}
-	
 	private Connection() { }
 }

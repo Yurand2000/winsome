@@ -21,7 +21,7 @@ public class ConsoleCommandExecutor
 		}
 		else
 		{
-			throw new CannotExecuteException();
+			throw new CannotExecuteException("Unknown command.");
 		}
 	}
 	
