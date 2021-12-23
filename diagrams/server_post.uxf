@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>530</x>
+      <y>140</y>
+      <w>260</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>/GenericPost/
+--
+  postID;
+  rewins[];
+  postLikes;
+  list&lt;postComment&gt;;
+  rewardState;
+
+--
+  getId();
+  virtual getContent();
+  addLike(username);
+  addDislike(username);
+  addComment(username, comment);
+  deletePost();
+  </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>530</x>
+      <y>450</y>
+      <w>120</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>RewinPost
+--
+  OriginalPostId;
+  Author;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>670</x>
+      <y>420</y>
+      <w>120</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>ContentPost
+--
+  Author;
+  Title;
+  Content;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>850</x>
+      <y>180</y>
+      <w>210</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>PostLikes
+--
+  positive_likes;
+  negative_likes;
+  set&lt;username&gt; who_liked;
+
+--
+  AddLike(username);
+  AddDislike(username);</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>850</x>
+      <y>340</y>
+      <w>100</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>PostComment
+--
+  username;
+  comment;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>150</x>
+      <y>410</y>
+      <w>280</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>PostFactory
+--
+  MakeNewPost(title, author, content);
+  MakeRewinPost(postid, author);</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>720</x>
+      <y>370</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>580</x>
+      <y>370</y>
+      <w>30</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>780</x>
+      <y>210</y>
+      <w>90</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>780</x>
+      <y>340</y>
+      <w>90</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>420</x>
+      <y>420</y>
+      <w>270</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>250.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>420</x>
+      <y>450</y>
+      <w>130</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>110.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>310</x>
+      <y>560</y>
+      <w>120</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>User
+(see server_user)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>360</x>
+      <y>510</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>150</x>
+      <y>140</y>
+      <w>330</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>RewardState
+--
+  map&lt;username, int&gt; commentCountPerUser;
+
+  new_positive_likes;
+  new_negative_likes;
+  set&lt;username&gt; recent_commentors;
+  iteration_count;
+
+--
+  addLike();
+  addDislike();
+  addComment(username);
+  calcLastReward();</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>470</x>
+      <y>230</y>
+      <w>80</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
+  </element>
+</diagram>

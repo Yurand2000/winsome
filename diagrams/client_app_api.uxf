@@ -40,7 +40,7 @@
   showPost(postid);
   deletePost(postid);
   rewinPost(postid);
-  ratePost(postid, positive);
+  ratePost(postid, liked);
   addComment(postid, comment);
   getWallet();
   getWalletInBitcoin();
