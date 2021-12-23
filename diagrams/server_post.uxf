@@ -5,25 +5,27 @@
     <id>UMLClass</id>
     <coordinates>
       <x>530</x>
-      <y>140</y>
+      <y>120</y>
       <w>260</w>
-      <h>240</h>
+      <h>270</h>
     </coordinates>
     <panel_attributes>/GenericPost/
 --
   postID;
   rewins[];
   postLikes;
-  list&lt;postComment&gt;;
+  postComments;
   rewardState;
 
 --
   getId();
+  getRewins();
   virtual getContent();
   addLike(username);
   addDislike(username);
   addComment(username, comment);
-  deletePost();
+  addRewin(postId);
+  removeRewin(postId);
   </panel_attributes>
     <additional_attributes/>
   </element>
@@ -31,7 +33,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>530</x>
-      <y>450</y>
+      <y>460</y>
       <w>120</w>
       <h>70</h>
     </coordinates>
@@ -45,7 +47,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>670</x>
-      <y>420</y>
+      <y>430</y>
       <w>120</w>
       <h>100</h>
     </coordinates>
@@ -62,7 +64,7 @@
       <x>850</x>
       <y>180</y>
       <w>210</w>
-      <h>140</h>
+      <h>150</h>
     </coordinates>
     <panel_attributes>PostLikes
 --
@@ -72,28 +74,37 @@
 
 --
   AddLike(username);
-  AddDislike(username);</panel_attributes>
+  AddDislike(username);
+  CanRate(username);</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>850</x>
-      <y>340</y>
-      <w>100</w>
-      <h>80</h>
+      <y>350</y>
+      <w>250</w>
+      <h>150</h>
     </coordinates>
-    <panel_attributes>PostComment
+    <panel_attributes>PostComments
+--
+  list&lt;Comment&gt; comments;
+--
+  addComment(username, comment);
+
+{innerclass
+Comment
 --
   username;
-  comment;</panel_attributes>
+  comment;
+innerclass}</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>150</x>
-      <y>410</y>
+      <y>420</y>
       <w>280</w>
       <h>110</h>
     </coordinates>
@@ -107,7 +118,7 @@
     <id>Relation</id>
     <coordinates>
       <x>720</x>
-      <y>370</y>
+      <y>380</y>
       <w>30</w>
       <h>70</h>
     </coordinates>
@@ -118,7 +129,7 @@
     <id>Relation</id>
     <coordinates>
       <x>580</x>
-      <y>370</y>
+      <y>380</y>
       <w>30</w>
       <h>100</h>
     </coordinates>
@@ -129,7 +140,7 @@
     <id>Relation</id>
     <coordinates>
       <x>780</x>
-      <y>210</y>
+      <y>220</y>
       <w>90</w>
       <h>30</h>
     </coordinates>
@@ -140,7 +151,7 @@
     <id>Relation</id>
     <coordinates>
       <x>780</x>
-      <y>340</y>
+      <y>350</y>
       <w>90</w>
       <h>30</h>
     </coordinates>
@@ -151,7 +162,7 @@
     <id>Relation</id>
     <coordinates>
       <x>420</x>
-      <y>420</y>
+      <y>430</y>
       <w>270</w>
       <h>30</h>
     </coordinates>
@@ -162,7 +173,7 @@
     <id>Relation</id>
     <coordinates>
       <x>420</x>
-      <y>450</y>
+      <y>460</y>
       <w>130</w>
       <h>30</h>
     </coordinates>
@@ -173,7 +184,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>310</x>
-      <y>560</y>
+      <y>570</y>
       <w>120</w>
       <h>40</h>
     </coordinates>
@@ -185,7 +196,7 @@
     <id>Relation</id>
     <coordinates>
       <x>360</x>
-      <y>510</y>
+      <y>520</y>
       <w>30</w>
       <h>70</h>
     </coordinates>
@@ -196,7 +207,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>150</x>
-      <y>140</y>
+      <y>150</y>
       <w>330</w>
       <h>240</h>
     </coordinates>
@@ -220,11 +231,26 @@
     <id>Relation</id>
     <coordinates>
       <x>470</x>
-      <y>230</y>
+      <y>240</y>
       <w>80</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>670</x>
+      <y>550</y>
+      <w>120</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Content
+--
+  Author;
+  Title;
+  Content;</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>
