@@ -4,7 +4,7 @@ import java.util.Set;
 
 public class ContentPost extends GenericPost
 {
-	private final Content content;
+	public final Content content;
 
 	public ContentPost(Integer postId, Content content, Set<Integer> rewins,
 		PostLikes likes, PostComments comments, RewardState reward_state)

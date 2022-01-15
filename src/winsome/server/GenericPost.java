@@ -36,11 +36,13 @@ public abstract class GenericPost
 		return Collections.unmodifiableSet(rewins);
 	}
 	
+	
+	
 	public void addLike(String username)
 	{
 		checkCanRate(username);
 		likes.addLike(username);
-		reward_state.addLike();
+		reward_state.addLike(username);
 	}
 	
 	public void addDislike(String username)
