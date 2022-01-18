@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>210</x>
+      <y>150</y>
+      <w>170</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>ServerMain
+--
+  startServer();
+  shutdownServer();</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>530</x>
+      <y>30</y>
+      <w>300</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>WalletUpdater
+--
+  startUpdater();
+  shutdownUpdater();
+
+- updateWallets();</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>530</x>
+      <y>150</y>
+      <w>280</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>UserRegistrator
+[RMI]
+--
+  registerNewUser(username, password);
+
+  </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>530</x>
+      <y>340</y>
+      <w>200</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>ClientHandler
+--
+  startHandler();
+  pauseHandler();
+  resumeHandler();
+  shutdownHandler();</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>530</x>
+      <y>580</y>
+      <w>230</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>WinsomeServer
+--
+  initServer(filename);
+  saveToFile();
+
+- pauseTaskExecutors();
+- resumeTaskExecutors();
+- executeTask(WinsomeTask);
+--
+  posts;
+  users;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>830</x>
+      <y>660</y>
+      <w>140</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>/WinsomeTask/
+--
+  run(posts, users);</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1100</x>
+      <y>600</y>
+      <w>340</w>
+      <h>380</h>
+    </coordinates>
+    <panel_attributes>WinsomeTaskFactory
+--
+  makeRegisterUserTask(username, password);
+
+  makeCalculatePostsRewardsTask(Reward[]);
+  makeCalculatePostRewardTask(Reward[], Post);
+  makeUpdateWalletTask(Reward[]);
+  makeSendWalletUpdateNotificationTask();
+
+  makeUpdateNewFollowerTask();
+  makeUpdateRemovedFollowerTask();
+
+  makeSocketReadTask(socket);
+  makeSocketWriteTask(socket);
+  makeFollowUserTask(socket);
+  makeUnfollowUserTask(socket);
+  makeAddPostTask(socket);
+  makeDeletePostTask(socket);
+  makeRewinPostTask(socket);
+  makeCommentPostTask(socket);
+  makeRatePostTask(socket);
+  makeGetWalletTask(socket);
+  makeGetWalletInBitcoinTask(socket);</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>810</x>
+      <y>580</y>
+      <w>220</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>WinsomeRunnable
+--
+  constructor(posts, users, task);
+  @override run();</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>530</x>
+      <y>230</y>
+      <w>260</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>LoggedUser
+[RMI Proxy]
+--
+  updateNewFollower(username);
+  updateRemovedFollower(username);</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>530</x>
+      <y>460</y>
+      <w>150</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>ServerAutosave
+--
+  startAutosaver();
+  stopAutosaver();
+
+- saveServerState();</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>530</x>
+      <y>780</y>
+      <w>210</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>PausableThread
+--
+  pauseExecution();
+  resumeExecution();
+  @override run();</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>530</x>
+      <y>890</y>
+      <w>230</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>PausableThreadFactory
+--
+  @override newThread();
+  pauseExecutions();
+  resumeExecutions();</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>630</x>
+      <y>860</y>
+      <w>30</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>740</x>
+      <y>750</y>
+      <w>30</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>590</x>
+      <y>550</y>
+      <w>30</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;30.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>700</x>
+      <y>430</y>
+      <w>30</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;150.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>730</x>
+      <y>310</y>
+      <w>30</w>
+      <h>290</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;270.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>730</x>
+      <y>210</y>
+      <w>90</w>
+      <h>390</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;370.0;10.0;220.0;70.0;220.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>730</x>
+      <y>130</y>
+      <w>110</w>
+      <h>470</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;450.0;10.0;300.0;90.0;300.0;90.0;10.0</additional_attributes>
+  </element>
+</diagram>
