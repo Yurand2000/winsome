@@ -10,8 +10,8 @@ import winsome.server.user.PasswordDigester;
 
 class PasswordDigesterTest
 {
-	@SuppressWarnings("unused")
 	@Test
+	@SuppressWarnings("unused")
 	void assertMessageDigestExists()
 	{
 		assertDoesNotThrow(() -> { PasswordDigester digest = PasswordDigester.instance(); });

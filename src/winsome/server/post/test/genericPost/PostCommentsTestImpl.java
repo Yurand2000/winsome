@@ -1,13 +1,22 @@
 package winsome.server.post.test.genericPost;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import winsome.server.post.PostComments;
 
+@JsonSerialize
+@JsonTypeName("post_comments_test_impl")
 public class PostCommentsTestImpl implements PostComments
 {
-	private Comment expected_commment;
-	private boolean add_comment_called = false;
+	@JsonIgnore() private Comment expected_commment;
+	@JsonIgnore() private boolean add_comment_called = false;
+	@JsonIgnore() private boolean clone_called = false;
 	
 	@Override
 	public void addComment(String username, String comment)
@@ -18,7 +27,7 @@ public class PostCommentsTestImpl implements PostComments
 	}
 
 	@Override
-	public List<Comment> getComments()
+	@JsonIgnore() public List<Comment> getComments()
 	{
 		return null;
 	}
@@ -32,5 +41,16 @@ public class PostCommentsTestImpl implements PostComments
 	{
 		assertTrue(add_comment_called);
 		add_comment_called = false;
+	}
+	
+	public PostCommentsTestImpl clone()
+	{
+		clone_called = true;
+		return new PostCommentsTestImpl();
+	}
+	
+	@JsonIgnore() public boolean getCloneCalled()
+	{
+		return clone_called;
 	}
 }

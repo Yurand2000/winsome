@@ -1,65 +1,70 @@
 package winsome.server.user;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import winsome.server.user.exceptions.*;
 import winsome.server.wallet.Wallet;
 
-public class User
+public class User implements Cloneable
 {
 	//constant fields
-	public final String username;
-	public final LoginInformation login;
-	public final List<Tag> tags;
+	@JsonProperty() public final String username;
+	@JsonProperty() public final LoginInformation login;
+	@JsonProperty() public final List<Tag> tags;
 	
 	//non-constant fields
-	private final Set<String> followers;
-	private final Set<String> following;
-	private final Set<Integer> posts;
-	public final Wallet wallet;
+	@JsonProperty() private final Set<String> followers;
+	@JsonProperty() private final Set<String> following;
+	@JsonProperty() private final Set<Integer> posts;
+	@JsonProperty() public final Wallet wallet;
 	
 	@SuppressWarnings("unused")
 	private User() { username = null; login = null; tags = null; followers = null; following = null; posts = null; wallet = null; }
+
+	private User(User user)
+	{
+		this(user.username, user.login, user.tags, user.followers, user.following, user.posts, user.wallet.clone());
+	}
 	
-	public User(String username, LoginInformation login, Tag[] tags,
+	private User(String username, LoginInformation login, List<Tag> tags,
 		Set<String> followers, Set<String> following, Set<Integer> posts, Wallet wallet)
 	{
-		if(tags.length == 0 || tags.length > 5)
+		if(tags.size() == 0 || tags.size() > 5)
 		{
 			throw new RuntimeException("Number of tags must be greater than 0 and less or equal than 5");
 		}
 		
 		this.username = username;
 		this.login = login;
-		this.tags = Collections.unmodifiableList(Arrays.asList(tags));
+		this.tags = new ArrayList<Tag>(tags);
+
 		this.followers = new HashSet<String>(followers);
 		this.following = new HashSet<String>(following);
 		this.posts = new HashSet<Integer>(posts);
-		this.wallet = wallet;		
+		this.wallet = wallet;
 	}
 	
-	public User(String username, LoginInformation login, Tag[] tags, Wallet wallet)
-	{
-		this(username, login, tags, new HashSet<String>(), new HashSet<String>(), new HashSet<Integer>(), wallet);
+	public User(String username, LoginInformation login, Tag[] tags,
+		Set<String> followers, Set<String> following, Set<Integer> posts, Wallet wallet)
+	{		
+		this(username, login, Arrays.asList(tags), followers, following, posts, wallet);	
 	}
 	
-	public synchronized Set<String> getFollowers()
+	public User(String username, LoginInformation login, Tag[] tags)
 	{
-		return Collections.unmodifiableSet(followers);
+		this(username, login, tags, new HashSet<String>(), new HashSet<String>(), new HashSet<Integer>(), new Wallet());
 	}
 	
-	public synchronized Set<String> getFollowing()
+	@Override
+	public synchronized User clone()
 	{
-		return Collections.unmodifiableSet(following);
-	}
-	
-	public synchronized Set<Integer> getPosts()
-	{
-		return Collections.unmodifiableSet(posts);
+		return new User(this);
 	}
 
 	public synchronized void addFollower(String username)
@@ -71,6 +76,18 @@ public class User
 	{
 		followers.remove(username);
 	}
+	
+	public synchronized boolean isFollowedBy(String follower)
+	{
+		return followers.contains(follower);
+	}
+	
+	public synchronized int countFollowers()
+	{
+		return followers.size();
+	}
+	
+
 	
 	public synchronized void addFollowing(String username)
 	{
@@ -88,6 +105,18 @@ public class User
 		}
 	}
 	
+	public synchronized boolean isFollowing(String user)
+	{
+		return following.contains(user);
+	}
+	
+	public synchronized int countFollowing()
+	{
+		return following.size();
+	}
+	
+
+	
 	public synchronized void addPost(Integer postId)
 	{
 		posts.add(postId);
@@ -96,5 +125,15 @@ public class User
 	public synchronized void deletePost(Integer postId)
 	{
 		posts.remove(postId);
+	}
+	
+	public synchronized boolean isAuthorOfPost(Integer post)
+	{
+		return posts.contains(post);
+	}
+	
+	public synchronized int countPosts()
+	{
+		return posts.size();
 	}
 }

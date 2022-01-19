@@ -46,10 +46,20 @@ public class SerializerWrapper
 		return deserialize(data.traverse(), arrayClass);
 	}
 	
-	public static <T> void addDeserializer(Class<T> type, JsonDeserializer<? extends T> deserializer)
+	/*public static <T> void addDeserializer(Class<T> type, JsonDeserializer<? extends T> deserializer)
 	{
 		SimpleModule module = new SimpleModule();
 		module.addDeserializer(type, deserializer);
 		instance().registerModule(module);
+	}*/
+	
+	public static void addDeserializer(Class<?> type)
+	{
+		instance().registerSubtypes(type);
+	}
+	
+	public static void addDeserializers(Class<?>... types)
+	{
+		instance().registerSubtypes(types);
 	}
 }

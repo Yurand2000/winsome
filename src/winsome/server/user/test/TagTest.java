@@ -2,8 +2,11 @@ package winsome.server.user.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
+
 import org.junit.jupiter.api.Test;
 
+import winsome.generic.SerializerWrapper;
 import winsome.server.user.Tag;
 
 class TagTest
@@ -35,5 +38,19 @@ class TagTest
 	{
 		Tag tag = new Tag("ciao");
 		assertEquals(tag.toString(), "ciao");
+	}
+	
+	@Test
+	@SuppressWarnings("unused")
+	void checkSerialization() throws IOException
+	{
+		Tag tag = new Tag("ciao");
+		assertDoesNotThrow(() -> { byte[] data = SerializerWrapper.serialize(tag); } );
+		
+		byte[] data = SerializerWrapper.serialize(tag);
+		assertDoesNotThrow(() -> { Tag t = SerializerWrapper.deserialize(data, Tag.class); } );
+		
+		Tag t = SerializerWrapper.deserialize(data, Tag.class);
+		assertEquals(tag.tag, t.tag);
 	}
 }

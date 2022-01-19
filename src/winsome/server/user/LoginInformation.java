@@ -4,11 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LoginInformation
 {
-	@JsonProperty()
-	private final long random_integer;
-	
-	@JsonProperty()
-	private final byte[] password_digest;
+	@JsonProperty() private final long random_integer;
+	@JsonProperty() private final byte[] password_digest;
 	
 	@SuppressWarnings("unused")
 	private LoginInformation() { random_integer = 0; password_digest = null; }

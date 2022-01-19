@@ -3,11 +3,18 @@ package winsome.server.post;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import winsome.server.post.exceptions.CannotRateException;
+
+@JsonTypeName("post_likes_impl")
 public class PostLikesImpl implements PostLikes
 {
-	private int positive_likes;
-	private int negative_likes;
-	private Set<String> who_liked;
+	@JsonProperty() private int positive_likes;
+	@JsonProperty() private int negative_likes;
+	@JsonProperty() private Set<String> who_liked;
 	
 	public PostLikesImpl()
 	{
@@ -26,6 +33,7 @@ public class PostLikesImpl implements PostLikes
 	@Override
 	public void addLike(String username)
 	{
+		checkCanRate(username);
 		positive_likes++;
 		who_liked.add(username);
 	}
@@ -33,17 +41,28 @@ public class PostLikesImpl implements PostLikes
 	@Override
 	public void addDislike(String username)
 	{
+		checkCanRate(username);
 		negative_likes++;
 		who_liked.add(username);
 	}
+	
+	private void checkCanRate(String username)
+	{
+		if(!canRate(username))
+		{
+			throw new CannotRateException();
+		}
+	}
 
 	@Override
+	@JsonIgnore
 	public int getLikes()
 	{
 		return positive_likes;
 	}
 
 	@Override
+	@JsonIgnore
 	public int getDislikes()
 	{
 		return negative_likes;
@@ -53,5 +72,11 @@ public class PostLikesImpl implements PostLikes
 	public boolean canRate(String username)
 	{
 		return !who_liked.contains(username);
+	}
+	
+	@Override
+	public PostLikesImpl clone()
+	{
+		return new PostLikesImpl(positive_likes, negative_likes, who_liked);
 	}
 }

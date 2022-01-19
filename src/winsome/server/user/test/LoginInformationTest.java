@@ -1,11 +1,15 @@
 package winsome.server.user.test;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import winsome.generic.SerializerWrapper;
 import winsome.server.user.LoginInformation;
 import winsome.server.user.PasswordDigester;
 
@@ -48,5 +52,21 @@ class LoginInformationTest
 		
 		test_password_digester.setExpectedPassword("passwd");
 		login.checkPassword("passwd");
+	}
+	
+	@Test
+	@SuppressWarnings("unused")
+	void checkSerialization() throws IOException
+	{
+		test_password_digester.setExpectedPassword("passwd");
+		LoginInformation login = new LoginInformation("passwd");
+		assertDoesNotThrow(() -> { byte[] data = SerializerWrapper.serialize(login); } );
+		
+		byte[] data = SerializerWrapper.serialize(login);
+		assertDoesNotThrow(() -> { LoginInformation l = SerializerWrapper.deserialize(data, LoginInformation.class); } );
+		
+		LoginInformation l = SerializerWrapper.deserialize(data, LoginInformation.class);
+		test_password_digester.setExpectedPassword("passwd");
+		l.checkPassword("passwd");
 	}
 }

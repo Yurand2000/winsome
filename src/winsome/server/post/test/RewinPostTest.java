@@ -1,14 +1,16 @@
 package winsome.server.post.test;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import winsome.server.post.RewinPost;
-import winsome.server.post.test.genericPost.*;
+import winsome.generic.SerializerWrapper;
+import winsome.server.post.*;
 
 class RewinPostTest
 {
@@ -17,9 +19,9 @@ class RewinPostTest
 	private Integer originalPostId;
 	private String rewinAuthor;
 	private Set<Integer> rewins;
-	private PostLikesTestImpl likes;
-	private PostCommentsTestImpl comments;
-	private RewardStateTestImpl rewardState;
+	private PostLikesImpl likes;
+	private PostCommentsImpl comments;
+	private RewardStateImpl rewardState;
 
 	@BeforeEach
 	void makeDefault()
@@ -29,9 +31,9 @@ class RewinPostTest
 		this.originalPostId = 5;
 		this.rewinAuthor = "Caio";
 		this.rewins = new HashSet<Integer>(Arrays.asList(rewins));
-		this.likes = new PostLikesTestImpl();
-		this.comments = new PostCommentsTestImpl();
-		this.rewardState = new RewardStateTestImpl();
+		this.likes = new PostLikesImpl();
+		this.comments = new PostCommentsImpl();
+		this.rewardState = new RewardStateImpl();
 		post = new RewinPost(postId, originalPostId, rewinAuthor, this.rewins, likes, comments, rewardState);
 	}
 	
@@ -41,7 +43,7 @@ class RewinPostTest
 	{
 		assertDoesNotThrow(() -> {
 			RewinPost post = new RewinPost(5, 1, "A", new HashSet<Integer>(),
-				new PostLikesTestImpl(), new PostCommentsTestImpl(), new RewardStateTestImpl());
+				new PostLikesImpl(), new PostCommentsImpl(), new RewardStateImpl());
 		});
 	}
 
@@ -61,5 +63,30 @@ class RewinPostTest
 	void isRewin()
 	{
 		assertTrue(post.isRewin());
+	}
+	
+	@Test
+	void checkClone()
+	{
+		RewinPost clone = post.clone();
+		assertEquals(clone.getAuthor(), "Caio");
+		assertEquals(clone.getOriginalPost(), 5);
+	}
+	
+	@Test
+	@SuppressWarnings("unused")
+	void checkSerialization() throws IOException
+	{
+		SerializerWrapper.addDeserializers(RewinPost.class, PostCommentsImpl.class, PostLikesImpl.class, RewardStateImpl.class);
+		
+		assertDoesNotThrow(() -> { byte[] data = SerializerWrapper.serialize(post); } );
+		
+		byte[] data = SerializerWrapper.serialize(post);
+		assertDoesNotThrow(() -> { GenericPost p = SerializerWrapper.deserialize(data, GenericPost.class); } );
+		
+		GenericPost p = SerializerWrapper.deserialize(data, GenericPost.class);
+		assertTrue(p.getClass() == RewinPost.class);
+		assertEquals(((RewinPost)p).getAuthor(), "Caio");
+		assertEquals(((RewinPost)p).getOriginalPost(), 5);
 	}
 }

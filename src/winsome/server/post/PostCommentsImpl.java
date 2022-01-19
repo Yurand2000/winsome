@@ -1,13 +1,17 @@
 package winsome.server.post;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+@JsonTypeName("post_comments_impl")
 public class PostCommentsImpl implements PostComments
 {
-	private final List<Comment> comments;
-
+	@JsonProperty() private final List<Comment> comments;
+	
 	public PostCommentsImpl()
 	{
 		comments = new LinkedList<Comment>();
@@ -27,6 +31,12 @@ public class PostCommentsImpl implements PostComments
 	@Override
 	public List<Comment> getComments()
 	{
-		return Collections.unmodifiableList(comments);
+		return new ArrayList<Comment>(comments);
+	}
+	
+	@Override
+	public PostCommentsImpl clone()
+	{
+		return new PostCommentsImpl(this.comments);
 	}
 }

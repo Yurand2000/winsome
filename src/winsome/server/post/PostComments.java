@@ -2,15 +2,24 @@ package winsome.server.post;
 
 import java.util.List;
 
-public interface PostComments
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
+public interface PostComments extends Cloneable
 {
 	void addComment(String username, String comment);
 	List<Comment> getComments();
+	
+	PostComments clone();
 
 	public static class Comment
 	{
-		public final String username;
-		public final String comment;
+		@JsonProperty() public final String username;
+		@JsonProperty() public final String comment;
+		
+		@SuppressWarnings("unused")
+		private Comment() { username = null; comment = null; }
 		
 		public Comment(String username, String comment)
 		{

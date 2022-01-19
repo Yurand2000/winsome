@@ -2,6 +2,7 @@ package winsome.server.post.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,9 +10,8 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import winsome.server.post.Content;
-import winsome.server.post.ContentPost;
-import winsome.server.post.test.genericPost.*;
+import winsome.generic.SerializerWrapper;
+import winsome.server.post.*;
 
 class ContentPostTest
 {
@@ -19,9 +19,9 @@ class ContentPostTest
 	private Integer postId;
 	private Content content;
 	private Set<Integer> rewins;
-	private PostLikesTestImpl likes;
-	private PostCommentsTestImpl comments;
-	private RewardStateTestImpl rewardState;
+	private PostLikesImpl likes;
+	private PostCommentsImpl comments;
+	private RewardStateImpl rewardState;
 
 	@BeforeEach
 	void makeDefault()
@@ -30,9 +30,9 @@ class ContentPostTest
 		this.postId = 10;
 		this.content = new Content("My Post", "Caio", "My Content");
 		this.rewins = new HashSet<Integer>(Arrays.asList(rewins));
-		this.likes = new PostLikesTestImpl();
-		this.comments = new PostCommentsTestImpl();
-		this.rewardState = new RewardStateTestImpl();
+		this.likes = new PostLikesImpl();
+		this.comments = new PostCommentsImpl();
+		this.rewardState = new RewardStateImpl();
 		post = new ContentPost(postId, content, this.rewins, likes, comments, rewardState);
 	}
 	
@@ -42,7 +42,7 @@ class ContentPostTest
 	{
 		assertDoesNotThrow(() -> {
 			ContentPost post = new ContentPost(5, content, new HashSet<Integer>(),
-				new PostLikesTestImpl(), new PostCommentsTestImpl(), new RewardStateTestImpl());
+				new PostLikesImpl(), new PostCommentsImpl(), new RewardStateImpl());
 		});
 	}
 	
@@ -59,5 +59,35 @@ class ContentPostTest
 	void isRewin()
 	{
 		assertFalse(post.isRewin());
+	}
+	
+	@Test
+	void checkClone()
+	{
+		ContentPost clone = post.clone();
+
+		Content postContent = clone.getContent();
+		assertEquals(postContent.title, content.title);
+		assertEquals(postContent.author, content.author);
+		assertEquals(postContent.content, content.content);
+	}
+	
+	@Test
+	@SuppressWarnings("unused")
+	void checkSerialization() throws IOException
+	{
+		SerializerWrapper.addDeserializers(ContentPost.class, PostCommentsImpl.class, PostLikesImpl.class, RewardStateImpl.class);
+		
+		assertDoesNotThrow(() -> { byte[] data = SerializerWrapper.serialize(post); } );
+		
+		byte[] data = SerializerWrapper.serialize(post);
+		assertDoesNotThrow(() -> { GenericPost p = SerializerWrapper.deserialize(data, GenericPost.class); } );
+		
+		GenericPost p = SerializerWrapper.deserialize(data, GenericPost.class);
+		assertTrue(p.getClass() == ContentPost.class);
+		Content postContent = ((ContentPost)p).getContent();
+		assertEquals(postContent.title, content.title);
+		assertEquals(postContent.author, content.author);
+		assertEquals(postContent.content, content.content);
 	}
 }

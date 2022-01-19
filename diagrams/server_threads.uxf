@@ -5,7 +5,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>210</x>
-      <y>150</y>
+      <y>120</y>
       <w>170</w>
       <h>70</h>
     </coordinates>
@@ -19,7 +19,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>530</x>
-      <y>30</y>
+      <y>0</y>
       <w>300</w>
       <h>110</h>
     </coordinates>
@@ -35,7 +35,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>530</x>
-      <y>150</y>
+      <y>120</y>
       <w>280</w>
       <h>70</h>
     </coordinates>
@@ -51,7 +51,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>530</x>
-      <y>340</y>
+      <y>310</y>
       <w>200</w>
       <h>100</h>
     </coordinates>
@@ -67,18 +67,20 @@
     <id>UMLClass</id>
     <coordinates>
       <x>530</x>
-      <y>580</y>
+      <y>550</y>
       <w>230</w>
-      <h>180</h>
+      <h>200</h>
     </coordinates>
     <panel_attributes>WinsomeServer
 --
-  initServer(filename);
+  constructor(data_file);
+  shutdownServer();
   saveToFile();
+  
+  executeTask(WinsomeTask);
 
 - pauseTaskExecutors();
 - resumeTaskExecutors();
-- executeTask(WinsomeTask);
 --
   posts;
   users;</panel_attributes>
@@ -88,7 +90,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>830</x>
-      <y>660</y>
+      <y>630</y>
       <w>140</w>
       <h>50</h>
     </coordinates>
@@ -101,7 +103,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>1100</x>
-      <y>600</y>
+      <y>570</y>
       <w>340</w>
       <h>380</h>
     </coordinates>
@@ -134,7 +136,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>810</x>
-      <y>580</y>
+      <y>550</y>
       <w>220</w>
       <h>70</h>
     </coordinates>
@@ -148,7 +150,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>530</x>
-      <y>230</y>
+      <y>200</y>
       <w>260</w>
       <h>90</h>
     </coordinates>
@@ -163,7 +165,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>530</x>
-      <y>460</y>
+      <y>430</y>
       <w>150</w>
       <h>100</h>
     </coordinates>
@@ -179,7 +181,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>530</x>
-      <y>780</y>
+      <y>770</y>
       <w>210</w>
       <h>90</h>
     </coordinates>
@@ -194,7 +196,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>530</x>
-      <y>890</y>
+      <y>880</y>
       <w>230</w>
       <h>90</h>
     </coordinates>
@@ -209,7 +211,7 @@
     <id>Relation</id>
     <coordinates>
       <x>630</x>
-      <y>860</y>
+      <y>850</y>
       <w>30</w>
       <h>50</h>
     </coordinates>
@@ -220,7 +222,7 @@
     <id>Relation</id>
     <coordinates>
       <x>740</x>
-      <y>750</y>
+      <y>740</y>
       <w>30</w>
       <h>160</h>
     </coordinates>
@@ -231,7 +233,7 @@
     <id>Relation</id>
     <coordinates>
       <x>590</x>
-      <y>550</y>
+      <y>520</y>
       <w>30</w>
       <h>50</h>
     </coordinates>
@@ -242,7 +244,7 @@
     <id>Relation</id>
     <coordinates>
       <x>700</x>
-      <y>430</y>
+      <y>400</y>
       <w>30</w>
       <h>170</h>
     </coordinates>
@@ -253,7 +255,7 @@
     <id>Relation</id>
     <coordinates>
       <x>730</x>
-      <y>310</y>
+      <y>280</y>
       <w>30</w>
       <h>290</h>
     </coordinates>
@@ -264,7 +266,7 @@
     <id>Relation</id>
     <coordinates>
       <x>730</x>
-      <y>210</y>
+      <y>180</y>
       <w>90</w>
       <h>390</h>
     </coordinates>
@@ -275,7 +277,7 @@
     <id>Relation</id>
     <coordinates>
       <x>730</x>
-      <y>130</y>
+      <y>100</y>
       <w>110</w>
       <h>470</h>
     </coordinates>

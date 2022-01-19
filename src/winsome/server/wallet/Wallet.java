@@ -1,33 +1,33 @@
 package winsome.server.wallet;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-//@JsonDeserialize(using= WalletDeserializer.class)
-public class Wallet
+public class Wallet implements Cloneable
 {
-	@JsonProperty()
-	private Long current_total;
-	
-	@JsonProperty()
-	private List<Transaction> transactions;
+	@JsonProperty() private Long current_total;
+	@JsonProperty() private List<Transaction> transactions;
 	
 	public Wallet()
 	{
 		current_total = (long) 0;
-		transactions = new LinkedList<Transaction>();
+		transactions = new ArrayList<Transaction>();
 	}
 	
 	public Wallet(Long total, List<Transaction> transactions)
 	{
 		this.current_total = total;
-		this.transactions = new LinkedList<Transaction>(transactions);
+		this.transactions = new ArrayList<Transaction>(transactions);
+	}
+	
+	@Override
+	public synchronized Wallet clone()
+	{
+		Wallet wallet = new Wallet(current_total, transactions);
+		return wallet;
 	}
 	
 	@JsonIgnore
@@ -39,7 +39,7 @@ public class Wallet
 	@JsonIgnore
 	public synchronized List<Transaction> getTransactions()
 	{
-		return Collections.unmodifiableList(transactions);
+		return new ArrayList<Transaction>(transactions);
 	}
 	
 	public synchronized void addTransaction(Long amount)
@@ -51,8 +51,8 @@ public class Wallet
 	
 	public static class Transaction
 	{
-		public final LocalDateTime timestamp;
-		public final Long amount;
+		@JsonProperty() public final LocalDateTime timestamp;
+		@JsonProperty() public final Long amount;
 		
 		@SuppressWarnings("unused")
 		private Transaction() { timestamp = LocalDateTime.MIN; amount = 0L; }

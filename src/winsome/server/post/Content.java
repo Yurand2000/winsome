@@ -1,10 +1,14 @@
 package winsome.server.post;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Content
 {
-	public final String title;
-	public final String author;
-	public final String content;
+	@JsonProperty() public final String title;
+	@JsonProperty() public final String author;
+	@JsonProperty() public final String content;
+	
+	public Content() { title = null; author = null; content = null; }
 	
 	public Content(String title, String author, String content)
 	{

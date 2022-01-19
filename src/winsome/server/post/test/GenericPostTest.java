@@ -4,11 +4,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import winsome.server.post.exceptions.CannotRateException;
+import winsome.generic.SerializerWrapper;
+import winsome.server.post.GenericPost;
 import winsome.server.post.test.genericPost.*;
 
 class GenericPostTest
@@ -40,12 +42,6 @@ class GenericPostTest
 			GenericPostTestImpl post = new GenericPostTestImpl(0, new HashSet<Integer>(),
 				new PostLikesTestImpl(), new PostCommentsTestImpl(), new RewardStateTestImpl());
 		});
-	}
-	
-	@Test
-	void getPostId()
-	{
-		assertEquals(post.getPostId(), 10);
 	}
 	
 	@Test
@@ -82,19 +78,6 @@ class GenericPostTest
 	}
 	
 	@Test
-	void addLikeAlreadyRated()
-	{
-		likes.setExpectedUser("Caio");
-		rewardState.setExpectedUser("Caio");
-		post.addLike("Caio");
-		likes.checkLikeCalled();
-		
-		likes.setAlreadyRated(true);
-		assertThrows(CannotRateException.class, () -> post.addLike("Caio"));
-		assertThrows(CannotRateException.class, () -> post.addDislike("Caio"));
-	}
-	
-	@Test
 	void addComment()
 	{
 		comments.setExpectedComment("Caio", "Commento");
@@ -120,5 +103,42 @@ class GenericPostTest
 		assertTrue(post.getRewins().contains(new Integer(11)));
 		post.removeRewin(11);
 		assertFalse(post.getRewins().contains(new Integer(11)));
+	}
+	
+	@Test
+	void checkClone()
+	{
+		GenericPostTestImpl clone = post.clone();
+		assertEquals(clone.postId, post.postId);
+		Set<Integer> rewins = clone.getRewins();
+		assertEquals(rewins.size(), 3);
+		assertTrue(rewins.contains(new Integer(11)));
+		assertTrue(rewins.contains(new Integer(15)));
+		assertTrue(rewins.contains(new Integer(18)));
+		
+		assertTrue(likes.getCloneCalled());
+		assertTrue(comments.getCloneCalled());
+		assertTrue(rewardState.getCloneCalled());
+	}
+	
+	@Test
+	@SuppressWarnings("unused")
+	void checkSerialization() throws IOException
+	{
+		SerializerWrapper.addDeserializers(GenericPostTestImpl.class, PostCommentsTestImpl.class, PostLikesTestImpl.class, RewardStateTestImpl.class);
+		
+		assertDoesNotThrow(() -> { byte[] data = SerializerWrapper.serialize(post); } );
+		
+		byte[] data = SerializerWrapper.serialize(post);
+		assertDoesNotThrow(() -> { GenericPost p = SerializerWrapper.deserialize(data, GenericPost.class); } );
+		
+		GenericPost p = SerializerWrapper.deserialize(data, GenericPost.class);
+		assertEquals(p.postId, post.postId);
+		Set<Integer> rewins = p.getRewins();
+		assertEquals(rewins.size(), 3);
+		assertTrue(rewins.contains(new Integer(11)));
+		assertTrue(rewins.contains(new Integer(15)));
+		assertTrue(rewins.contains(new Integer(18)));
+		
 	}
 }

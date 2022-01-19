@@ -1,10 +1,7 @@
 package winsome.server.user.test;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.io.IOException;
 import org.junit.jupiter.api.Test;
-import winsome.generic.SerializerWrapper;
 import winsome.server.user.Tag;
 import winsome.server.user.User;
 import winsome.server.user.UserFactory;
@@ -12,20 +9,21 @@ import winsome.server.user.UserFactory;
 class UserFactoryTest {
 
 	@Test
-	void test() throws IOException
+	void checkMakeNewUser()
 	{
-		User user = UserFactory.makeNewUser("user", "pass", new Tag[]{new Tag("ciao"), new Tag("sport")});
-		user.wallet.addTransaction(50L);
-		user.wallet.addTransaction(40L);
-		user.addFollower("follower");
-		user.addFollowing("following");
-		user.addPost(50);
-		byte[] data = UserFactory.serializeUser(user);
-		System.out.println(new String(data));
+		User new_user = UserFactory.makeNewUser("username", "password", new Tag[] {new Tag("sport")});
+		assertEquals(new_user.username, "username");
 		
-		user = SerializerWrapper.deserialize(data, User.class);
-		data = UserFactory.serializeUser(user);
-		System.out.println(new String(data));
+		assertTrue(new_user.login.checkPassword("password"));
+		
+		assertEquals(new_user.tags.size(), 1);
+		assertTrue(new_user.tags.get(0).equals(new Tag("sport")));
+		
+		assertEquals(new_user.wallet.getCurrentTotal(), 0);
+		assertTrue(new_user.wallet.getTransactions().isEmpty());
+		
+		assertEquals(new_user.countFollowers(), 0);
+		assertEquals(new_user.countFollowing(), 0);
+		assertEquals(new_user.countPosts(), 0);
 	}
-
 }
