@@ -18,6 +18,7 @@ public class RewardStateTestImpl implements RewardState
 	@JsonIgnore() private boolean dislike_called = false;
 	@JsonIgnore() private boolean add_comment_called = false;
 	@JsonIgnore() private boolean clone_called = false;
+	@JsonIgnore() private boolean calc_reward_called = false;
 	
 	@Override
 	public void addLike(String username)
@@ -41,6 +42,7 @@ public class RewardStateTestImpl implements RewardState
 
 	@Override
 	public Reward calcLastReward() {
+		calc_reward_called = true;
 		return null;
 	}
 
@@ -60,6 +62,11 @@ public class RewardStateTestImpl implements RewardState
 	{
 		assertTrue(add_comment_called);
 		add_comment_called = false;
+	}
+	
+	public boolean checkCalcRewardCalled()
+	{
+		return calc_reward_called;
 	}
 	
 	public void setExpectedUser(String username)

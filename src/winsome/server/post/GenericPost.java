@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import winsome.server.post.RewardState.Reward;
+
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 public abstract class GenericPost implements Cloneable
 {
@@ -39,6 +41,8 @@ public abstract class GenericPost implements Cloneable
 	
 	@JsonIgnore() public abstract boolean isRewin();
 	
+	@JsonIgnore() public abstract String getAuthor();
+
 	public abstract GenericPost clone();
 	
 	public synchronized Set<Integer> getRewins()
@@ -72,5 +76,10 @@ public abstract class GenericPost implements Cloneable
 	public synchronized void removeRewin(Integer postId)
 	{
 		rewins.remove(postId);
+	}
+	
+	public synchronized Reward calculateReward()
+	{
+		return reward_state.calcLastReward();
 	}
 }

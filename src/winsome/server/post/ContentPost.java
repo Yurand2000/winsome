@@ -2,12 +2,14 @@ package winsome.server.post;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonTypeName("content_post")
 public class ContentPost extends GenericPost
 {
-	public final Content content;
+	@JsonProperty() public final Content content;
 
 	@SuppressWarnings("unused")
 	private ContentPost() { super(); content = null; }
@@ -24,12 +26,21 @@ public class ContentPost extends GenericPost
 		super(postId, rewins, likes, comments, reward_state);
 		this.content = content;
 	}
+	
+	@Override
+	@JsonIgnore()
+	public String getAuthor()
+	{
+		return content.author;
+	}
 
+	@JsonIgnore()
 	public Content getContent()
 	{
 		return content;
 	}
-	
+
+	@JsonIgnore()
 	public boolean isRewin()
 	{
 		return false;

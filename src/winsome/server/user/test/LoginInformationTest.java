@@ -6,8 +6,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import winsome.generic.SerializerWrapper;
 import winsome.server.user.LoginInformation;
@@ -26,6 +25,15 @@ class LoginInformationTest
 		Field password_digester = PasswordDigester.class.getDeclaredField("me");
 		password_digester.setAccessible(true);
 		password_digester.set(null, test_password_digester);
+	}
+	
+	@AfterEach
+	void teardownFakePasswordDigester() throws Exception
+	{
+		//sets the api via reflex
+		Field password_digester = PasswordDigester.class.getDeclaredField("me");
+		password_digester.setAccessible(true);
+		password_digester.set(null, null);
 	}
 	
 	@SuppressWarnings("unused")

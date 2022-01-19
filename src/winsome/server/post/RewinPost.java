@@ -36,6 +36,7 @@ public class RewinPost extends GenericPost
 		return originalPostId;
 	}
 
+	@Override
 	@JsonIgnore()
 	public String getAuthor()
 	{

@@ -32,4 +32,9 @@ public class GenericPostTestImpl extends GenericPost
 	{
 		return new GenericPostTestImpl(this);
 	}
+
+	@Override
+	public String getAuthor() {
+		return null;
+	}
 }

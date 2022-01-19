@@ -106,6 +106,13 @@ class GenericPostTest
 	}
 	
 	@Test
+	void checkCalculateReward()
+	{
+		post.calculateReward();
+		assertTrue(rewardState.checkCalcRewardCalled());
+	}
+	
+	@Test
 	void checkClone()
 	{
 		GenericPostTestImpl clone = post.clone();
