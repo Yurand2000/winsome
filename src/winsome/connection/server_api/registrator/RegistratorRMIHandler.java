@@ -11,9 +11,4 @@ public class RegistratorRMIHandler extends RMIObjectRegistrator<RegistratorImpl>
 	{
 		super( new RegistratorImpl(server), RegistratorRMI.getRegistratorName(), WinsomeConnectionProtocol.getRMIRegistryPort() );
 	}
-	
-	public RegistratorImpl getRegistrator()
-	{
-		return object;
-	}
 }
