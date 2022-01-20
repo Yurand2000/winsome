@@ -4,14 +4,14 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>470</x>
-      <y>240</y>
-      <w>160</w>
-      <h>80</h>
+      <x>570</x>
+      <y>360</y>
+      <w>120</w>
+      <h>70</h>
     </coordinates>
     <panel_attributes>Message
 --
-  messageHeader;
+  int length;
   byte[] content;
   </panel_attributes>
     <additional_attributes/>
@@ -19,33 +19,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>670</x>
-      <y>240</y>
-      <w>130</w>
-      <h>80</h>
-    </coordinates>
-    <panel_attributes>MessageHeader
---
-  int type;
-  int length;</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>620</x>
-      <y>270</y>
-      <w>70</w>
-      <h>30</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>50.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>160</x>
-      <y>240</y>
+      <x>260</x>
+      <y>360</y>
       <w>270</w>
       <h>60</h>
     </coordinates>
@@ -57,8 +32,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>420</x>
-      <y>240</y>
+      <x>520</x>
+      <y>360</y>
       <w>70</w>
       <h>30</h>
     </coordinates>

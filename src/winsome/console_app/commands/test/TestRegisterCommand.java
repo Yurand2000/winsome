@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import java.lang.reflect.Field;
 
-import winsome.client_app.Connection;
+import winsome.client_app.ClientAppAPI;
 import winsome.client_app.api.User;
 import winsome.client_app.api.exceptions.UsernameAlreadyTakenException;
 import winsome.console_app.CannotExecuteException;
@@ -23,7 +23,7 @@ class TestRegisterCommand
 		client_api = new TestClientAPI();
 		
 		//sets the api via reflex
-		Field singletonAPI = Connection.class.getDeclaredField("client_api");
+		Field singletonAPI = ClientAppAPI.class.getDeclaredField("client_api");
 		singletonAPI.setAccessible(true);
 		singletonAPI.set(null, client_api);
 	}

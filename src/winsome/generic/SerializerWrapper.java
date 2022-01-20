@@ -26,6 +26,14 @@ public class SerializerWrapper
 		return mapper;
 	}
 	
+	public static <T> byte[] serializeCompact(T obj) throws IOException
+	{
+		mapper.disable(SerializationFeature.INDENT_OUTPUT);
+		byte[] data = instance().writeValueAsBytes(obj);
+		mapper.enable(SerializationFeature.INDENT_OUTPUT);
+		return data;		
+	}
+	
 	public static <T> byte[] serialize(T obj) throws IOException
 	{
 		return instance().writeValueAsBytes(obj);		

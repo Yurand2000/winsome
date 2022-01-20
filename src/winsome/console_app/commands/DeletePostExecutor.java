@@ -3,7 +3,7 @@ package winsome.console_app.commands;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import winsome.client_app.Connection;
+import winsome.client_app.ClientAppAPI;
 import winsome.console_app.ConsoleCommandExecutor;
 
 public class DeletePostExecutor extends ConsoleCommandExecutor
@@ -32,7 +32,7 @@ public class DeletePostExecutor extends ConsoleCommandExecutor
 		matcher.find();
 		Integer postId = Integer.parseInt(matcher.group(1));
 		
-		Connection.getLoggedAPI().deletePost(postId);
+		ClientAppAPI.getLoggedClientAPI().deletePost(postId);
 		return "Successfully deleted post \"" + postId.toString() + "\".";
 	}
 }

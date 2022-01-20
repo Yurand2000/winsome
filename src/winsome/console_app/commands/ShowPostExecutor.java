@@ -3,7 +3,7 @@ package winsome.console_app.commands;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import winsome.client_app.Connection;
+import winsome.client_app.ClientAppAPI;
 import winsome.client_app.api.Post;
 import winsome.console_app.ConsoleCommandExecutor;
 
@@ -33,7 +33,7 @@ public class ShowPostExecutor extends ConsoleCommandExecutor
 		matcher.find();
 		Integer postId = Integer.parseInt(matcher.group(1));
 		
-		Post post = Connection.getLoggedAPI().showPost(postId);
+		Post post = ClientAppAPI.getLoggedClientAPI().showPost(postId);
 		return postToString(post);
 	}
 

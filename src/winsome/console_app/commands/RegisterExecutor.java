@@ -1,6 +1,6 @@
 package winsome.console_app.commands;
 
-import winsome.client_app.Connection;
+import winsome.client_app.ClientAppAPI;
 import winsome.client_app.api.User;
 import winsome.console_app.CannotExecuteException;
 import winsome.console_app.ConsoleCommandExecutor;
@@ -61,7 +61,7 @@ public class RegisterExecutor extends ConsoleCommandExecutor
 	
 	private String callRegister(String username, String password, User.Tag[] tags)
 	{
-		Connection.getAPI().register(username, password, tags);
+		ClientAppAPI.getAPI().register(username, password, tags);
 		return "Registered successfully with username: " + username + ".";
 	}
 	

@@ -3,7 +3,7 @@ package winsome.console_app.commands;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import winsome.client_app.Connection;
+import winsome.client_app.ClientAppAPI;
 import winsome.console_app.CannotExecuteException;
 import winsome.console_app.ConsoleCommandExecutor;
 
@@ -35,7 +35,7 @@ public class AddCommentExecutor extends ConsoleCommandExecutor
 		String comment = matcher.group(2);
 		checkComment(comment);
 		
-		Connection.getLoggedAPI().addComment(postId, comment);
+		ClientAppAPI.getLoggedClientAPI().addComment(postId, comment);
 		return "Successfully commented post \"" + postId.toString() + "\".";
 	}
 	

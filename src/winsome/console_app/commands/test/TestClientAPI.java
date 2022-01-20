@@ -4,12 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.regex.Pattern;
 
-import winsome.client_app.api.ClientAPI;
+import winsome.client_app.api.ApplicationAPI;
 import winsome.client_app.api.LoggedClientAPI;
 import winsome.client_app.api.User;
 import winsome.client_app.api.exceptions.*;
 
-public class TestClientAPI implements ClientAPI
+public class TestClientAPI implements ApplicationAPI
 {
 	private boolean register_called = false;
 	private boolean username_already_taken = false;

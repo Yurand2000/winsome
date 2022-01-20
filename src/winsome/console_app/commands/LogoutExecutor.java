@@ -3,7 +3,7 @@ package winsome.console_app.commands;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import winsome.client_app.Connection;
+import winsome.client_app.ClientAppAPI;
 import winsome.console_app.ConsoleCommandExecutor;
 
 public class LogoutExecutor extends ConsoleCommandExecutor
@@ -28,7 +28,7 @@ public class LogoutExecutor extends ConsoleCommandExecutor
 	@Override
 	protected String execute(String line)
 	{		
-		Connection.getAPI().logout();
+		ClientAppAPI.getAPI().logout();
 		return "Logout successful.";
 	}
 }

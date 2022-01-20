@@ -3,7 +3,7 @@ package winsome.console_app.commands;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import winsome.client_app.Connection;
+import winsome.client_app.ClientAppAPI;
 import winsome.client_app.api.Wallet;
 import winsome.console_app.ConsoleCommandExecutor;
 
@@ -29,7 +29,7 @@ public class GetWalletExecutor extends ConsoleCommandExecutor
 	@Override
 	protected String execute(String line)
 	{		
-		Wallet wallet = Connection.getLoggedAPI().getWallet();
+		Wallet wallet = ClientAppAPI.getLoggedClientAPI().getWallet();
 		return wallet.toString();
 	}
 }

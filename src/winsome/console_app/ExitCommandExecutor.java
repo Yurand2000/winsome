@@ -1,5 +1,7 @@
 package winsome.console_app;
 
+import winsome.client_app.ClientAppAPI;
+
 public class ExitCommandExecutor extends ConsoleCommandExecutor
 {
 	public ExitCommandExecutor(ConsoleCommandExecutor next)
@@ -13,6 +15,7 @@ public class ExitCommandExecutor extends ConsoleCommandExecutor
 	@Override
 	protected String execute(String line)
 	{
+		ClientAppAPI.getAPI().logout();
 		Thread.currentThread().interrupt();
 		return "Exiting...";
 	}

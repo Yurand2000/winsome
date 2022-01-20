@@ -37,5 +37,11 @@ public class User
 				o.getClass() == this.getClass() &&
 				((Tag)o).tag.equals(tag);
 		}
+		
+		@Override
+		public String toString()
+		{
+			return tag;
+		}
 	}
 }

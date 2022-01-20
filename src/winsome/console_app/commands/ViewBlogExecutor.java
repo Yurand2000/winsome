@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import winsome.client_app.Connection;
+import winsome.client_app.ClientAppAPI;
 import winsome.client_app.api.PostShort;
 import winsome.console_app.ConsoleCommandExecutor;
 
@@ -30,7 +30,7 @@ public class ViewBlogExecutor extends ConsoleCommandExecutor
 	@Override
 	protected String execute(String line)
 	{		
-		List<PostShort> blog = Connection.getLoggedAPI().viewBlog();
+		List<PostShort> blog = ClientAppAPI.getLoggedClientAPI().viewBlog();
 		StringBuilder string = new StringBuilder();
 		string.append("My Blog:");
 		for(PostShort post : blog)

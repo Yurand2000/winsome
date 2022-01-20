@@ -3,7 +3,7 @@ package winsome.console_app.commands;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import winsome.client_app.Connection;
+import winsome.client_app.ClientAppAPI;
 import winsome.console_app.ConsoleCommandExecutor;
 
 public class RatePostExecutor extends ConsoleCommandExecutor
@@ -34,7 +34,7 @@ public class RatePostExecutor extends ConsoleCommandExecutor
 		Integer postId = Integer.parseInt(matcher.group(1));
 		boolean isPositiveVote = Integer.parseInt(matcher.group(2)) == 1;
 		
-		Connection.getLoggedAPI().ratePost(postId, isPositiveVote);
+		ClientAppAPI.getLoggedClientAPI().ratePost(postId, isPositiveVote);
 		return "Successfully rated post \"" + postId.toString() + "\".";
 	}
 }

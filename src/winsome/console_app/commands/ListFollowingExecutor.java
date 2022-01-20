@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import winsome.client_app.Connection;
+import winsome.client_app.ClientAppAPI;
 import winsome.client_app.api.User;
 import winsome.console_app.ConsoleCommandExecutor;
 
@@ -30,7 +30,7 @@ public class ListFollowingExecutor extends ConsoleCommandExecutor
 	@Override
 	protected String execute(String line)
 	{		
-		List<User> users = Connection.getLoggedAPI().listFollowing();
+		List<User> users = ClientAppAPI.getLoggedClientAPI().listFollowing();
 		StringBuilder string = new StringBuilder();
 		string.append("My followers:");
 		for(User user : users)

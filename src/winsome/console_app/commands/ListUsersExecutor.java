@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import winsome.client_app.Connection;
+import winsome.client_app.ClientAppAPI;
 import winsome.client_app.api.User;
 import winsome.console_app.ConsoleCommandExecutor;
 
@@ -30,7 +30,7 @@ public class ListUsersExecutor extends ConsoleCommandExecutor
 	@Override
 	protected String execute(String line)
 	{		
-		List<User> users = Connection.getLoggedAPI().listUsers();
+		List<User> users = ClientAppAPI.getLoggedClientAPI().listUsers();
 		StringBuilder string = new StringBuilder();
 		string.append("Users with common tags:");
 		for(User user : users)

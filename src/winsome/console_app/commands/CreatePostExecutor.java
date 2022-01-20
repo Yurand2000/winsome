@@ -3,7 +3,7 @@ package winsome.console_app.commands;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import winsome.client_app.Connection;
+import winsome.client_app.ClientAppAPI;
 import winsome.console_app.CannotExecuteException;
 import winsome.console_app.ConsoleCommandExecutor;
 
@@ -36,7 +36,7 @@ public class CreatePostExecutor extends ConsoleCommandExecutor
 		checkTitle(title);
 		checkContent(content);
 		
-		Integer postId = Connection.getLoggedAPI().createPost(title, content);
+		Integer postId = ClientAppAPI.getLoggedClientAPI().createPost(title, content);
 		return "Post with id: " + postId.toString() + " created successfully.";
 	}
 	
