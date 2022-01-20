@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
-import java.util.Arrays;
 
 import winsome.connection.protocols.WinsomeConnectionProtocol;
 import winsome.connection.protocols.WalletNotification;
@@ -34,10 +33,15 @@ public class WalletNotificationUpdater implements Runnable
 		notifier_thread.start();
 	}
 	
-	public void unregisterWalletUpdateNotifications() throws InterruptedException
+	public void unregisterWalletUpdateNotifications()
 	{
-		notifier_thread.interrupt();
-		notifier_thread.join();
+		try
+		{
+			teardownUdpSocket();
+			notifier_thread.interrupt();
+			notifier_thread.join();
+		}
+		catch (InterruptedException e) { }
 	}
 	
 	@Override
@@ -51,8 +55,6 @@ public class WalletNotificationUpdater implements Runnable
 			{
 				waitForPacket();
 			}
-			
-			teardownUdpSocket();
 		}
 		catch (IOException e)
 		{
@@ -67,20 +69,37 @@ public class WalletNotificationUpdater implements Runnable
 		socket.joinGroup(multicast_address);
 	}
 	
-	private void waitForPacket() throws IOException
+	private void waitForPacket()
 	{
-		socket.receive(incoming_packet);
+		try { socket.receive(incoming_packet); }
+		catch(IOException e) { return; }
 		
-		if(Arrays.equals(incoming_packet.getData(), WalletNotification.getNotificationMessage()))
+		if(checkIncomingPacket())
 		{
 			notification_task.run();
 		}
 	}
 	
-	private void teardownUdpSocket() throws IOException
+	private void teardownUdpSocket()
 	{
-		socket.leaveGroup(multicast_address);
 		socket.close();
 		socket = null;
+	}
+	
+	private boolean checkIncomingPacket()
+	{
+		if(incoming_packet.getLength() != WalletNotification.getNotificationMessage().length)
+		{
+			return false;
+		}
+		
+		byte[] incoming = incoming_packet.getData();
+		byte[] expected = WalletNotification.getNotificationMessage();
+		for(int i = 0; i < incoming_packet.getLength(); i++)
+		{
+			if(incoming[i] != expected[i])
+				return false;
+		}
+		return true;
 	}
 }

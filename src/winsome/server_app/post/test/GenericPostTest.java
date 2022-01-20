@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -130,8 +130,9 @@ class GenericPostTest
 	
 	@Test
 	@SuppressWarnings("unused")
-	void checkSerialization() throws IOException
+	void checkSerialization() throws Exception
 	{
+		resetSerializerWrapper();
 		SerializerWrapper.addDeserializers(GenericPostTestImpl.class, PostCommentsTestImpl.class, PostLikesTestImpl.class, RewardStateTestImpl.class);
 		
 		assertDoesNotThrow(() -> { byte[] data = SerializerWrapper.serialize(post); } );
@@ -146,6 +147,12 @@ class GenericPostTest
 		assertTrue(rewins.contains(new Integer(11)));
 		assertTrue(rewins.contains(new Integer(15)));
 		assertTrue(rewins.contains(new Integer(18)));
-		
+	}
+	
+	void resetSerializerWrapper() throws Exception
+	{
+		Field mapper = SerializerWrapper.class.getDeclaredField("mapper");
+		mapper.setAccessible(true);
+		mapper.set(null, null);
 	}
 }

@@ -2,7 +2,7 @@ package winsome.server_app.post.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -74,8 +74,9 @@ class ContentPostTest
 	
 	@Test
 	@SuppressWarnings("unused")
-	void checkSerialization() throws IOException
+	void checkSerialization() throws Exception
 	{
+		resetSerializerWrapper();
 		SerializerWrapper.addDeserializers(ContentPost.class, PostCommentsImpl.class, PostLikesImpl.class, RewardStateImpl.class);
 		
 		assertDoesNotThrow(() -> { byte[] data = SerializerWrapper.serialize(post); } );
@@ -89,5 +90,12 @@ class ContentPostTest
 		assertEquals(postContent.title, content.title);
 		assertEquals(postContent.author, content.author);
 		assertEquals(postContent.content, content.content);
+	}
+	
+	void resetSerializerWrapper() throws Exception
+	{
+		Field mapper = SerializerWrapper.class.getDeclaredField("mapper");
+		mapper.setAccessible(true);
+		mapper.set(null, null);
 	}
 }

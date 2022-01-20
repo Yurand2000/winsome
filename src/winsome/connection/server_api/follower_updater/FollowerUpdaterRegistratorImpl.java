@@ -22,7 +22,9 @@ public class FollowerUpdaterRegistratorImpl extends RemoteObject implements Foll
 	{
 		try
 		{
-			callback_updaters.get(user).notifyNewFollowing(new_follower);
+			FollowerUpdater updater = callback_updaters.get(user);
+			if(updater != null)
+				updater.notifyNewFollowing(new_follower);
 		}
 		catch (RemoteException e) { }
 	}
@@ -31,7 +33,9 @@ public class FollowerUpdaterRegistratorImpl extends RemoteObject implements Foll
 	{
 		try
 		{
-			callback_updaters.get(user).notifyRemovedFollowing(removed_follower);
+			FollowerUpdater updater = callback_updaters.get(user);
+			if(updater != null)
+				updater.notifyRemovedFollowing(removed_follower);
 		}
 		catch (RemoteException e) { }
 	}

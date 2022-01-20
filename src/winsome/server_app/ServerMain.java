@@ -13,7 +13,7 @@ public class ServerMain
 	
 	public ServerMain(InetSocketAddress address, String savefile)
 	{
-		server = new WinsomeServer(savefile);
+		server = new WinsomeServerImpl(savefile);
 		autosaver = new ServerAutosaver(server);
 		client_handler = new ClientHandler(address, server);
 	}
