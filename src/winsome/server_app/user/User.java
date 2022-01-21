@@ -87,6 +87,10 @@ public class User implements Cloneable
 		return followers.size();
 	}
 	
+	public synchronized ArrayList<String> getFollowers()
+	{
+		return new ArrayList<String>(followers);
+	}
 
 	
 	public synchronized void addFollowing(String username)
@@ -115,6 +119,10 @@ public class User implements Cloneable
 		return following.size();
 	}
 	
+	public synchronized List<String> getFollowing()
+	{
+		return new ArrayList<String>(following);
+	}
 
 	
 	public synchronized void addPost(Integer postId)
@@ -135,5 +143,10 @@ public class User implements Cloneable
 	public synchronized int countPosts()
 	{
 		return posts.size();
+	}
+	
+	public synchronized List<Integer> getPosts()
+	{
+		return new ArrayList<Integer>(posts);
 	}
 }

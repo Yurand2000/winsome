@@ -1,10 +1,7 @@
 package winsome.console_app;
 
-import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.io.BufferedReader;
-import java.io.IOException;
 
 public class ConsoleExecutor
 {	
@@ -13,7 +10,7 @@ public class ConsoleExecutor
 	private Thread consoleExecutorThread;
 	private ConsoleExecutorRunnable consoleExecutorRunnable;
 	
-	public static ConsoleExecutor instance()
+	private static ConsoleExecutor instance()
 	{
 		if(instance == null)
 		{
@@ -28,7 +25,12 @@ public class ConsoleExecutor
 		consoleExecutorRunnable = new ConsoleExecutorRunnable();
 	}
 	
-	public void startConsoleExecutor()
+	public static void startConsoleExecutor()
+	{
+		instance().startConsoleExecutorPrivate();
+	}
+	
+	private void startConsoleExecutorPrivate()
 	{
 		if(consoleExecutorThread == null)
 		{
@@ -43,21 +45,27 @@ public class ConsoleExecutor
 		}
 	}
 	
-	public void joinConsoleExecutor() throws InterruptedException
+	public static void joinConsoleExecutor() throws InterruptedException
+	{
+		instance().joinConsoleExecutorPrivate();
+	}
+	
+	private void joinConsoleExecutorPrivate() throws InterruptedException
 	{
 		if(consoleExecutorThread != null)
 		{
+			consoleExecutorThread.interrupt();
 			consoleExecutorThread.join();
 			consoleExecutorThread = null;
 		}
 	}
 	
-	public void setExecutorChain(ConsoleCommandExecutor executor_chain)
-	{		
-		consoleExecutorRunnable.setExecutorChain(executor_chain);
+	public static void setExecutorChain(List<Class<? extends ConsoleCommandExecutor>> executors)
+	{
+		instance().setExecutorChainPrivate(executors);
 	}
 	
-	public void setExecutorChain(List<Class<? extends ConsoleCommandExecutor>> executors)
+	private void setExecutorChainPrivate(List<Class<? extends ConsoleCommandExecutor>> executors)
 	{
 		try
 		{
@@ -68,7 +76,7 @@ public class ConsoleExecutor
 				root = executor_class.getConstructor(ConsoleCommandExecutor.class).newInstance(root);
 			}
 			
-			setExecutorChain(root);
+			setExecutorChainPrivate(root);
 		}
 		catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | NoSuchMethodException | SecurityException e)
@@ -78,47 +86,8 @@ public class ConsoleExecutor
 		}
 	}
 	
-	private class ConsoleExecutorRunnable implements Runnable
-	{
-		private ConsoleCommandExecutor chain;
-		
-		public ConsoleExecutorRunnable()
-		{
-			chain = new ConsoleCommandExecutor(null);
-		}
-		
-		public synchronized void setExecutorChain(ConsoleCommandExecutor executor_chain)
-		{
-			chain = executor_chain;
-		}
-
-		@Override
-		public void run()
-		{
-			try
-			{
-				BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-				while(!Thread.currentThread().isInterrupted())
-				{
-					String line = reader.readLine();
-					
-					if(!Thread.currentThread().isInterrupted())
-					{
-						String output = execute(line);						
-						System.out.println(output);
-					}
-				}
-			}
-			catch(CannotExecuteException e)
-			{
-				System.out.println(e.getMessage());
-			}
-			catch (IOException e) { }
-		}
-		
-		private synchronized String execute(String line)
-		{
-			return chain.executeString(line);
-		}
+	private void setExecutorChainPrivate(ConsoleCommandExecutor executor_chain)
+	{		
+		consoleExecutorRunnable.setExecutorChain(executor_chain);
 	}
 }

@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import java.lang.reflect.Field;
 
 import winsome.client_app.ClientAppAPI;
-import winsome.client_app.api.User;
 import winsome.client_app.api.exceptions.UsernameAlreadyTakenException;
 import winsome.console_app.CannotExecuteException;
 import winsome.console_app.commands.RegisterExecutor;
@@ -35,40 +34,35 @@ class TestRegisterCommand
 	void testCommandWithFiveTags()
 	{
 		command.executeString("register username password tag1 tag2 tag3 tag4 tag5");
-		client_api.checkRegisterArguments( "username", "password", new User.Tag[]
-			{ new User.Tag("tag1"), new User.Tag("tag2"), new User.Tag("tag3"),
-			  new User.Tag("tag4"), new User.Tag("tag5") } );
+		client_api.checkRegisterArguments( "username", "password", new String[]{ "tag1","tag2", "tag3", "tag4", "tag5" } );
 	}
 	
 	@Test
 	void testCommandWithFourTags()
 	{
 		command.executeString("register username password tag1 tag2 tag3 tag4");
-		client_api.checkRegisterArguments( "username", "password", new User.Tag[]
-			{ new User.Tag("tag1"), new User.Tag("tag2"), new User.Tag("tag3"), new User.Tag("tag4") } );
+		client_api.checkRegisterArguments( "username", "password", new String[]{ "tag1","tag2", "tag3", "tag4" } );
 	}
 	
 	@Test
 	void testCommandWithThreeTags()
 	{
 		command.executeString("register username password tag1 tag2 tag3");
-		client_api.checkRegisterArguments( "username", "password", new User.Tag[]
-			{ new User.Tag("tag1"), new User.Tag("tag2"), new User.Tag("tag3") } );
+		client_api.checkRegisterArguments( "username", "password", new String[]{ "tag1","tag2", "tag3" } );
 	}
 	
 	@Test
 	void testCommandWithTwoTags()
 	{
 		command.executeString("register username password tag1 tag2");
-		client_api.checkRegisterArguments( "username", "password", new User.Tag[]
-			{ new User.Tag("tag1"), new User.Tag("tag2") } );
+		client_api.checkRegisterArguments( "username", "password", new String[]{ "tag1","tag2" } );
 	}
 	
 	@Test
 	void testCommandWithOneTag()
 	{
 		command.executeString("register username password tag1");
-		client_api.checkRegisterArguments( "username", "password", new User.Tag[]{ new User.Tag("tag1") } );
+		client_api.checkRegisterArguments( "username", "password", new String[]{ "tag1" } );
 	}
 	
 	@Test
@@ -112,6 +106,6 @@ class TestRegisterCommand
 	{
 		client_api.setUsernameAlreadyTaken();
 		assertThrows(UsernameAlreadyTakenException.class, () -> command.executeString("register username password tag1"));
-		client_api.checkRegisterArguments( "username", "password", new User.Tag[]{ new User.Tag("tag1") } );
+		client_api.checkRegisterArguments( "username", "password", new String[]{ "tag1" } );
 	}
 }

@@ -6,7 +6,6 @@ import java.util.regex.Pattern;
 
 import winsome.client_app.api.ApplicationAPI;
 import winsome.client_app.api.LoggedClientAPI;
-import winsome.client_app.api.User;
 import winsome.client_app.api.exceptions.*;
 
 public class TestClientAPI implements ApplicationAPI
@@ -15,7 +14,7 @@ public class TestClientAPI implements ApplicationAPI
 	private boolean username_already_taken = false;
 	private String register_username;
 	private String register_password;
-	private User.Tag[] register_tags;
+	private String[] register_tags;
 	
 	private boolean login_called = false;
 	private String login_username;
@@ -28,14 +27,14 @@ public class TestClientAPI implements ApplicationAPI
 	private boolean is_logged_in = false;
 	
 	@Override
-	public void register(String username, String password, User.Tag[] tags)
+	public void register(String username, String password, String[] tags)
 	{
 		assertTrue(Pattern.matches("\\w+", username));
 		assertTrue(Pattern.matches("\\w+", password));
 		assertTrue(password.length() >= 4 && password.length() <= 32);
 		for(int i = 0; i < tags.length; i++)
 		{
-			assertTrue(Pattern.matches("\\w+", tags[i].tag));
+			assertTrue(Pattern.matches("\\w+", tags[i]));
 		}
 		
 		register_username = username;
@@ -50,7 +49,7 @@ public class TestClientAPI implements ApplicationAPI
 		}
 	}
 	
-	public void checkRegisterArguments(String username, String password, User.Tag[] tags)
+	public void checkRegisterArguments(String username, String password, String[] tags)
 	{
 		assertTrue(register_called);
 		assertTrue(register_username.equals(username));

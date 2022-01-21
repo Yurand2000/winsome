@@ -7,16 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeName("null")
 @JsonSerialize
-public class Message implements Cloneable
+public class Message
 {
-	public Message()
-	{
-		
-	}
-	
-	@Override
-	public Message clone()
-	{
-		return this;
-	}
+	public Message() { }
 }

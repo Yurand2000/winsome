@@ -107,7 +107,7 @@ innerclass}
     <panel_attributes>Wallet
 --
   current_total;
-  transactions
+  transactions[];
 
 {innerclass
 Transaction

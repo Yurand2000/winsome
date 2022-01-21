@@ -1,7 +1,6 @@
 package winsome.console_app.commands;
 
 import winsome.client_app.ClientAppAPI;
-import winsome.client_app.api.User;
 import winsome.console_app.CannotExecuteException;
 import winsome.console_app.ConsoleCommandExecutor;
 
@@ -53,38 +52,38 @@ public class RegisterExecutor extends ConsoleCommandExecutor
 		matcher.find();
 		String username = matcher.group(1);
 		String password = matcher.group(2);
-		User.Tag[] tags = getTags(matcher);
+		String[] tags = getTags(matcher);
 		
 		checkRegisterParameters(username, password, tags);
 		return callRegister(username, password, tags);
 	}
 	
-	private String callRegister(String username, String password, User.Tag[] tags)
+	private String callRegister(String username, String password, String[] tags)
 	{
 		ClientAppAPI.getAPI().register(username, password, tags);
 		return "Registered successfully with username: " + username + ".";
 	}
 	
-	private User.Tag[] getTags(Matcher matcher)
+	private String[] getTags(Matcher matcher)
 	{
-		ArrayList<User.Tag> tags = new ArrayList<User.Tag>();
-		tags.add(new User.Tag(matcher.group(3)));
+		ArrayList<String> tags = new ArrayList<String>();
+		tags.add(matcher.group(3));
 		addTag(matcher.group(4), tags);
 		addTag(matcher.group(5), tags);
 		addTag(matcher.group(6), tags);
 		addTag(matcher.group(7), tags);		
-		return tags.toArray(new User.Tag[0]);
+		return tags.toArray(new String[0]);
 	}
 	
-	private void addTag(String tag, ArrayList<User.Tag> array)
+	private void addTag(String tag, ArrayList<String> array)
 	{
 		if(tag != null && tag != "")
 		{
-			array.add(new User.Tag(tag));
+			array.add(tag);
 		}
 	}
 	
-	private void checkRegisterParameters(String username, String password, User.Tag[] tags)
+	private void checkRegisterParameters(String username, String password, String[] tags)
 	{
 		checkUsername(username);
 		checkPassword(password);
@@ -115,9 +114,9 @@ public class RegisterExecutor extends ConsoleCommandExecutor
 		}
 	}
 	
-	private void checkTag(User.Tag tag)
+	private void checkTag(String tag)
 	{
-		if(!charset_regex.matcher(tag.tag).matches())
+		if(!charset_regex.matcher(tag).matches())
 		{
 			throw new CannotExecuteException("tag must have only alphanumeric characters and/or underscores.");
 		}

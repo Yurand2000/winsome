@@ -1,6 +1,8 @@
 package winsome.client_app.api.exceptions;
 
-public class TooManyTagsException extends RuntimeException
+import winsome.client_app.api.APIException;
+
+public class TooManyTagsException extends APIException
 {
 	private static final long serialVersionUID = 1L;
 

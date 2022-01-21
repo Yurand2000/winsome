@@ -1,6 +1,8 @@
 package winsome.client_app.api.exceptions;
 
-public class UnknownUsernameException extends RuntimeException
+import winsome.client_app.api.APIException;
+
+public class UnknownUsernameException extends APIException
 {
 	private static final long serialVersionUID = 1L;
 

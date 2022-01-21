@@ -2,12 +2,12 @@ package winsome.client_app.api.exceptions;
 
 import winsome.client_app.api.APIException;
 
-public class NotLoggedInException extends APIException
+public class CouldNotConnectException extends APIException
 {
 	private static final long serialVersionUID = 1L;
 
-	public NotLoggedInException()
+	public CouldNotConnectException()
 	{
-		super("Cannot execute: not logged in.");
+		super("Could not connect to remote server.");
 	}
 }

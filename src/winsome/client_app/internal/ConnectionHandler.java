@@ -5,7 +5,9 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
+import winsome.client_app.api.exceptions.ServerInternalException;
 import winsome.connection.socket_messages.Message;
+import winsome.connection.socket_messages.server.RequestExceptionAnswer;
 import winsome.generic.SerializerWrapper;
 
 public class ConnectionHandler
@@ -34,6 +36,24 @@ public class ConnectionHandler
 		int length = readMessageLength();
 		byte[] data = readMessage(length);
 		return SerializerWrapper.deserialize(data, Message.class);
+	}
+	
+	public <T> T readMessage(Class<T> type) throws IOException
+	{
+		Message message = readMessage();
+		
+		if(message.getClass() == type)
+		{
+			return type.cast(message);
+		}
+		else if(message.getClass() == RequestExceptionAnswer.class)
+		{
+			throw RequestExceptionAnswer.class.cast(message).makeException();
+		}
+		else
+		{
+			throw new ServerInternalException("null");
+		}
 	}
 	
 	public void sendMessage(Message message) throws IOException

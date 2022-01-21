@@ -49,6 +49,14 @@ public class WinsomeData implements Cloneable
 		}
 	}
 	
+	public static void lockPost(GenericPost post, Runnable r)
+	{
+		synchronized(post)
+		{
+			r.run();
+		}
+	}
+	
 	public static void lockUserThenPost(User a, GenericPost b, Runnable r)
 	{
 		synchronized(a)
