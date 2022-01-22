@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.nio.channels.SelectionKey;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import winsome.connection.server_api.socket.SocketInformations;
+import winsome.connection.server_api.socket.SocketState;
 import winsome.connection.socket_messages.Message;
 import winsome.generic.SerializerWrapper;
 import winsome.server_app.internal.WinsomeData;
@@ -29,9 +29,9 @@ public class TaskUtils
 		key.selector().wakeup();
 	}
 	
-	public static void sendMessage(SocketInformations infos, Message msg)
+	public static void sendMessage(SocketState infos, Message msg)
 	{
-		infos.writer.fillWriteBuffer(serializeMessage(msg));
+		infos.writer.addMessageToSend(serializeMessage(msg));
 	}
 	
 	private static byte[] serializeMessage(Message msg)

@@ -10,6 +10,7 @@ import java.rmi.NotBoundException;
 import winsome.connection.protocols.WinsomeConnectionProtocol;
 import winsome.connection.server_api.follower_updater.FollowerUpdaterRegistratorHandler;
 import winsome.connection.server_api.registrator.RegistratorRMIHandler;
+import winsome.connection.server_api.socket.ClientHandler;
 import winsome.connection.socket_messages.MessageUtils;
 import winsome.server_app.internal.*;
 

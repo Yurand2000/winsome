@@ -2,13 +2,13 @@ package winsome.connection.server_api.socket;
 
 import java.nio.channels.SelectionKey;
 
-public class SocketInformations
+public class SocketState
 {
 	private String username;
 	public final SocketReader reader;
 	public final SocketWriter writer;
 	
-	public SocketInformations(SelectionKey socket)
+	public SocketState(SelectionKey socket)
 	{
 		reader = new SocketReader(socket);
 		writer = new SocketWriter(socket);

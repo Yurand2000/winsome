@@ -47,7 +47,7 @@ class SocketWriterTest
 	void testExecuteWriteOperation() throws IOException
 	{
 		byte[] data = "ciao".getBytes();
-		writer.fillWriteBuffer(data);
+		writer.addMessageToSend(data);
 
 		assertEquals(key.interestOps(), 0);
 		
@@ -72,9 +72,9 @@ class SocketWriterTest
 	void testExecuteTwoWriteOperation() throws IOException
 	{
 		byte[] data = "ciao".getBytes();
-		writer.fillWriteBuffer(data);
+		writer.addMessageToSend(data);
 		data = "Nicola".getBytes();
-		writer.fillWriteBuffer(data);
+		writer.addMessageToSend(data);
 
 		assertEquals(key.interestOps(), 0);
 		

@@ -26,7 +26,10 @@ public class SocketWriter
 		}
 		catch (IOException e)
 		{
-			throw new RuntimeException(e.getMessage());
+			try { key.channel().close(); }
+			catch (IOException e1) { }
+			
+			key.cancel();
 		}
 	}
 	
@@ -47,7 +50,7 @@ public class SocketWriter
 		}
 	}
 	
-	public void fillWriteBuffer(byte[] data)
+	public void addMessageToSend(byte[] data)
 	{
 		write_buffer.putInt(data.length);
 		write_buffer.put(data);

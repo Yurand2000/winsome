@@ -37,9 +37,10 @@ public class WalletNotificationUpdater implements Runnable
 	{
 		try
 		{
-			teardownUdpSocket();
+			socket.close();
 			notifier_thread.interrupt();
 			notifier_thread.join();
+			socket = null;
 		}
 		catch (InterruptedException e) { }
 	}
@@ -78,12 +79,6 @@ public class WalletNotificationUpdater implements Runnable
 		{
 			notification_task.run();
 		}
-	}
-	
-	private void teardownUdpSocket()
-	{
-		socket.close();
-		socket = null;
 	}
 	
 	private boolean checkIncomingPacket()

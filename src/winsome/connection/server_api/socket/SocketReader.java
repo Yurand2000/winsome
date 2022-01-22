@@ -31,7 +31,10 @@ public class SocketReader
 		}
 		catch (IOException e)
 		{
-			throw new RuntimeException(e.getMessage());
+			try { key.channel().close(); }
+			catch (IOException e1) { }
+			
+			key.cancel();
 		}
 	}
 	

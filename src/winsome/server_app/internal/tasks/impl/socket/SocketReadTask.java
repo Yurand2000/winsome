@@ -3,7 +3,7 @@ package winsome.server_app.internal.tasks.impl.socket;
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
 
-import winsome.connection.server_api.socket.SocketInformations;
+import winsome.connection.server_api.socket.SocketState;
 import winsome.connection.socket_messages.Message;
 import winsome.connection.socket_messages.server.RequestExceptionAnswer;
 import winsome.generic.SerializerWrapper;
@@ -13,11 +13,11 @@ import winsome.server_app.internal.tasks.TaskUtils;
 import winsome.server_app.internal.tasks.WinsomeTask;
 import winsome.server_app.internal.tasks.impl.ParseIncomingMessageTask;
 
-public class Task_SocketRead implements WinsomeTask
+public class SocketReadTask implements WinsomeTask
 {
 	private SelectionKey key;
 	
-	public Task_SocketRead(SelectionKey key)
+	public SocketReadTask(SelectionKey key)
 	{
 		this.key = key;
 	}
@@ -25,7 +25,7 @@ public class Task_SocketRead implements WinsomeTask
 	@Override
 	public void run(WinsomeServer server, WinsomeData server_data)
 	{
-		SocketInformations data = (SocketInformations) key.attachment();
+		SocketState data = (SocketState) key.attachment();
 		data.reader.executeReadOperation();
 		
 		if(data.reader.hasMessageBeenRetrived())
@@ -44,7 +44,7 @@ public class Task_SocketRead implements WinsomeTask
 		}
 		catch (IOException e)
 		{
-			TaskUtils.sendMessage((SocketInformations) key.attachment(), new RequestExceptionAnswer(e.getMessage()));
+			TaskUtils.sendMessage((SocketState) key.attachment(), new RequestExceptionAnswer(e.getMessage()));
 			TaskUtils.setSocketReadyToWrite(key);
 			throw new RuntimeException(e.getMessage());
 		}

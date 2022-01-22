@@ -1,4 +1,4 @@
-package winsome.server_app.internal;
+package winsome.connection.server_api.socket;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -8,9 +8,11 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 
-import winsome.connection.server_api.socket.SocketInformations;
-import winsome.server_app.internal.tasks.impl.socket.Task_SocketRead;
-import winsome.server_app.internal.tasks.impl.socket.Task_SocketWrite;
+import winsome.server_app.internal.WinsomeServer;
+import winsome.server_app.internal.pausable_threads.PausableThread;
+import winsome.server_app.internal.pausable_threads.PausableThreadMonitor;
+import winsome.server_app.internal.tasks.impl.socket.SocketReadTask;
+import winsome.server_app.internal.tasks.impl.socket.SocketWriteTask;
 
 public class ClientHandler implements Runnable
 {
@@ -19,9 +21,8 @@ public class ClientHandler implements Runnable
 
 	private ServerSocketChannel listening_socket;
 	private Selector selector;
-	private Thread selector_thread;
-	private boolean is_paused;
-	private boolean is_stopped;
+	private PausableThreadMonitor selector_thread_monitor;
+	private PausableThread selector_thread;
 	
 	public ClientHandler(InetSocketAddress address, WinsomeServer server)
 	{
@@ -31,8 +32,7 @@ public class ClientHandler implements Runnable
 		listening_socket = null;
 		selector = null;
 		selector_thread = null;
-		is_paused = false;
-		is_stopped = false;
+		selector_thread_monitor = null;
 	}
 	
 	public void startClientHandler() throws IOException
@@ -43,36 +43,35 @@ public class ClientHandler implements Runnable
 		listening_socket.configureBlocking(false);		
 		listening_socket.register(selector, SelectionKey.OP_ACCEPT);
 		
-		selector_thread = new Thread(this);
+		selector_thread_monitor = new PausableThreadMonitor();
+		selector_thread = new PausableThread(selector_thread_monitor, this);
 		selector_thread.start();
 	}
 	
 	public void stopClientHandler() throws InterruptedException, IOException
 	{
-		is_stopped = true;
-		listening_socket.close();
-		selector.close();
-		selector_thread.interrupt();
-		synchronized(selector_thread)
-			{ selector_thread.notify(); }
-		selector_thread.join();
-		
-		listening_socket = null;
-		selector = null;
-		selector_thread = null;
-		is_paused = false;
-		is_stopped = false;
+		if(selector != null)
+		{
+			listening_socket.close();
+			selector_thread.interrupt();
+			selector_thread.join();
+			selector.close();
+			
+			listening_socket = null;
+			selector = null;
+			selector_thread = null;
+			selector_thread_monitor = null;
+		}
 	}
 	
 	public void pauseClientHandler()
 	{
-		is_paused = true;
+		selector_thread_monitor.pauseAllThreads();
 	}
 	
 	public void resumeClientHandler()
 	{
-		is_paused = false;
-		selector_thread.notify();
+		selector_thread_monitor.resumeAllThreads();
 	}
 
 	@Override
@@ -80,25 +79,7 @@ public class ClientHandler implements Runnable
 	{
 		while(!Thread.currentThread().isInterrupted())
 		{
-			waitIfPaused();
-			
-			if(!is_stopped)
-			{
-				tryRunClientHandler();
-			}
-		}
-	}
-	
-	private void waitIfPaused()
-	{
-		while(is_paused && !is_stopped)
-		{
-			try
-			{ 
-				synchronized(selector_thread)
-					{ selector_thread.wait(); }
-			}
-			catch (InterruptedException e) { }
+			tryRunClientHandler();
 		}
 	}
 	
@@ -153,7 +134,7 @@ public class ClientHandler implements Runnable
 		new_channel.configureBlocking(false);
 		
 		SelectionKey new_key = new_channel.register(selector, SelectionKey.OP_READ);
-		new_key.attach(new SocketInformations(new_key));
+		new_key.attach(new SocketState(new_key));
 	}
 	
 	private void executeReadWriteKey(SelectionKey key)
@@ -161,12 +142,11 @@ public class ClientHandler implements Runnable
 		key.interestOps(0);		
 		if(key.isReadable())
 		{
-			server.executeTask(new Task_SocketRead(key));
+			server.executeTask(new SocketReadTask(key));
 		}
-		
-		if(key.isWritable())
+		else if(key.isWritable())
 		{
-			server.executeTask(new Task_SocketWrite(key));
+			server.executeTask(new SocketWriteTask(key));
 		}
 	}
 }

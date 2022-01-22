@@ -8,6 +8,7 @@ import java.nio.channels.Selector;
 
 public class SelectionKeyTest extends SelectionKey
 {
+	private boolean cancel_called = false;
 	private final SelectorTest selector;
 	private final SelectableChannel channel;
 	private int interestOps;
@@ -41,7 +42,13 @@ public class SelectionKeyTest extends SelectionKey
 	@Override
 	public void cancel()
 	{
-		fail();
+		cancel_called = true;
+	}
+	
+	public void checkCancelCalled()
+	{
+		assertTrue(cancel_called);
+		cancel_called = false;
 	}
 
 	@Override
