@@ -1,14 +1,14 @@
 @echo off
 
 setlocal enabledelayedexpansion
-
-set sources=
-cd src
-for /r %%f in (*.java) do (
-	set "sources=!sources!%%f "
+set libs=
+for %%f in (libs\jackson\*.jar) do (
+    set libs=!libs!%%f;
 )
-cd ..
-REM echo !sources!
+for %%f in (libs\junit\*.jar) do (
+    set libs=!libs!%%f;
+)
 
-echo Generation Javadocs
-call javadoc -d javadoc !sources!
+echo Generate Javadocs
+call javadoc -d javadocs -sourcepath .\src -subpackages winsome -public -classpath !libs!
+pause
