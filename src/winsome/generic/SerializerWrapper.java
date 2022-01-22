@@ -4,10 +4,8 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.TreeNode;
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class SerializerWrapper
 {	
@@ -53,13 +51,6 @@ public class SerializerWrapper
 	{
 		return deserialize(data.traverse(), arrayClass);
 	}
-	
-	/*public static <T> void addDeserializer(Class<T> type, JsonDeserializer<? extends T> deserializer)
-	{
-		SimpleModule module = new SimpleModule();
-		module.addDeserializer(type, deserializer);
-		instance().registerModule(module);
-	}*/
 	
 	public static void addDeserializer(Class<?> type)
 	{

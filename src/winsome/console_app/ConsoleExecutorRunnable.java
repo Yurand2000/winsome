@@ -29,20 +29,20 @@ public class ConsoleExecutorRunnable implements Runnable
 	@Override
 	public void run()
 	{
-		try
+		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+		while(!Thread.currentThread().isInterrupted())
 		{
-			BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-			while(!Thread.currentThread().isInterrupted())
+			try
 			{
 				String line = reader.readLine();
 				
-				if(!Thread.currentThread().isInterrupted())
+				if(!Thread.currentThread().isInterrupted() && !line.isEmpty())
 				{
 					executeCommand(line);
 				}
 			}
+			catch (IOException e) { }
 		}
-		catch (IOException e) { }
 	}
 	
 	private void executeCommand(String line)

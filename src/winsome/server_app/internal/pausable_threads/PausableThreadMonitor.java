@@ -22,7 +22,7 @@ public class PausableThreadMonitor
 	
 	public synchronized void checkNotPaused() throws InterruptedException
 	{
-		while(threadsPaused)
+		while(!Thread.currentThread().isInterrupted() && threadsPaused)
 		{
 			wait();
 		}

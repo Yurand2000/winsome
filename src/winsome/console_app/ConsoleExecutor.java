@@ -54,7 +54,6 @@ public class ConsoleExecutor
 	{
 		if(consoleExecutorThread != null)
 		{
-			consoleExecutorThread.interrupt();
 			consoleExecutorThread.join();
 			consoleExecutorThread = null;
 		}

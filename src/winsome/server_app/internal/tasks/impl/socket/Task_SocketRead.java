@@ -3,10 +3,13 @@ package winsome.server_app.internal.tasks.impl.socket;
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
 
+import winsome.connection.server_api.socket.SocketInformations;
 import winsome.connection.socket_messages.Message;
+import winsome.connection.socket_messages.server.RequestExceptionAnswer;
 import winsome.generic.SerializerWrapper;
 import winsome.server_app.internal.WinsomeData;
 import winsome.server_app.internal.WinsomeServer;
+import winsome.server_app.internal.tasks.TaskUtils;
 import winsome.server_app.internal.tasks.WinsomeTask;
 import winsome.server_app.internal.tasks.impl.ParseIncomingMessageTask;
 
@@ -41,6 +44,8 @@ public class Task_SocketRead implements WinsomeTask
 		}
 		catch (IOException e)
 		{
+			TaskUtils.sendMessage((SocketInformations) key.attachment(), new RequestExceptionAnswer(e.getMessage()));
+			TaskUtils.setSocketReadyToWrite(key);
 			throw new RuntimeException(e.getMessage());
 		}
 	}

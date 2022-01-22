@@ -1,27 +1,24 @@
 package winsome.server_app;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
 
 public class ServerAppMain
 {
 	private static ServerMain server;
-	private static InetSocketAddress address;
-	private static String savefile;
+	private static String settings_file = "settings.json";
 	
 	public static void main(String[] args) throws IOException, InterruptedException, AlreadyBoundException, NotBoundException
-	{
-		savefile = "savefile.json";
-		address = new InetSocketAddress(InetAddress.getByName("localhost"), 8080);
-		
+	{		
 		System.out.println("Server starting...");
-		System.out.println("* Server savefile: " + savefile);
-		System.out.println("* Server address: " + address.toString());
+		System.out.println("* Server settings file: " + settings_file);
 		
-		server = new ServerMain(address, savefile);
+		server = new ServerMain(settings_file);
+		System.out.println("* Server address: " + server.settings.server_address);
+		System.out.println("* Server multicast address: " + server.settings.server_udp_address);
+		System.out.println("* Server save file: " + server.settings.save_file);
+		
 		server.startServer();
 
 		System.out.println("Server started. Press ENTER to stop.");

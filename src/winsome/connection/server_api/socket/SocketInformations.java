@@ -1,4 +1,4 @@
-package winsome.server_app.internal.tasks.impl.socket;
+package winsome.connection.server_api.socket;
 
 import java.nio.channels.SelectionKey;
 

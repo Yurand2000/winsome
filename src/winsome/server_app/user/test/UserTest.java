@@ -65,6 +65,15 @@ class UserTest
 	}
 	
 	@Test
+	void checkGetFollowers()
+	{
+		User user = new User("username", new LoginInformation(0, new byte[]{}), new Tag[1]);
+		user.addFollower("ciao");
+		
+		assertTrue(user.getFollowers().contains("ciao"));
+	}
+	
+	@Test
 	void checkAddFollowing()
 	{
 		User user = new User("username", new LoginInformation(0, new byte[]{}), new Tag[1]);
@@ -95,6 +104,15 @@ class UserTest
 	}
 	
 	@Test
+	void checkGetFollowing()
+	{
+		User user = new User("username", new LoginInformation(0, new byte[]{}), new Tag[1]);
+		user.addFollowing("ciao");
+		
+		assertTrue(user.getFollowing().contains("ciao"));
+	}
+	
+	@Test
 	void checkAddPost()
 	{
 		User user = new User("username", new LoginInformation(0, new byte[]{}), new Tag[1]);
@@ -116,6 +134,16 @@ class UserTest
 		
 		user.deletePost(postId);
 		assertEquals(user.countPosts(), 0);
+	}
+	
+	@Test
+	void checkGetPosts()
+	{
+		User user = new User("username", new LoginInformation(0, new byte[]{}), new Tag[1]);
+		Integer postId = 2310;
+		user.addPost(postId);
+		
+		assertTrue(user.getPosts().contains(2310));
 	}
 	
 	@Test

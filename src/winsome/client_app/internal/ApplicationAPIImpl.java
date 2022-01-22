@@ -4,14 +4,17 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.rmi.NotBoundException;
 
+import winsome.client_app.api.APIException;
 import winsome.client_app.api.ApplicationAPI;
 import winsome.client_app.api.LoggedClientAPI;
-import winsome.client_app.api.exceptions.CouldNotConnectException;
 import winsome.client_app.api.exceptions.NotLoggedInException;
-import winsome.client_app.internal.tasks.ClientTaskExecutor;
-import winsome.client_app.internal.tasks.LoginTaskExecutor;
-import winsome.client_app.internal.tasks.LogoutTaskExecutor;
+import winsome.client_app.api.exceptions.ServerInternalException;
 import winsome.connection.client_api.registrator.RegistratorRMIHandler;
+import winsome.connection.client_api.socket.ConnectionHandler;
+import winsome.connection.client_api.socket.ConnectionHandlerImpl;
+import winsome.connection.client_api.socket.tasks.ClientTaskExecutor;
+import winsome.connection.client_api.socket.tasks.LoginTaskExecutor;
+import winsome.connection.client_api.socket.tasks.LogoutTaskExecutor;
 
 public class ApplicationAPIImpl implements ApplicationAPI
 {
@@ -39,43 +42,42 @@ public class ApplicationAPIImpl implements ApplicationAPI
 	{
 		try
 		{
+			client_connection = new ConnectionHandlerImpl(server_address);
 			logged_client = new ApplicationLoggedAPIImpl(server_address.getHostString(), username);
-			client_connection = new ConnectionHandler(server_address);
-			client_connection.connect();
 			
-			executeTask(new LoginTaskExecutor(username, password, wallet_notification_runnable));
+			executeTask(new LoginTaskExecutor(username, password, wallet_notification_runnable));			
 		}
 		catch (IOException | NotBoundException e)
 		{
 			logged_client = null;
 			client_connection = null;
 			
-			throw new CouldNotConnectException();
+			throw new ServerInternalException(e.getMessage());
+		}
+		catch(APIException e)
+		{
+			logged_client = null;
+			client_connection = null;
+			
+			throw e;
 		}
 	}
 
 	@Override
 	public void logout()
 	{
-		if(logged_client != null)
-		{
-			actualLogout();
-		}
-		else
-		{
-			throw new NotLoggedInException();
-		}
-	}
-	
-	private void actualLogout()
-	{
 		try
 		{
+			if(logged_client == null)
+			{
+				throw new NotLoggedInException();
+			}
 			executeTask(new LogoutTaskExecutor());
-			
-			client_connection.disconnect();
 		} 
-		catch (IOException e) { }
+		catch (APIException e)
+		{
+			throw e;
+		}
 		finally
 		{
 			logged_client = null;

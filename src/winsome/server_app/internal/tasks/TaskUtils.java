@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.nio.channels.SelectionKey;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import winsome.connection.server_api.socket.SocketInformations;
 import winsome.connection.socket_messages.Message;
 import winsome.generic.SerializerWrapper;
 import winsome.server_app.internal.WinsomeData;
-import winsome.server_app.internal.tasks.impl.socket.SocketInformations;
 import winsome.server_app.post.Content;
 import winsome.server_app.post.ContentPost;
 import winsome.server_app.post.GenericPost;
@@ -20,6 +20,13 @@ public class TaskUtils
 	public static void setSocketReadyToWrite(SelectionKey key)
 	{
 		key.interestOps(SelectionKey.OP_WRITE);
+		key.selector().wakeup();
+	}
+	
+	public static void setSocketReadyToRead(SelectionKey key)
+	{
+		key.interestOps(SelectionKey.OP_READ);
+		key.selector().wakeup();
 	}
 	
 	public static void sendMessage(SocketInformations infos, Message msg)

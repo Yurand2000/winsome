@@ -2,6 +2,7 @@ package winsome.server_app.internal.tasks.impl;
 
 import java.nio.channels.SelectionKey;
 
+import winsome.connection.server_api.socket.SocketInformations;
 import winsome.connection.socket_messages.client.LogoutRequest;
 import winsome.connection.socket_messages.server.LogoutAnswer;
 import winsome.connection.socket_messages.server.RequestExceptionAnswer;
@@ -9,11 +10,11 @@ import winsome.server_app.internal.WinsomeData;
 import winsome.server_app.internal.WinsomeServer;
 import winsome.server_app.internal.tasks.TaskUtils;
 import winsome.server_app.internal.tasks.WinsomeTask;
-import winsome.server_app.internal.tasks.impl.socket.SocketInformations;
 
 public class LogoutUserTask implements WinsomeTask
 {
 	private final SelectionKey socket;
+	@SuppressWarnings("unused")
 	private final LogoutRequest message;
 
 	public LogoutUserTask(SelectionKey socket, LogoutRequest message)

@@ -1,9 +1,11 @@
-package winsome.server_app.internal.tasks.impl.socket;
+package winsome.connection.server_api.socket;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
+
+import winsome.server_app.internal.tasks.TaskUtils;
 
 public class SocketReader
 {	
@@ -49,11 +51,11 @@ public class SocketReader
 				tryReadMessage();
 			}
 		}
-		while(hasBytesToRead() && hasAnyOperationBeenExecuted());
+		while(!hasMessageBeenRetrived() && hasBytesToRead() && hasAnyOperationBeenExecuted());
 		
 		if(!hasMessageBeenRetrived())
 		{
-			key.interestOps(SelectionKey.OP_READ);
+			TaskUtils.setSocketReadyToRead(key);
 		}
 	}
 	

@@ -2,6 +2,7 @@ package winsome.server_app.internal.tasks.impl.socket;
 
 import java.nio.channels.SelectionKey;
 
+import winsome.connection.server_api.socket.SocketInformations;
 import winsome.server_app.internal.WinsomeData;
 import winsome.server_app.internal.WinsomeServer;
 import winsome.server_app.internal.tasks.WinsomeTask;

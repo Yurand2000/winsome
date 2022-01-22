@@ -1,9 +1,11 @@
-package winsome.server_app.internal.tasks.impl.socket;
+package winsome.connection.server_api.socket;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
+
+import winsome.server_app.internal.tasks.TaskUtils;
 
 public class SocketWriter
 {
@@ -31,16 +33,17 @@ public class SocketWriter
 	private void tryExecuteWriteOperation() throws IOException
 	{
 		write_buffer.flip();
+		((SocketChannel)key.channel()).write(write_buffer);
+		
 		if(write_buffer.hasRemaining())
 		{
-			((SocketChannel)key.channel()).write(write_buffer);
 			write_buffer.compact();
-			key.interestOps(SelectionKey.OP_WRITE);
+			TaskUtils.setSocketReadyToWrite(key);
 		}
 		else
 		{
 			write_buffer.clear();
-			key.interestOps(SelectionKey.OP_READ);
+			TaskUtils.setSocketReadyToRead(key);
 		}
 	}
 	

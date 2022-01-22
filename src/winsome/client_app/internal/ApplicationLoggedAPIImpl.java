@@ -16,16 +16,17 @@ import winsome.client_app.api.PostShort;
 import winsome.client_app.api.User;
 import winsome.client_app.api.Wallet;
 import winsome.connection.client_api.follower_updater.FollowerUpdaterRMIHandler;
+import winsome.connection.client_api.socket.ApplicationLoggedAPI;
 import winsome.connection.client_api.wallet_notifier.WalletNotificationUpdater;
 
-public class ApplicationLoggedAPIImpl implements LoggedClientAPI
+public class ApplicationLoggedAPIImpl implements LoggedClientAPI, ApplicationLoggedAPI
 {
 	public final String me;
 	public final Set<String> followers;
 	public final Set<String> following;
 	public final Map<Integer, PostShort> blog;
 	public final WalletNotificationUpdater wallet_notifier;
-	public final FollowerUpdaterRMIHandler client_handler;
+	public final FollowerUpdaterRMIHandler follower_updater;
 	
 	public ApplicationLoggedAPIImpl(String server_host, String me) throws IOException, NotBoundException
 	{
@@ -34,7 +35,7 @@ public class ApplicationLoggedAPIImpl implements LoggedClientAPI
 		this.following = new HashSet<String>();
 		this.blog = new HashMap<Integer, PostShort>();
 		this.wallet_notifier = new WalletNotificationUpdater();
-		this.client_handler = new FollowerUpdaterRMIHandler(server_host, me, followers);
+		this.follower_updater = new FollowerUpdaterRMIHandler(server_host, me, followers);
 	}
 
 	@Override
@@ -137,6 +138,44 @@ public class ApplicationLoggedAPIImpl implements LoggedClientAPI
 	public Integer getWalletInBitcoin() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	
+
+	@Override
+	public String getThisUser()
+	{
+		return me;
+	}
+
+	@Override
+	public Set<String> getFollowers()
+	{
+		return followers;
+	}
+
+	@Override
+	public Set<String> getFollowing()
+	{
+		return following;
+	}
+
+	@Override
+	public Map<Integer, PostShort> getBlog()
+	{
+		return blog;
+	}
+
+	@Override
+	public WalletNotificationUpdater getWalletNotifier()
+	{		
+		return wallet_notifier;
+	}
+
+	@Override
+	public FollowerUpdaterRMIHandler getFollowerUpdater()
+	{
+		return follower_updater;
 	}
 
 }

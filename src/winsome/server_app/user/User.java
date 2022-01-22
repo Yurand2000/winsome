@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import winsome.server_app.user.exceptions.*;
@@ -87,6 +88,7 @@ public class User implements Cloneable
 		return followers.size();
 	}
 	
+	@JsonIgnore()
 	public synchronized ArrayList<String> getFollowers()
 	{
 		return new ArrayList<String>(followers);
@@ -118,7 +120,8 @@ public class User implements Cloneable
 	{
 		return following.size();
 	}
-	
+
+	@JsonIgnore()
 	public synchronized List<String> getFollowing()
 	{
 		return new ArrayList<String>(following);
@@ -144,7 +147,8 @@ public class User implements Cloneable
 	{
 		return posts.size();
 	}
-	
+
+	@JsonIgnore()
 	public synchronized List<Integer> getPosts()
 	{
 		return new ArrayList<Integer>(posts);

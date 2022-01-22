@@ -1,14 +1,10 @@
 package winsome.client_app;
 
-import java.io.IOException;
 import java.net.UnknownHostException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import winsome.client_app.api.*;
 import winsome.client_app.internal.ApplicationAPIImpl;
-import winsome.generic.SerializerWrapper;
+import winsome.connection.socket_messages.MessageUtils;
 
 public class ClientAppAPI
 {
@@ -28,6 +24,8 @@ public class ClientAppAPI
 	
 	public static void startClient(Runnable wallet_notification) throws UnknownHostException
 	{
+		MessageUtils.registerJsonDeserializers();
+		
 		ClientSettings settings = getClientSettings();
 		client_api = new ApplicationAPIImpl(settings.makeServerAdddress(), wallet_notification);
 	}
@@ -43,26 +41,13 @@ public class ClientAppAPI
 	
 	public static ClientSettings getClientSettings()
 	{
-		Path path = Paths.get(client_settings_file);
-		
-		try
+		ClientSettings settings = ClientSettings.deserializeFromFile(client_settings_file);
+		if(settings == null)
 		{
-			byte[] settings_data = Files.readAllBytes(path);
-			return SerializerWrapper.deserialize(settings_data, ClientSettings.class);
+			settings = new ClientSettings();
+			ClientSettings.serializeToFile(settings, client_settings_file);
 		}
-		catch (IOException e)
-		{
-			ClientSettings settings = new ClientSettings();
-			
-			try 
-			{
-				byte[] settings_data = SerializerWrapper.serialize(settings);
-				Files.write(path, settings_data);
-			}
-			catch (IOException e2) { }
-			
-			return settings;
-		}
+		return settings;
 	}
 	
 	private ClientAppAPI() { }

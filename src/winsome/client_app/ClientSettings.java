@@ -1,26 +1,30 @@
 package winsome.client_app;
 
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 
-import winsome.connection.protocols.WinsomeConnectionProtocol;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ClientSettings
+import winsome.connection.protocols.WinsomeConnectionProtocol;
+import winsome.generic.SettingsReader;
+
+public class ClientSettings extends SettingsReader
 {
-	public final String server_address;
+	@JsonProperty() public final String server_address;
 	
 	public ClientSettings()
 	{
-		server_address = "localhost";
+		server_address = "127.0.0.1";
 	}
 	
-	public ClientSettings(String server_address)
+	public static ClientSettings deserializeFromFile(String filename)
 	{
-		this.server_address = server_address;
+		return deserializeFromFile(ClientSettings.class, filename);
 	}
 	
 	public InetSocketAddress makeServerAdddress() throws UnknownHostException
 	{
-		return InetSocketAddress.createUnresolved(server_address, WinsomeConnectionProtocol.getTCPListenerPort());
+		return new InetSocketAddress(InetAddress.getByName(server_address), WinsomeConnectionProtocol.getTCPListenerPort());
 	}
 }

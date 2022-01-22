@@ -8,7 +8,7 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 
-import winsome.server_app.internal.tasks.impl.socket.SocketInformations;
+import winsome.connection.server_api.socket.SocketInformations;
 import winsome.server_app.internal.tasks.impl.socket.Task_SocketRead;
 import winsome.server_app.internal.tasks.impl.socket.Task_SocketWrite;
 
@@ -158,6 +158,7 @@ public class ClientHandler implements Runnable
 	
 	private void executeReadWriteKey(SelectionKey key)
 	{
+		key.interestOps(0);		
 		if(key.isReadable())
 		{
 			server.executeTask(new Task_SocketRead(key));

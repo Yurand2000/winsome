@@ -1,34 +1,41 @@
 package winsome.server_app;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
 
+import winsome.connection.protocols.WinsomeConnectionProtocol;
 import winsome.connection.server_api.follower_updater.FollowerUpdaterRegistratorHandler;
 import winsome.connection.server_api.registrator.RegistratorRMIHandler;
+import winsome.connection.socket_messages.MessageUtils;
 import winsome.server_app.internal.*;
 
 public class ServerMain
 {
+	public final ServerSettings settings;
 	private final WinsomeServer server;
 	private final ServerAutosaver autosaver;
-	private final ClientHandler client_handler;
 	private final RegistratorRMIHandler registrator_handler;
+	private final ClientHandler client_handler;
 	private final FollowerUpdaterRegistratorHandler follower_updater_handler;
 	
-	public ServerMain(InetSocketAddress address, String savefile)
+	public ServerMain(String settings_file)
 	{
-		server = new WinsomeServerImpl(savefile);
+		settings = getServerSettings(settings_file);
+		server = new WinsomeServerImpl(settings);		
 		autosaver = new ServerAutosaver(server);
-		client_handler = new ClientHandler(address, server);
 		registrator_handler = new RegistratorRMIHandler(server);
+		client_handler = new ClientHandler(getServerAddress(), server);
 		follower_updater_handler = new FollowerUpdaterRegistratorHandler();
 	}
 	
 	public void startServer() throws IOException, AlreadyBoundException
 	{
 		ServerRMIRegistry.startRegistry();
+		MessageUtils.registerJsonDeserializers();
 		server.startServer();
 		
 		autosaver.startAutosaver();
@@ -46,5 +53,25 @@ public class ServerMain
 		
 		server.shutdownServer();
 		ServerRMIRegistry.shutdownRegistry();
+	}
+	
+	private ServerSettings getServerSettings(String settings_file)
+	{
+		ServerSettings settings = ServerSettings.deserializeFromFile(settings_file);
+		if(settings == null)
+		{
+			settings = new ServerSettings();
+			ServerSettings.serializeToFile(settings, settings_file);
+		}
+		return settings;
+	}
+	
+	private InetSocketAddress getServerAddress()
+	{
+		try
+		{
+			return new InetSocketAddress(InetAddress.getByName(settings.server_address), WinsomeConnectionProtocol.getTCPListenerPort());
+		}
+		catch (UnknownHostException e) { throw new RuntimeException(e.getMessage()); }
 	}
 }

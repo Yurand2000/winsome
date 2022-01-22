@@ -1,4 +1,4 @@
-package winsome.client_app.internal;
+package winsome.connection.client_api.socket;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -10,14 +10,14 @@ import winsome.connection.socket_messages.Message;
 import winsome.connection.socket_messages.server.RequestExceptionAnswer;
 import winsome.generic.SerializerWrapper;
 
-public class ConnectionHandler
+public class ConnectionHandlerImpl implements ConnectionHandler
 {
 	private final InetSocketAddress server_address;
 	private SocketChannel socket;
 	private final ByteBuffer read_buffer;
 	private final ByteBuffer write_buffer;
 	
-	public ConnectionHandler(InetSocketAddress server_address)
+	public ConnectionHandlerImpl(InetSocketAddress server_address)
 	{
 		this.server_address = server_address;
 		this.read_buffer = ByteBuffer.allocate(512);
@@ -31,14 +31,7 @@ public class ConnectionHandler
 		socket.connect(server_address);
 	}
 	
-	public Message readMessage() throws IOException
-	{
-		int length = readMessageLength();
-		byte[] data = readMessage(length);
-		return SerializerWrapper.deserialize(data, Message.class);
-	}
-	
-	public <T> T readMessage(Class<T> type) throws IOException
+	public <T extends Message> T readMessage(Class<T> type) throws IOException
 	{
 		Message message = readMessage();
 		
@@ -52,11 +45,18 @@ public class ConnectionHandler
 		}
 		else
 		{
-			throw new ServerInternalException("null");
+			throw new ServerInternalException("could not deserialize message.");
 		}
 	}
 	
-	public void sendMessage(Message message) throws IOException
+	private Message readMessage() throws IOException
+	{
+		int length = readMessageLength();
+		byte[] data = readMessage(length);
+		return SerializerWrapper.deserialize(data, Message.class);
+	}
+	
+	public <T extends Message> void sendMessage(T message) throws IOException
 	{
 		byte[] data = SerializerWrapper.serializeCompact(message);
 		write_buffer.putInt(data.length);
@@ -65,10 +65,20 @@ public class ConnectionHandler
 		socket.write(write_buffer);
 	}
 	
-	public void disconnect() throws IOException
+	public void disconnect()
 	{
-		socket.close();
-		socket = null;
+		try
+		{
+			if(socket != null)
+			{
+				socket.close();
+			}
+		}
+		catch (IOException e) { }
+		finally
+		{
+			socket = null;
+		}
 	}
 	
 	private int readMessageLength() throws IOException

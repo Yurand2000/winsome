@@ -3,6 +3,8 @@ package winsome.server_app.internal.tasks.impl;
 import java.nio.channels.SelectionKey;
 import java.util.ArrayList;
 import java.util.List;
+
+import winsome.connection.server_api.socket.SocketInformations;
 import winsome.connection.socket_messages.client.LoginRequest;
 import winsome.connection.socket_messages.server.LoginAnswer;
 import winsome.connection.socket_messages.server.RequestExceptionAnswer;
@@ -10,7 +12,6 @@ import winsome.server_app.internal.WinsomeData;
 import winsome.server_app.internal.WinsomeServer;
 import winsome.server_app.internal.tasks.WinsomeTask;
 import winsome.server_app.internal.tasks.TaskUtils;
-import winsome.server_app.internal.tasks.impl.socket.SocketInformations;
 import winsome.server_app.user.User;
 
 public class LoginUserTask implements WinsomeTask
@@ -29,27 +30,32 @@ public class LoginUserTask implements WinsomeTask
 	{
 		User requested_user = server_data.users.get(message.username);
 		
-		checkLogin(requested_user);
-		sendLoginAnswer(requested_user, server_data);
+		if(checkLogin(requested_user))
+		{
+			sendLoginAnswer(requested_user, server_data);
+		}
 		
 		TaskUtils.setSocketReadyToWrite(socket);
 	}
 	
-	private void checkLogin(User requested_user)
+	private boolean checkLogin(User requested_user)
 	{
 		SocketInformations infos = (SocketInformations) socket.attachment();
 		
 		if(requested_user == null)
 		{
 			TaskUtils.sendMessage(infos, new RequestExceptionAnswer("User does not exist."));
+			return false;
 		}
-		
+
 		if(!requested_user.login.checkPassword(message.password))
 		{
 			TaskUtils.sendMessage(infos, new RequestExceptionAnswer("Incorrect password."));
+			return false;
 		}
 		
 		infos.setSocketUser(message.username);
+		return true;
 	}
 	
 	private void sendLoginAnswer(User user, WinsomeData server_data)

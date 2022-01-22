@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
 import winsome.generic.SerializerWrapper;
 import winsome.server_app.internal.pausable_threads.PausableThreadFactory;
 import winsome.server_app.internal.tasks.WinsomeRunnable;
@@ -13,17 +14,17 @@ import winsome.server_app.internal.tasks.WinsomeTask;
 
 public class WinsomeServerImpl implements WinsomeServer
 {
-	private final String save_file;
+	public final ServerSettings settings;
 	private final WinsomeData server_data;
 	private ExecutorService thread_pool;
 	private final PausableThreadFactory thread_factory;
 	
-	public WinsomeServerImpl(String filename)
+	public WinsomeServerImpl(ServerSettings settings)
 	{
-		save_file = filename;
+		this.settings = settings;
 		thread_factory = new PausableThreadFactory();
 		thread_pool = null;
-		server_data = tryGetSerializedData(save_file);		
+		server_data = tryGetSerializedData(settings.save_file);		
 	}
 	
 	private WinsomeData tryGetSerializedData(String filename)
@@ -85,7 +86,7 @@ public class WinsomeServerImpl implements WinsomeServer
 		try
 		{
 			byte[] data = SerializerWrapper.serialize(obj);
-			Files.write(Paths.get(save_file), data);
+			Files.write(Paths.get(settings.save_file), data);
 		}
 		catch (IOException e)
 		{

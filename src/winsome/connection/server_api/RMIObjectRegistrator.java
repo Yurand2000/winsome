@@ -30,6 +30,7 @@ public class RMIObjectRegistrator<T extends Remote>
 	public void unbindObject() throws IOException, NotBoundException
 	{
 		getRegistry().unbind( object_name );
+		UnicastRemoteObject.unexportObject( object, true );
 	}
 	
 	private Remote generateStub() throws RemoteException
