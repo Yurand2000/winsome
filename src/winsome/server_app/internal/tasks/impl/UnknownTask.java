@@ -2,7 +2,7 @@ package winsome.server_app.internal.tasks.impl;
 
 import java.nio.channels.SelectionKey;
 
-import winsome.connection.server_api.socket.SocketState;
+import winsome.connection.server_api.socket.SocketStateImpl;
 import winsome.connection.socket_messages.server.RequestExceptionAnswer;
 import winsome.server_app.internal.WinsomeData;
 import winsome.server_app.internal.WinsomeServer;
@@ -22,7 +22,7 @@ public class UnknownTask implements WinsomeTask
 	public void run(WinsomeServer server, WinsomeData server_data)
 	{
 		TaskUtils.sendMessage(
-			(SocketState) socket.attachment(),
+			(SocketStateImpl) socket.attachment(),
 			new RequestExceptionAnswer("Unknown task.")
 		);
 		

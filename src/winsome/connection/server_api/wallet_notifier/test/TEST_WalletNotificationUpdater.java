@@ -14,7 +14,7 @@ import winsome.connection.server_api.wallet_notifier.WalletNotificationUpdater;
 import winsome.connection.protocols.WalletNotification;
 import winsome.connection.protocols.WinsomeConnectionProtocol;
 
-class WalletNotificationUpdaterTest
+class TEST_WalletNotificationUpdater
 {
 	@Test
 	void test() throws IOException

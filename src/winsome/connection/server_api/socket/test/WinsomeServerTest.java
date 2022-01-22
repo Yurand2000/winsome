@@ -5,41 +5,23 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.lang.reflect.Field;
 import java.nio.channels.SelectionKey;
 
-import winsome.connection.server_api.socket.SocketState;
+import winsome.connection.server_api.socket.SocketStateImpl;
+import winsome.connection.server_api.socket.tasks.SocketTask;
 import winsome.server_app.internal.WinsomeServer;
 import winsome.server_app.internal.tasks.TaskUtils;
 import winsome.server_app.internal.tasks.WinsomeTask;
-import winsome.server_app.internal.tasks.impl.socket.SocketReadTask;
-import winsome.server_app.internal.tasks.impl.socket.SocketWriteTask;
 
-public class WinsomeServerTest implements WinsomeServer
+class WinsomeServerTest implements WinsomeServer
 {
 	private boolean execute_task = false;
 	private boolean write_test = false;
 	private Class<? extends WinsomeTask> expected_task = null; 
-	
-	public WinsomeServerTest()
-	{
-		
-	}
-	
-	@Override
-	public void startServer()
-	{
-		fail();
-	}
 
-	@Override
-	public void shutdownServer()
-	{
-		fail();
-	}
-
-	@Override
-	public void saveToFile()
-	{
-		fail();
-	}
+	public WinsomeServerTest() { }
+	public void startServer() { fail(); }
+	public void shutdownServer() { fail(); }
+	public void saveToFile() { fail(); }
+	public void executeTaskNow(WinsomeTask task) { fail(); }
 
 	@Override
 	public void executeTask(WinsomeTask task)
@@ -47,12 +29,6 @@ public class WinsomeServerTest implements WinsomeServer
 		expected_task = task.getClass();
 		
 		fakeExecuteTask(task);
-	}
-
-	@Override
-	public void executeTaskNow(WinsomeTask task)
-	{
-		fail();
 	}
 
 	public void checkExpectedTask(Class<? extends WinsomeTask> task)
@@ -72,15 +48,15 @@ public class WinsomeServerTest implements WinsomeServer
 	private void fakeExecuteTask(WinsomeTask task)
 	{
 		SelectionKey key = getSelectionKey(task);
-		SocketState state = (SocketState) key.attachment();
+		SocketStateImpl state = (SocketStateImpl) key.attachment();
 		
 		if(key.isReadable())
 		{
-			state.reader.executeReadOperation();
+			state.getReader().executeReadOperation();
 			
-			if(state.reader.hasMessageBeenRetrived())
+			if(state.getReader().hasMessageBeenRetrived())
 			{
-				byte[] data = state.reader.getRetrivedMessage();
+				byte[] data = state.getReader().getRetrivedMessage();
 				
 				assertArrayEquals(data, "read".getBytes());
 				
@@ -92,14 +68,14 @@ public class WinsomeServerTest implements WinsomeServer
 				
 				if(write_test)
 				{
-					state.writer.addMessageToSend("write".getBytes());
+					state.getWriter().addMessageToSend("write".getBytes());
 					TaskUtils.setSocketReadyToWrite(key);
 				}
 			}
 		}
 		else if(key.isWritable())
 		{
-			state.writer.executeWriteOperation();
+			state.getWriter().executeWriteOperation();
 		}
 	}
 	
@@ -112,15 +88,9 @@ public class WinsomeServerTest implements WinsomeServer
 	{
 		try
 		{
-			if(task.getClass() == SocketReadTask.class)
+			if(SocketTask.class.isAssignableFrom(task.getClass()))
 			{
-				Field key_field = SocketReadTask.class.getDeclaredField("key");
-				key_field.setAccessible(true);
-				return (SelectionKey) key_field.get(task);
-			}
-			else if(task.getClass() == SocketWriteTask.class)
-			{
-				Field key_field = SocketWriteTask.class.getDeclaredField("key");
+				Field key_field = SocketTask.class.getDeclaredField("key");
 				key_field.setAccessible(true);
 				return (SelectionKey) key_field.get(task);
 			}

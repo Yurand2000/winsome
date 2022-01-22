@@ -16,7 +16,7 @@ import winsome.connection.server_api.follower_updater.*;
 import winsome.connection.client_api.follower_updater.*;
 import winsome.server_app.internal.ServerRMIRegistry;
 
-class FollowerUpdaterTest
+class TEST_FollowerUpdater
 {
 	private FollowerUpdaterRegistratorHandler server_handler;
 	private FollowerUpdaterRMIHandler client_handler;

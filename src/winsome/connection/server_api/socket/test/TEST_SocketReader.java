@@ -14,15 +14,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import winsome.connection.server_api.socket.SocketReader;
+import winsome.connection.server_api.socket.SocketReaderImpl;
 
-class SocketReaderTest
+class TEST_SocketReader
 {
 	private SelectorTest selector;
 	private SelectionKeyTest key;
 	private SocketChannel key_channel;
 	private SocketChannel other_channel;
-	private SocketReader reader;
+	private SocketReaderImpl reader;
 	
 	@BeforeEach
 	void setup() throws IOException
@@ -41,7 +41,7 @@ class SocketReaderTest
 		key_channel.finishConnect();
 		
 		key = new SelectionKeyTest(selector, key_channel);
-		reader = new SocketReader(key);
+		reader = new SocketReaderImpl(key);
 	}
 	
 	@Test

@@ -13,10 +13,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import winsome.connection.server_api.socket.ClientHandler;
-import winsome.server_app.internal.tasks.impl.socket.SocketReadTask;
-import winsome.server_app.internal.tasks.impl.socket.SocketWriteTask;
+import winsome.connection.server_api.socket.tasks.SocketReadTask;
+import winsome.connection.server_api.socket.tasks.SocketWriteTask;
 
-class ClientHandlerTest
+class TEST_ClientHandler
 {
 	private WinsomeServerTest server;
 	private SocketChannel other_channel;

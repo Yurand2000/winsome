@@ -29,9 +29,9 @@ public class TaskUtils
 		key.selector().wakeup();
 	}
 	
-	public static void sendMessage(SocketState infos, Message msg)
+	public static void sendMessage(SocketState state, Message msg)
 	{
-		infos.writer.addMessageToSend(serializeMessage(msg));
+		state.getWriter().addMessageToSend(serializeMessage(msg));
 	}
 	
 	private static byte[] serializeMessage(Message msg)

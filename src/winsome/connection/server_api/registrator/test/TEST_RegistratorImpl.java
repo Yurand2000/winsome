@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import winsome.connection.server_api.registrator.RegistratorImpl;
 
-class RegistratorImplTest
+class TEST_RegistratorImpl
 {
 	private WinsomeServerTest server_test = null;
 	

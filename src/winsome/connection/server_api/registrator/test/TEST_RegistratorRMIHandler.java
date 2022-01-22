@@ -14,7 +14,7 @@ import winsome.connection.server_api.registrator.Registrator;
 import winsome.connection.server_api.registrator.RegistratorRMIHandler;
 import winsome.server_app.internal.ServerRMIRegistry;
 
-class RegistratorRMIHandlerTest 
+class TEST_RegistratorRMIHandler 
 {
 	private WinsomeServerTest server_test = null;
 	private RegistratorRMIHandler registrator = null;

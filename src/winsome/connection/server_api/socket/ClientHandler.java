@@ -8,11 +8,11 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 
+import winsome.connection.server_api.socket.tasks.SocketReadTask;
+import winsome.connection.server_api.socket.tasks.SocketWriteTask;
 import winsome.server_app.internal.WinsomeServer;
 import winsome.server_app.internal.pausable_threads.PausableThread;
 import winsome.server_app.internal.pausable_threads.PausableThreadMonitor;
-import winsome.server_app.internal.tasks.impl.socket.SocketReadTask;
-import winsome.server_app.internal.tasks.impl.socket.SocketWriteTask;
 
 public class ClientHandler implements Runnable
 {
@@ -134,7 +134,7 @@ public class ClientHandler implements Runnable
 		new_channel.configureBlocking(false);
 		
 		SelectionKey new_key = new_channel.register(selector, SelectionKey.OP_READ);
-		new_key.attach(new SocketState(new_key));
+		new_key.attach(new SocketStateImpl(new_key));
 	}
 	
 	private void executeReadWriteKey(SelectionKey key)

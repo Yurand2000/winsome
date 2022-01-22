@@ -4,7 +4,7 @@ import java.nio.channels.SelectionKey;
 import java.util.ArrayList;
 import java.util.List;
 
-import winsome.connection.server_api.socket.SocketState;
+import winsome.connection.server_api.socket.SocketStateImpl;
 import winsome.connection.socket_messages.client.LoginRequest;
 import winsome.connection.socket_messages.server.LoginAnswer;
 import winsome.connection.socket_messages.server.RequestExceptionAnswer;
@@ -40,7 +40,7 @@ public class LoginUserTask implements WinsomeTask
 	
 	private boolean checkLogin(User requested_user)
 	{
-		SocketState infos = (SocketState) socket.attachment();
+		SocketStateImpl infos = (SocketStateImpl) socket.attachment();
 		
 		if(requested_user == null)
 		{
@@ -87,6 +87,6 @@ public class LoginUserTask implements WinsomeTask
 			"upd_multicast_address missing" //!
 		);
 
-		TaskUtils.sendMessage((SocketState) socket.attachment(), answer);	
+		TaskUtils.sendMessage((SocketStateImpl) socket.attachment(), answer);	
 	}
 }

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import winsome.connection.server_api.follower_updater.FollowerUpdaterRegistratorImpl;
 
-class FollowerUpdaterRegistratorImplTest
+class TEST_FollowerUpdaterRegistratorImpl
 {
 	@Test
 	void testRegisterFollowerUpdater() throws RemoteException

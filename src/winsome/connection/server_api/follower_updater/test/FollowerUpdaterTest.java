@@ -7,7 +7,7 @@ import java.rmi.server.RemoteObject;
 
 import winsome.connection.client_api.follower_updater.FollowerUpdater;
 
-public class FollowerUpdaterTest extends RemoteObject implements FollowerUpdater
+class FollowerUpdaterTest extends RemoteObject implements FollowerUpdater
 {
 	private static final long serialVersionUID = 1L;
 	

@@ -13,15 +13,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import winsome.connection.server_api.socket.SocketWriter;
+import winsome.connection.server_api.socket.SocketWriterImpl;
 
-class SocketWriterTest
+class TEST_SocketWriter
 {
 	private SelectorTest selector;
 	private SelectionKeyTest key;
 	private SocketChannel key_channel;
 	private SocketChannel other_channel;
-	private SocketWriter writer;
+	private SocketWriterImpl writer;
 	
 	@BeforeEach
 	void setup() throws IOException
@@ -40,7 +40,7 @@ class SocketWriterTest
 		key_channel.finishConnect();
 		
 		key = new SelectionKeyTest(selector, key_channel);
-		writer = new SocketWriter(key);
+		writer = new SocketWriterImpl(key);
 	}
 
 	@Test

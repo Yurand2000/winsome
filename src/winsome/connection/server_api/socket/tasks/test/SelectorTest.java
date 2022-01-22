@@ -1,4 +1,4 @@
-package winsome.connection.server_api.socket.test;
+package winsome.connection.server_api.socket.tasks.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,7 +11,7 @@ import java.util.Set;
 class SelectorTest extends Selector
 {
 	private boolean wakeup_invoked = false;
-
+	
 	public SelectorTest() { }
 	public boolean isOpen() { fail(); return false; }
 	public SelectorProvider provider() { fail(); return null; }

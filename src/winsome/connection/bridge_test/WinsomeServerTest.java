@@ -1,4 +1,4 @@
-package winsome.connection.server_api.registrator.test;
+package winsome.connection.bridge_test;
 
 import static org.junit.jupiter.api.Assertions.*;
 

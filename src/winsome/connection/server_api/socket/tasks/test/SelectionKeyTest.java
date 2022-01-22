@@ -1,4 +1,4 @@
-package winsome.connection.server_api.socket.test;
+package winsome.connection.server_api.socket.tasks.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -10,23 +10,16 @@ class SelectionKeyTest extends SelectionKey
 {
 	private boolean cancel_called = false;
 	private final SelectorTest selector;
-	private final SelectableChannel channel;
 	private int interestOps;
 	
-	public SelectionKeyTest(SelectorTest selector, SelectableChannel channel)
+	public SelectionKeyTest(SelectorTest selector)
 	{
 		this.selector = selector;
-		this.channel = channel;
 		this.interestOps = 0;
 	}
 
-	public boolean isValid() { fail(); return false; }
-	
-	@Override
-	public SelectableChannel channel()
-	{
-		return channel;
-	}
+	public SelectableChannel channel() { fail(); return null; }
+	public boolean isValid() { fail(); return false;}
 
 	@Override
 	public Selector selector()

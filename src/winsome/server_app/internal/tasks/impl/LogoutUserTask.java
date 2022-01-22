@@ -2,7 +2,7 @@ package winsome.server_app.internal.tasks.impl;
 
 import java.nio.channels.SelectionKey;
 
-import winsome.connection.server_api.socket.SocketState;
+import winsome.connection.server_api.socket.SocketStateImpl;
 import winsome.connection.socket_messages.client.LogoutRequest;
 import winsome.connection.socket_messages.server.LogoutAnswer;
 import winsome.connection.socket_messages.server.RequestExceptionAnswer;
@@ -27,13 +27,13 @@ public class LogoutUserTask implements WinsomeTask
 	public void run(WinsomeServer server, WinsomeData server_data)
 	{
 		logout();		
-		TaskUtils.sendMessage((SocketState) socket.attachment(), new LogoutAnswer());		
+		TaskUtils.sendMessage((SocketStateImpl) socket.attachment(), new LogoutAnswer());		
 		TaskUtils.setSocketReadyToWrite(socket);
 	}
 	
 	private void logout()
 	{
-		SocketState infos = (SocketState) socket.attachment();
+		SocketStateImpl infos = (SocketStateImpl) socket.attachment();
 		if(infos.getSocketUser() == null)
 		{
 			TaskUtils.sendMessage(infos, new RequestExceptionAnswer("User not logged in."));

@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Timeout;
 
 import winsome.connection.server_api.wallet_notifier.WalletNotificationUpdater;
 
-class WalletNotifierTest
+class TEST_WalletNotifier
 {
 	private InetAddress multicast_address;
 	private winsome.connection.client_api.wallet_notifier.WalletNotificationUpdater client_updater;

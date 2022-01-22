@@ -9,10 +9,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import winsome.connection.client_api.registrator.RegistratorRMIHandler;
-import winsome.connection.server_api.registrator.test.WinsomeServerTest;
 import winsome.server_app.internal.ServerRMIRegistry;
 
-class RegistratorTest
+class TEST_RegistratorTest
 {
 	private WinsomeServerTest server;	
 	private winsome.connection.server_api.registrator.RegistratorRMIHandler server_registrator;
