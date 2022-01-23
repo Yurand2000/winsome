@@ -22,7 +22,7 @@ public abstract class DefaultTaskExecutor implements ClientTaskExecutor
 		catch (IOException e)
 		{
 			onException(connection, api);
-			throw new APIException(e.getMessage());
+			throw new APIException(e.toString());
 		}
 		catch (ServerInternalException e)
 		{
@@ -46,8 +46,9 @@ public abstract class DefaultTaskExecutor implements ClientTaskExecutor
 	
 	protected void onFinally(ConnectionHandler connection, ApplicationLoggedAPI api) { }
 	
-	private APIException parseRequestException(Exception e)
+	private APIException parseRequestException(RequestExceptionAnswer.Exception e)
 	{
-		return new ServerInternalException(e.getMessage());
+		// TODO
+		return e;
 	}
 }

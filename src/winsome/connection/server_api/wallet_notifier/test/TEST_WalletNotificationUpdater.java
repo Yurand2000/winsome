@@ -17,21 +17,31 @@ import winsome.connection.protocols.WinsomeConnectionProtocol;
 class TEST_WalletNotificationUpdater
 {
 	@Test
+	void testThrowsOnUnknownAddress()
+	{
+		assertThrows(IOException.class, () ->
+		{
+			WalletNotificationUpdater.NotifyWalletUpdated("unknown address");
+		});
+	}
+	
+	@Test
 	void test() throws IOException
 	{
 		byte[] message = new byte[WalletNotification.getNotificationMessage().length];
 		DatagramPacket incoming_packet = new DatagramPacket(message, message.length);
-		InetAddress multicast_address = InetAddress.getByName("224.0.0.128");
+		String multicast_address = "224.0.0.128";
+		InetAddress address = InetAddress.getByName(multicast_address);
 		
 		MulticastSocket socket = new MulticastSocket(WinsomeConnectionProtocol.getUDPMulticastPort());
-		socket.joinGroup(multicast_address);
+		socket.joinGroup(address);
 		
 		WalletNotificationUpdater.NotifyWalletUpdated(multicast_address);
 		
 		socket.receive(incoming_packet);
 		assertTrue(Arrays.equals(incoming_packet.getData(), WalletNotification.getNotificationMessage()));
 		
-		socket.leaveGroup(multicast_address);
+		socket.leaveGroup(address);
 		socket.close();
 		socket = null;
 	}

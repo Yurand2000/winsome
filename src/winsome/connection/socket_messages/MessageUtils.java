@@ -11,14 +11,38 @@ public class MessageUtils
 	public static void registerJsonDeserializers()
 	{
 		SerializerWrapper.addDeserializers(
+			CommentPostRequest.class,
+			CreatePostRequest.class,
+			DeletePostRequest.class,
+			FollowUserRequest.class,
+			GetFeedRequest.class,
+			GetPostRequest.class,
+			GetWalletInBitcoinRequest.class,
+			GetWalletRequest.class,
+			ListUserRequest.class,
 			LoginRequest.class,
-			LogoutRequest.class
+			LogoutRequest.class,
+			RatePostRequest.class,
+			RewinPostRequest.class,
+			UnfollowUserRequest.class
 		);
 		
 		SerializerWrapper.addDeserializers(
+			CommentPostAnswer.class,
+			CreatePostAnswer.class,
+			DeletePostAnswer.class,
+			FollowUserAnswer.class,
+			GetFeedAnswer.class,
+			GetPostAnswer.class,
+			GetWalletAnswer.class,
+			GetWalletInBitcoinAnswer.class,
+			ListUserAnswer.class,
 			LoginAnswer.class,
 			LogoutAnswer.class,
-			RequestExceptionAnswer.class
+			RatePostAnswer.class,
+			RequestExceptionAnswer.class,
+			RewinPostAnswer.class,
+			UnfollowUserAnswer.class
 		);
 	}
 }

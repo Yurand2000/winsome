@@ -4,7 +4,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import winsome.client_app.ClientAppAPI;
-import winsome.console_app.CannotExecuteException;
 import winsome.console_app.ConsoleCommandExecutor;
 
 public class AddCommentExecutor extends ConsoleCommandExecutor
@@ -33,17 +32,8 @@ public class AddCommentExecutor extends ConsoleCommandExecutor
 		matcher.find();
 		Integer postId = Integer.parseInt(matcher.group(1));
 		String comment = matcher.group(2);
-		checkComment(comment);
 		
 		ClientAppAPI.getLoggedClientAPI().addComment(postId, comment);
 		return "Successfully commented post \"" + postId.toString() + "\".";
-	}
-	
-	private void checkComment(String comment)
-	{
-		if(comment.length() > 35)
-		{
-			throw new CannotExecuteException("Comment is too long: max 35 characters each.");
-		}
 	}
 }

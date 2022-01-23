@@ -18,6 +18,13 @@ public class PostFactory
 		sequence_holes = new PriorityQueue<Integer>();
 	}
 	
+	public PostFactory(List<GenericPost> posts)
+	{
+		current_last_id = findLastInteger(posts);
+		Set<Integer> missing = generateMissingSet(current_last_id, posts);
+		sequence_holes = new PriorityQueue<Integer>(missing);
+	}
+	
 	public GenericPost makeNewPost(String title, String author, String content)
 	{
 		Integer newPostId = generateNextId();
@@ -53,13 +60,6 @@ public class PostFactory
 		sequence_holes.add(postId);
 	}
 	
-	public PostFactory(List<GenericPost> posts)
-	{
-		current_last_id = findLastInteger(posts);
-		Set<Integer> missing = generateMissingSet(current_last_id, posts);
-		sequence_holes = new PriorityQueue<Integer>(missing);
-	}
-	
 	private Integer findLastInteger(List<GenericPost> posts)
 	{
 		Integer max = 0;
@@ -74,7 +74,7 @@ public class PostFactory
 	private Set<Integer> generateMissingSet(Integer max, List<GenericPost> posts)
 	{
 		Set<Integer> missing = new TreeSet<Integer>();
-		for(int i = 1; i < max - 1; i++)
+		for(int i = 1; i < max; i++)
 		{
 			missing.add(i);
 		}

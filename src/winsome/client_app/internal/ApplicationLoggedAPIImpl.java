@@ -16,8 +16,10 @@ import winsome.client_app.api.PostShort;
 import winsome.client_app.api.User;
 import winsome.client_app.api.Wallet;
 import winsome.connection.client_api.follower_updater.FollowerUpdaterRMIHandler;
+import winsome.connection.client_api.follower_updater.FollowerUpdaterRMIHandlerImpl;
 import winsome.connection.client_api.socket.ApplicationLoggedAPI;
 import winsome.connection.client_api.wallet_notifier.WalletNotificationUpdater;
+import winsome.connection.client_api.wallet_notifier.WalletNotificationUpdaterImpl;
 
 public class ApplicationLoggedAPIImpl implements LoggedClientAPI, ApplicationLoggedAPI
 {
@@ -25,17 +27,17 @@ public class ApplicationLoggedAPIImpl implements LoggedClientAPI, ApplicationLog
 	public final Set<String> followers;
 	public final Set<String> following;
 	public final Map<Integer, PostShort> blog;
-	public final WalletNotificationUpdater wallet_notifier;
-	public final FollowerUpdaterRMIHandler follower_updater;
+	public final WalletNotificationUpdaterImpl wallet_notifier;
+	public final FollowerUpdaterRMIHandlerImpl follower_updater;
 	
 	public ApplicationLoggedAPIImpl(String server_host, String me) throws IOException, NotBoundException
 	{
 		this.me = me;
 		this.followers = Collections.synchronizedSet(new HashSet<String>());
-		this.following = new HashSet<String>();
-		this.blog = new HashMap<Integer, PostShort>();
-		this.wallet_notifier = new WalletNotificationUpdater();
-		this.follower_updater = new FollowerUpdaterRMIHandler(server_host, me, followers);
+		this.following = Collections.synchronizedSet(new HashSet<String>());
+		this.blog = Collections.synchronizedMap(new HashMap<Integer, PostShort>());
+		this.wallet_notifier = new WalletNotificationUpdaterImpl();
+		this.follower_updater = new FollowerUpdaterRMIHandlerImpl(server_host, me, followers);
 	}
 
 	@Override

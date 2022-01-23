@@ -5,26 +5,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.regex.Pattern;
 
 import winsome.client_app.api.ApplicationAPI;
-import winsome.client_app.api.LoggedClientAPI;
 import winsome.client_app.api.exceptions.*;
 
-public class TestClientAPI implements ApplicationAPI
-{
+class TestClientAPI implements ApplicationAPI
+{	
+	private TestLoggedClientAPI logged_api = new TestLoggedClientAPI();
+
 	private boolean register_called = false;
 	private boolean username_already_taken = false;
 	private String register_username;
 	private String register_password;
 	private String[] register_tags;
-	
-	private boolean login_called = false;
-	private String login_username;
-	private String login_password;
-	
-	private boolean logout_called = false;
-	
-	private boolean unknown_username = false;
-	private boolean incorrect_password = false;
-	private boolean is_logged_in = false;
 	
 	@Override
 	public void register(String username, String password, String[] tags)
@@ -65,7 +56,15 @@ public class TestClientAPI implements ApplicationAPI
 	{
 		username_already_taken = true;
 	}
+	
+	private boolean login_called = false;
+	private String login_username;
+	private String login_password;
 
+	private boolean unknown_username = false;
+	private boolean incorrect_password = false;
+	private boolean is_logged_in = false;
+	
 	@Override
 	public void login(String username, String password)
 	{
@@ -111,6 +110,8 @@ public class TestClientAPI implements ApplicationAPI
 	{
 		is_logged_in = true;
 	}
+	
+	private boolean logout_called = false;
 
 	@Override
 	public void logout()
@@ -128,7 +129,8 @@ public class TestClientAPI implements ApplicationAPI
 	}
 
 	@Override
-	public LoggedClientAPI getLoggedAPI() {
-		return null;
+	public TestLoggedClientAPI getLoggedAPI()
+	{
+		return logged_api;
 	}
 }

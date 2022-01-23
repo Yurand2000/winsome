@@ -31,7 +31,7 @@ public class RewinPost extends GenericPost
 	}
 
 	@JsonIgnore()
-	public Integer getOriginalPost()
+	public Integer getOriginalPostId()
 	{
 		return originalPostId;
 	}

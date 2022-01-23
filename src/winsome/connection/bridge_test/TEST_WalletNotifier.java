@@ -3,7 +3,6 @@ package winsome.connection.bridge_test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -16,14 +15,14 @@ import winsome.connection.server_api.wallet_notifier.WalletNotificationUpdater;
 
 class TEST_WalletNotifier
 {
-	private InetAddress multicast_address;
-	private winsome.connection.client_api.wallet_notifier.WalletNotificationUpdater client_updater;
+	private String multicast_address;
+	private winsome.connection.client_api.wallet_notifier.WalletNotificationUpdaterImpl client_updater;
 	
 	@BeforeEach
 	void setup() throws UnknownHostException
 	{
-		multicast_address = InetAddress.getByName("224.0.0.128");
-		client_updater = new winsome.connection.client_api.wallet_notifier.WalletNotificationUpdater();
+		multicast_address = "224.0.0.128";
+		client_updater = new winsome.connection.client_api.wallet_notifier.WalletNotificationUpdaterImpl();
 	}
 	
 	@Test

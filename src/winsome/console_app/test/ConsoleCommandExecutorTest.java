@@ -1,35 +1,42 @@
 package winsome.console_app.test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.*;
 
-import winsome.console_app.*;
-import winsome.console_app.test.consoleCommandExecutor.*;
+import winsome.console_app.ConsoleCommandExecutor;
 
-class ConsoleCommandExecutorTest
-{	
-	@Test
-	void defaultExecutorWithoutSuccessorThrowsOnNullString()
+class ConsoleCommandExecutorTest extends ConsoleCommandExecutor
+{
+	private String expected = null;
+	private boolean executed = false;
+	
+	public ConsoleCommandExecutorTest()
 	{
-		ConsoleCommandExecutor testClass = new ConsoleCommandExecutor(null);
-		assertThrows(CannotExecuteException.class, () -> testClass.executeString("any string"));
+		super(null);
+	}
+
+	@Override
+	protected boolean canExecute(String line)
+	{
+		assertEquals(expected, line);
+		return true;
 	}
 	
-	@Test
-	void defaultExecutorWithSuccessorRunsOnSuccessor()
+	@Override
+	protected String execute(String line)
 	{
-		TestCommandExecutor test_child = new TestCommandExecutor();
-		ConsoleCommandExecutor testClass = new ConsoleCommandExecutor(test_child);
-		testClass.executeString("ciao mondo");
-		test_child.checkHasExecutedAndReset();
+		Thread.currentThread().interrupt();
+		executed = true;
+		return "Output";
 	}
 	
-	@Test
-	void defaultExecutorExecuteMethodRun()
+	public void setExpectedString(String line)
 	{
-		TestCommandExecutorDefaultExecute test_child = new TestCommandExecutorDefaultExecute();
-		ConsoleCommandExecutor testClass = new ConsoleCommandExecutor(test_child);
-		assertThrows(UnsupportedOperationException.class, () -> testClass.executeString("any string"));
-		test_child.checkExecuteCalled();
+		expected = line;
+	}
+	
+	public void checkExecuted()
+	{
+		assertTrue(executed);
+		executed = false;
 	}
 }

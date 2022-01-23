@@ -12,9 +12,10 @@ public class WalletNotificationUpdater
 {
 	private WalletNotificationUpdater() { }
 	
-	public static void NotifyWalletUpdated(InetAddress multicast_address) throws IOException
+	public static void NotifyWalletUpdated(String multicast_address) throws IOException
 	{
-		DatagramPacket packet = makeWalletNotificationDatagram(multicast_address, WinsomeConnectionProtocol.getUDPMulticastPort());
+		InetAddress address = InetAddress.getByName(multicast_address);
+		DatagramPacket packet = makeWalletNotificationDatagram(address, WinsomeConnectionProtocol.getUDPMulticastPort());
 		sendDatagram(packet);
 	}
 	

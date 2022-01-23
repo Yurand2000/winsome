@@ -1,12 +1,14 @@
 package winsome.server_app.post;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import winsome.server_app.post.PostComments.Comment;
 import winsome.server_app.post.RewardState.Reward;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
@@ -81,5 +83,20 @@ public abstract class GenericPost implements Cloneable
 	public synchronized Reward calculateReward()
 	{
 		return reward_state.calcLastReward();
+	}
+	
+	@JsonIgnore() public synchronized Integer getPositiveRatings()
+	{
+		return likes.getLikes();
+	}
+	
+	@JsonIgnore() public synchronized Integer getNegativeRatings()
+	{
+		return likes.getDislikes();
+	}
+	
+	@JsonIgnore() public synchronized List<Comment> getComments()
+	{
+		return comments.getComments();
 	}
 }

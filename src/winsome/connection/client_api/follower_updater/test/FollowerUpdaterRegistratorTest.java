@@ -7,7 +7,7 @@ import java.rmi.RemoteException;
 import winsome.connection.client_api.follower_updater.FollowerUpdater;
 import winsome.connection.server_api.follower_updater.FollowerUpdaterRegistrator;
 
-public class FollowerUpdaterRegistratorTest implements FollowerUpdaterRegistrator
+class FollowerUpdaterRegistratorTest implements FollowerUpdaterRegistrator
 {
 	private boolean called_register = false;
 	private boolean called_unregister = false;

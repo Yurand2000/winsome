@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 import winsome.connection.server_api.registrator.Registrator;
 
-public class RegistratorTestImpl implements Registrator
+class RegistratorTestImpl implements Registrator
 {
 	private String expected_username;
 	private String expected_password;

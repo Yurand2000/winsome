@@ -1,7 +1,6 @@
 package winsome.connection.client_api.socket.tasks;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.Arrays;
 
 import winsome.client_app.api.PostShort;
@@ -38,6 +37,12 @@ public class LoginTaskExecutor extends DefaultTaskExecutor
 		startFollowerNotificationListener(api);
 	}
 
+	@Override
+	protected void onException(ConnectionHandler connection, ApplicationLoggedAPI api)
+	{
+		connection.disconnect();
+	}
+
 	private void fillStructures(ApplicationLoggedAPI api, LoginAnswer answer)
 	{
 		api.getFollowers().addAll(Arrays.asList(answer.followed_by_users));
@@ -52,18 +57,11 @@ public class LoginTaskExecutor extends DefaultTaskExecutor
 	private void startWalletNotificationListener(ApplicationLoggedAPI api, LoginAnswer answer) throws IOException
 	{
 		api.getWalletNotifier().registerWalletUpdateNotifications(
-			InetAddress.getByName(answer.udp_multicast_address),
-			wallet_notification_runnable);
+			answer.udp_multicast_address, wallet_notification_runnable);
 	}
 	
 	private void startFollowerNotificationListener(ApplicationLoggedAPI api) throws IOException
 	{
 		api.getFollowerUpdater().registerFollowerUpdater();
-	}
-
-	@Override
-	protected void onException(ConnectionHandler connection, ApplicationLoggedAPI api)
-	{
-		connection.disconnect();
 	}
 }

@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import winsome.server_app.user.PasswordDigester;
 
-public class FakePasswordDigester extends PasswordDigester
+class FakePasswordDigester extends PasswordDigester
 {
 	private String expected_password = null;
 	private long random_number = -1;

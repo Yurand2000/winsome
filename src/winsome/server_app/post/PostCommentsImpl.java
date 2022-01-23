@@ -1,6 +1,7 @@
 package winsome.server_app.post;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class PostCommentsImpl implements PostComments
 	@Override
 	public List<Comment> getComments()
 	{
-		return new ArrayList<Comment>(comments);
+		return Collections.unmodifiableList(new ArrayList<Comment>(comments));
 	}
 	
 	@Override

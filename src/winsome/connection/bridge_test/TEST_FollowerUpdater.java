@@ -30,7 +30,7 @@ class TEST_FollowerUpdater
 		server_handler.bindObject();
 		
 		followers = new HashSet<String>();
-		client_handler = new FollowerUpdaterRMIHandler("localhost", "Luca", followers);
+		client_handler = new FollowerUpdaterRMIHandlerImpl("localhost", "Luca", followers);
 		client_handler.registerFollowerUpdater();
 	}
 	

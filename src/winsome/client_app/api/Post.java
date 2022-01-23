@@ -23,13 +23,7 @@ public class Post
 		this.content = content;
 		this.positive_ratings = positive_ratings;
 		this.negative_ratings = negative_ratings;
-		
-		List<Comment> copy_comments = new ArrayList<Comment>(comments.size());
-		for(Comment comment : comments)
-		{
-			copy_comments.add(new Comment(comment));
-		}
-		this.comments = unmodifiableList(copy_comments);
+		this.comments = unmodifiableList(new ArrayList<Comment>(comments));
 	}
 	
 	public static class Comment

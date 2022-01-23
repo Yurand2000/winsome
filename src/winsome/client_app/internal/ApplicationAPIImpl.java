@@ -88,6 +88,10 @@ public class ApplicationAPIImpl implements ApplicationAPI
 	@Override
 	public LoggedClientAPI getLoggedAPI()
 	{
+		if(logged_client == null)
+		{
+			throw new NotLoggedInException();
+		}
 		return logged_client;
 	}
 

@@ -66,7 +66,7 @@ public class TaskUtils
 		{
 			AtomicInteger original_postId = new AtomicInteger();
 			WinsomeData.lockPost(post, () -> {
-				original_postId.set(((RewinPost)post).getOriginalPost());
+				original_postId.set(((RewinPost)post).getOriginalPostId());
 			});
 			
 			return getPostContent(original_postId.get(), author, server_data);
