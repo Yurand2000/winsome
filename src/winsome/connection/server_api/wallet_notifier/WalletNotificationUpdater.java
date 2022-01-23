@@ -30,6 +30,11 @@ public class WalletNotificationUpdater
 		WalletNotificationUpdater.multicast_address = multicast_address;
 	}
 	
+	public static String getMulticastAddress()
+	{
+		return multicast_address;
+	}
+	
 	private static DatagramPacket makeWalletNotificationDatagram(InetAddress multicast_address, int port)
 	{
 		byte[] message = WalletNotification.getNotificationMessage();

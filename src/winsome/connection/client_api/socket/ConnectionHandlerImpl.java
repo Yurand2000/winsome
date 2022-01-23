@@ -61,8 +61,13 @@ public class ConnectionHandlerImpl implements ConnectionHandler
 		byte[] data = SerializerWrapper.serializeCompact(message);
 		write_buffer.putInt(data.length);
 		write_buffer.put(data);
-		write_buffer.flip();
-		socket.write(write_buffer);
+		
+		while(write_buffer.position() > 0)
+		{
+			write_buffer.flip();
+			socket.write(write_buffer);
+			write_buffer.compact();
+		}
 	}
 	
 	public void disconnect()

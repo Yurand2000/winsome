@@ -3,6 +3,7 @@ package winsome.server_app.internal.tasks.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import winsome.connection.server_api.wallet_notifier.WalletNotificationUpdater;
 import winsome.connection.socket_messages.client.LoginRequest;
 import winsome.connection.socket_messages.server.LoginAnswer;
 import winsome.connection.socket_messages.server.RequestExceptionAnswer;
@@ -78,7 +79,7 @@ public class LoginUserTask extends SocketClientTask
 			following.toArray(new String[0]),
 			followers.toArray(new String[0]),
 			postsAndTitle.toArray(new LoginAnswer.PostIdAndTitle[0]),
-			"upd_multicast_address missing" //!
+			WalletNotificationUpdater.getMulticastAddress()
 		);
 
 		socket.sendAnswerMessage(answer);	

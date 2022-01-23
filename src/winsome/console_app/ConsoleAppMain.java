@@ -20,6 +20,8 @@ public class ConsoleAppMain
 		
 		ConsoleExecutor.joinConsoleExecutor();
 		printLine("Winsome Console Client Closed.");
+		
+		ClientAppAPI.stopClient();
 	}
 	
 	private static Runnable getWalletNotificationAction()

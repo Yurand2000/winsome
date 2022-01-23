@@ -68,11 +68,10 @@ public class ApplicationAPIImpl implements ApplicationAPI
 	{
 		try
 		{
-			if(logged_client == null)
+			if(logged_client != null)
 			{
-				throw new NotLoggedInException();
+				executeTask(new LogoutTaskExecutor());
 			}
-			executeTask(new LogoutTaskExecutor());
 		} 
 		catch (APIException e)
 		{

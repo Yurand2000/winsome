@@ -27,7 +27,7 @@ class TEST_WalletNotificationUpdater
 	}
 	
 	@Test
-	void test() throws IOException
+	void testNormalOperation() throws IOException
 	{
 		byte[] message = new byte[WalletNotification.getNotificationMessage().length];
 		DatagramPacket incoming_packet = new DatagramPacket(message, message.length);
@@ -46,5 +46,12 @@ class TEST_WalletNotificationUpdater
 		socket.leaveGroup(address);
 		socket.close();
 		socket = null;
+	}
+
+	@Test
+	void testGetAddress()
+	{
+		WalletNotificationUpdater.setMulticastAddress("address");
+		assertEquals(WalletNotificationUpdater.getMulticastAddress(), "address");
 	}
 }

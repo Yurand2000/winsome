@@ -11,6 +11,7 @@ import winsome.connection.protocols.WinsomeConnectionProtocol;
 import winsome.connection.server_api.follower_updater.FollowerUpdaterRegistratorHandler;
 import winsome.connection.server_api.registrator.RegistratorRMIHandler;
 import winsome.connection.server_api.socket.ClientHandler;
+import winsome.connection.server_api.wallet_notifier.WalletNotificationUpdater;
 import winsome.connection.socket_messages.MessageUtils;
 import winsome.server_app.internal.*;
 
@@ -27,6 +28,7 @@ public class ServerMain
 	{
 		settings = getServerSettings(settings_file);
 		InetSocketAddress server_address = getServerAddress();
+		WalletNotificationUpdater.setMulticastAddress(settings.server_udp_address);
 		MessageUtils.registerJsonDeserializers();
 		
 		server = new WinsomeServerImpl(settings);		
