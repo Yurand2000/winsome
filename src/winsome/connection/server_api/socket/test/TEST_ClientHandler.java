@@ -15,11 +15,14 @@ import org.junit.jupiter.api.Test;
 import winsome.connection.server_api.socket.ClientHandler;
 import winsome.connection.server_api.socket.tasks.SocketReadTask;
 import winsome.connection.server_api.socket.tasks.SocketWriteTask;
+import winsome.connection.socket_messages.Message;
+import winsome.generic.SerializerWrapper;
 
 class TEST_ClientHandler
 {
-	private WinsomeServerTest server;
-	private SocketChannel other_channel;
+	private WinsomeDataTest data = null;
+	private ServerThreadpoolTest pool = null;
+	private SocketChannel client_channel;
 	private ClientHandler handler;
 	private InetSocketAddress address;
 	
@@ -27,71 +30,72 @@ class TEST_ClientHandler
 	void setup() throws IOException
 	{
 		address = new InetSocketAddress(InetAddress.getLocalHost(), 8080);
-		server = new WinsomeServerTest();
-		handler = new ClientHandler(address, server);
+		data = new WinsomeDataTest();
+		pool = new ServerThreadpoolTest();
+		handler = new ClientHandler(address, data, pool);
 		handler.startClientHandler();
 		
-		other_channel = SocketChannel.open();
+		client_channel = SocketChannel.open();
 	}
 
 	@Test
 	void testConnect() throws IOException
 	{
-		other_channel.connect(address);
+		client_channel.connect(address);
 		
-		assertTrue(other_channel.isConnected());
+		assertTrue(client_channel.isConnected());
 	}
 	
 	@Test
 	void testNewChannelIsSetAsReadable() throws IOException, InterruptedException
 	{
-		other_channel.connect(address);
+		client_channel.connect(address);
 		
-		assertTrue(other_channel.isConnected());
+		assertTrue(client_channel.isConnected());
 		
 		ByteBuffer buf = ByteBuffer.allocate(64);
 		buf.putInt(4);
 		buf.put("read".getBytes());
 		buf.flip();
 		
-		other_channel.write(buf);
+		client_channel.write(buf);
 
-		server.waitExecuteTaskCalled();
-		server.checkExpectedTask(SocketReadTask.class);
+		pool.waitExecuteTaskCalled();
+		pool.checkExpectedTask(SocketReadTask.class);
 	}
 	
 	@Test
 	void testNewChannelWriteOperation() throws IOException, InterruptedException
 	{
-		server.setWriteTest();
-		other_channel.connect(address);
+		pool.setWriteTest();
+		client_channel.connect(address);
 		
-		assertTrue(other_channel.isConnected());
+		assertTrue(client_channel.isConnected());
 		
 		ByteBuffer buf = ByteBuffer.allocate(64);
 		buf.putInt(4);
 		buf.put("read".getBytes());
 		buf.flip();
 		
-		other_channel.write(buf);
-		server.waitExecuteTaskCalled();
-		server.checkExpectedTask(SocketReadTask.class);
+		client_channel.write(buf);
+		pool.waitExecuteTaskCalled();
+		pool.checkExpectedTask(SocketReadTask.class);
 		
 		buf.clear();
-		other_channel.read(buf);
+		client_channel.read(buf);
 		buf.flip();
 		int size = buf.getInt();
 		byte[] data = new byte[size];
 		buf.get(data);
 		
-		assertArrayEquals(data, "write".getBytes());
-		server.checkExpectedTask(SocketWriteTask.class);
+		assertDoesNotThrow(() -> SerializerWrapper.deserialize(data, Message.class));
+		pool.checkExpectedTask(SocketWriteTask.class);
 	}
 
 	@AfterEach
 	void teardown() throws IOException, InterruptedException
 	{
-		other_channel.close();
+		client_channel.close();
 		handler.stopClientHandler();
 	}
 }

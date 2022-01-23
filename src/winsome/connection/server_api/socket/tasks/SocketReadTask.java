@@ -1,35 +1,31 @@
 package winsome.connection.server_api.socket.tasks;
 
 import java.io.IOException;
-import java.nio.channels.SelectionKey;
-
 import winsome.connection.server_api.socket.SocketState;
 import winsome.connection.socket_messages.Message;
 import winsome.connection.socket_messages.server.RequestExceptionAnswer;
 import winsome.generic.SerializerWrapper;
 import winsome.server_app.internal.WinsomeData;
-import winsome.server_app.internal.WinsomeServer;
-import winsome.server_app.internal.tasks.TaskUtils;
 import winsome.server_app.internal.tasks.impl.ParseIncomingMessageTask;
+import winsome.server_app.internal.threadpool.ServerThreadpool;
 
 public class SocketReadTask extends SocketTask
 {	
-	public SocketReadTask(SelectionKey key)
+	public SocketReadTask(SocketState socket, WinsomeData data)
 	{
-		super(key);
+		super(socket, data);
 	}
 
 	@Override
-	public void run(WinsomeServer server, WinsomeData server_data)
+	public void run(ServerThreadpool pool)
 	{
-		SocketState data = (SocketState) key.attachment();
-		data.getReader().executeReadOperation();
+		socket.getReader().executeReadOperation();
 		
-		if(data.getReader().hasMessageBeenRetrived())
+		if(socket.getReader().hasMessageBeenRetrived())
 		{
-			byte[] message_data = data.getReader().getRetrivedMessage();
-			Message message = deserializeMessage(message_data);
-			server.executeTask( new ParseIncomingMessageTask(key, message) );
+			byte[] message_data = socket.getReader().getRetrivedMessage();
+			socket.setRequestMessage(deserializeMessage(message_data));
+			pool.enqueueTask( new ParseIncomingMessageTask(socket, data) );
 		}
 	}
 	
@@ -41,8 +37,7 @@ public class SocketReadTask extends SocketTask
 		}
 		catch (IOException e)
 		{
-			TaskUtils.sendMessage((SocketState) key.attachment(), new RequestExceptionAnswer(e.getMessage()));
-			TaskUtils.setSocketReadyToWrite(key);
+			socket.sendAnswerMessage( new RequestExceptionAnswer(e.toString()) );
 			throw new RuntimeException(e.getMessage());
 		}
 	}

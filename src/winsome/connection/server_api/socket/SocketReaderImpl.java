@@ -5,8 +5,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 
-import winsome.server_app.internal.tasks.TaskUtils;
-
 public class SocketReaderImpl implements SocketReader
 {	
 	private final SelectionKey key;
@@ -59,7 +57,7 @@ public class SocketReaderImpl implements SocketReader
 		
 		if(!hasMessageBeenRetrived())
 		{
-			TaskUtils.setSocketReadyToRead(key);
+			SocketUtils.setSocketReadyToRead(key);
 		}
 	}
 

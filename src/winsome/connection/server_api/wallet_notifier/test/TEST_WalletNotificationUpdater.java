@@ -19,9 +19,10 @@ class TEST_WalletNotificationUpdater
 	@Test
 	void testThrowsOnUnknownAddress()
 	{
-		assertThrows(IOException.class, () ->
+		assertThrows(RuntimeException.class, () ->
 		{
-			WalletNotificationUpdater.NotifyWalletUpdated("unknown address");
+			WalletNotificationUpdater.setMulticastAddress("unknown address");
+			WalletNotificationUpdater.notifyWalletUpdated();
 		});
 	}
 	
@@ -35,8 +36,9 @@ class TEST_WalletNotificationUpdater
 		
 		MulticastSocket socket = new MulticastSocket(WinsomeConnectionProtocol.getUDPMulticastPort());
 		socket.joinGroup(address);
-		
-		WalletNotificationUpdater.NotifyWalletUpdated(multicast_address);
+
+		WalletNotificationUpdater.setMulticastAddress(multicast_address);
+		WalletNotificationUpdater.notifyWalletUpdated();
 		
 		socket.receive(incoming_packet);
 		assertTrue(Arrays.equals(incoming_packet.getData(), WalletNotification.getNotificationMessage()));

@@ -8,16 +8,18 @@ import winsome.connection.server_api.registrator.RegistratorImpl;
 
 class TEST_RegistratorImpl
 {
-	private WinsomeServerTest server_test = null;
+	private WinsomeDataTest data = null;
+	private ServerThreadpoolTest pool = null;
 	
 	@Test
 	void testRegister() throws RemoteException
 	{
-		server_test = new WinsomeServerTest();
+		data = new WinsomeDataTest();
+		pool = new ServerThreadpoolTest();
 		
-		RegistratorImpl reg = new RegistratorImpl(server_test);
+		RegistratorImpl reg = new RegistratorImpl(data, pool);
 		reg.register("", "", new String[0]);
 		
-		server_test.checkExecuteTaskNowCalled();
+		pool.checkEnqueueCalled();
 	}
 }

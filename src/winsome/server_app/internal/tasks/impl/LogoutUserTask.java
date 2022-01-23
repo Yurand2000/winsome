@@ -1,44 +1,38 @@
 package winsome.server_app.internal.tasks.impl;
 
-import java.nio.channels.SelectionKey;
-
-import winsome.connection.server_api.socket.SocketStateImpl;
 import winsome.connection.socket_messages.client.LogoutRequest;
 import winsome.connection.socket_messages.server.LogoutAnswer;
 import winsome.connection.socket_messages.server.RequestExceptionAnswer;
 import winsome.server_app.internal.WinsomeData;
-import winsome.server_app.internal.WinsomeServer;
-import winsome.server_app.internal.tasks.TaskUtils;
-import winsome.server_app.internal.tasks.WinsomeTask;
+import winsome.server_app.internal.tasks.SocketClientTask;
+import winsome.server_app.internal.tasks.SocketTaskState;
+import winsome.server_app.internal.threadpool.ServerThreadpool;
 
-public class LogoutUserTask implements WinsomeTask
+public class LogoutUserTask extends SocketClientTask
 {
-	private final SelectionKey socket;
 	@SuppressWarnings("unused")
 	private final LogoutRequest message;
 
-	public LogoutUserTask(SelectionKey socket, LogoutRequest message)
+	public LogoutUserTask(SocketTaskState socket, WinsomeData data, LogoutRequest message)
 	{
-		this.socket = socket;
+		super(socket, data);
 		this.message = message;
 	}
 
 	@Override
-	public void run(WinsomeServer server, WinsomeData server_data)
+	public void run(ServerThreadpool pool)
 	{
 		logout();		
-		TaskUtils.sendMessage((SocketStateImpl) socket.attachment(), new LogoutAnswer());		
-		TaskUtils.setSocketReadyToWrite(socket);
+		socket.sendAnswerMessage(new LogoutAnswer());
 	}
 	
 	private void logout()
 	{
-		SocketStateImpl infos = (SocketStateImpl) socket.attachment();
-		if(infos.getSocketUser() == null)
+		if(socket.getClientUser() == null)
 		{
-			TaskUtils.sendMessage(infos, new RequestExceptionAnswer("User not logged in."));
+			socket.sendAnswerMessage( new RequestExceptionAnswer("User not logged in."));
 		}
 		
-		infos.setSocketUser(null);
+		socket.setClientUser(null);
 	}
 }

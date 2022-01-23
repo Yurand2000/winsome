@@ -9,12 +9,12 @@ import winsome.client_app.api.ApplicationAPI;
 import winsome.client_app.api.LoggedClientAPI;
 import winsome.client_app.api.exceptions.NotLoggedInException;
 import winsome.client_app.api.exceptions.ServerInternalException;
+import winsome.client_app.internal.tasks.ClientTaskExecutor;
+import winsome.client_app.internal.tasks.LoginTaskExecutor;
+import winsome.client_app.internal.tasks.LogoutTaskExecutor;
 import winsome.connection.client_api.registrator.RegistratorRMIHandler;
 import winsome.connection.client_api.socket.ConnectionHandler;
 import winsome.connection.client_api.socket.ConnectionHandlerImpl;
-import winsome.connection.client_api.socket.tasks.ClientTaskExecutor;
-import winsome.connection.client_api.socket.tasks.LoginTaskExecutor;
-import winsome.connection.client_api.socket.tasks.LogoutTaskExecutor;
 
 public class ApplicationAPIImpl implements ApplicationAPI
 {

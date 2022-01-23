@@ -3,22 +3,29 @@ package winsome.connection.server_api.registrator;
 import java.rmi.RemoteException;
 import java.rmi.server.RemoteObject;
 
-import winsome.server_app.internal.WinsomeServer;
+import winsome.server_app.internal.WinsomeData;
 import winsome.server_app.internal.tasks.impl.RegisterNewUserTask;
+import winsome.server_app.internal.threadpool.ServerThreadpool;
 
 public class RegistratorImpl  extends RemoteObject implements Registrator
 {
 	private static final long serialVersionUID = 1L;
 	
-	private WinsomeServer server;
+	private WinsomeData winsome_data;
+	private ServerThreadpool threadpool;
 	
-	public RegistratorImpl(WinsomeServer server)
+	public RegistratorImpl(WinsomeData winsome_data, ServerThreadpool threadpool)
 	{
-		this.server = server;
+		this.winsome_data = winsome_data;
+		this.threadpool = threadpool;
 	}
 	
 	public void register(String username, String password, String[] tags) throws RemoteException
 	{
-		server.executeTaskNow(new RegisterNewUserTask(username, password, tags));
+		RegisterNewUserTask task = new RegisterNewUserTask(winsome_data, username, password, tags);
+		threadpool.enqueueTask(task);
+		
+		try { task.get(); }
+		catch (InterruptedException e) { throw new RuntimeException(e.toString()); }
 	}
 }

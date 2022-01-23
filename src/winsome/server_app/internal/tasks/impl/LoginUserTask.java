@@ -1,60 +1,54 @@
 package winsome.server_app.internal.tasks.impl;
 
-import java.nio.channels.SelectionKey;
 import java.util.ArrayList;
 import java.util.List;
 
-import winsome.connection.server_api.socket.SocketStateImpl;
 import winsome.connection.socket_messages.client.LoginRequest;
 import winsome.connection.socket_messages.server.LoginAnswer;
 import winsome.connection.socket_messages.server.RequestExceptionAnswer;
 import winsome.server_app.internal.WinsomeData;
-import winsome.server_app.internal.WinsomeServer;
-import winsome.server_app.internal.tasks.WinsomeTask;
+import winsome.server_app.internal.tasks.SocketClientTask;
+import winsome.server_app.internal.tasks.SocketTaskState;
 import winsome.server_app.internal.tasks.TaskUtils;
+import winsome.server_app.internal.threadpool.ServerThreadpool;
 import winsome.server_app.user.User;
 
-public class LoginUserTask implements WinsomeTask
+public class LoginUserTask extends SocketClientTask
 {
-	private final SelectionKey socket;
 	private final LoginRequest message;
 
-	public LoginUserTask(SelectionKey socket, LoginRequest message)
+	public LoginUserTask(SocketTaskState socket, WinsomeData data, LoginRequest message)
 	{
-		this.socket = socket;
+		super(socket, data);
 		this.message = message;
 	}
 
 	@Override
-	public void run(WinsomeServer server, WinsomeData server_data)
+	public void run(ServerThreadpool pool)
 	{
-		User requested_user = server_data.users.get(message.username);
+		User requested_user = data.getUsers().get(message.username);
 		
 		if(checkLogin(requested_user))
 		{
-			sendLoginAnswer(requested_user, server_data);
+			sendLoginAnswer(requested_user, data);
 		}
-		
-		TaskUtils.setSocketReadyToWrite(socket);
 	}
 	
 	private boolean checkLogin(User requested_user)
-	{
-		SocketStateImpl infos = (SocketStateImpl) socket.attachment();
-		
+	{		
 		if(requested_user == null)
 		{
-			TaskUtils.sendMessage(infos, new RequestExceptionAnswer("User does not exist."));
+			socket.sendAnswerMessage(new RequestExceptionAnswer("User does not exist."));
 			return false;
 		}
 
 		if(!requested_user.login.checkPassword(message.password))
 		{
-			TaskUtils.sendMessage(infos, new RequestExceptionAnswer("Incorrect password."));
+			socket.sendAnswerMessage(new RequestExceptionAnswer("Incorrect password."));
 			return false;
 		}
 		
-		infos.setSocketUser(message.username);
+		socket.setClientUser(message.username);
 		return true;
 	}
 	
@@ -65,7 +59,7 @@ public class LoginUserTask implements WinsomeTask
 		List<Integer> posts = new ArrayList<Integer>();
 		List<LoginAnswer.PostIdAndTitle> postsAndTitle = new ArrayList<LoginAnswer.PostIdAndTitle>();
 		
-		WinsomeData.lockUser(user, () ->
+		TaskUtils.lockUser(user, () ->
 		{
 			following.addAll(user.getFollowing());
 			followers.addAll(user.getFollowers());
@@ -87,6 +81,6 @@ public class LoginUserTask implements WinsomeTask
 			"upd_multicast_address missing" //!
 		);
 
-		TaskUtils.sendMessage((SocketStateImpl) socket.attachment(), answer);	
+		socket.sendAnswerMessage(answer);	
 	}
 }

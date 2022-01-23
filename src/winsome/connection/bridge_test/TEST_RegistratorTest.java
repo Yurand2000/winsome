@@ -13,15 +13,17 @@ import winsome.server_app.internal.ServerRMIRegistry;
 
 class TEST_RegistratorTest
 {
-	private WinsomeServerTest server;	
+	private WinsomeDataTest data = null;
+	private ServerThreadpoolTest pool = null;
 	private winsome.connection.server_api.registrator.RegistratorRMIHandler server_registrator;
 
 	@BeforeEach
 	void setup() throws IOException, AlreadyBoundException
 	{
-		server = new WinsomeServerTest();
+		data = new WinsomeDataTest();
+		pool = new ServerThreadpoolTest();
 		ServerRMIRegistry.startRegistry();
-		server_registrator = new winsome.connection.server_api.registrator.RegistratorRMIHandler(server);
+		server_registrator = new winsome.connection.server_api.registrator.RegistratorRMIHandler(data, pool);
 		server_registrator.bindObject();
 	}
 	
@@ -29,7 +31,7 @@ class TEST_RegistratorTest
 	void testRegistration()
 	{
 		RegistratorRMIHandler.register("localhost", "Benito", "password", new String[] {"Auto"});
-		server.checkExecuteTaskNowCalled();
+		pool.checkEnqueueCalled();
 	}
 
 	@AfterEach

@@ -3,82 +3,80 @@ package winsome.server_app.internal;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import winsome.generic.SerializerWrapper;
-import winsome.server_app.internal.pausable_threads.PausableThreadFactory;
-import winsome.server_app.internal.tasks.WinsomeRunnable;
-import winsome.server_app.internal.tasks.WinsomeTask;
+import winsome.server_app.internal.threadpool.ServerThreadpool;
+import winsome.server_app.internal.threadpool.ServerThreadpoolImpl;
 
 public class WinsomeServerImpl implements WinsomeServer
 {
-	public final ServerSettings settings;
-	private final WinsomeData server_data;
-	private ExecutorService thread_pool;
-	private final PausableThreadFactory thread_factory;
+	private final ServerSettings settings;
+	private final WinsomeDataImpl winsome_data;
+	private final ServerThreadpoolImpl threadpool;
 	
 	public WinsomeServerImpl(ServerSettings settings)
 	{
 		this.settings = settings;
-		thread_factory = new PausableThreadFactory();
-		thread_pool = null;
-		server_data = tryGetSerializedData(settings.save_file);		
+		threadpool = new ServerThreadpoolImpl();
+		winsome_data = tryGetSerializedData(settings.save_file);		
 	}
 	
-	private WinsomeData tryGetSerializedData(String filename)
+	private WinsomeDataImpl tryGetSerializedData(String filename)
 	{
 		if(filename == null || !Files.exists(Paths.get(filename)))
 		{
-			return new WinsomeData();
+			return new WinsomeDataImpl();
 		}
 		else
 		{
 			try 
 			{
 				byte[] data = Files.readAllBytes(Paths.get(filename));
-				return SerializerWrapper.deserialize(data, WinsomeData.class);				
+				return SerializerWrapper.deserialize(data, WinsomeDataImpl.class);				
 			}
 			catch (IOException e)
 			{
 				System.err.println(e.getMessage());
-				return new WinsomeData();
+				return new WinsomeDataImpl();
 			}
 		}
 	}
 	
 	public void startServer()
 	{
-		int processors = Runtime.getRuntime().availableProcessors();
-		thread_pool = Executors.newFixedThreadPool(processors, thread_factory);
+		threadpool.startThreadpool();
 	}
 	
 	public void shutdownServer()
 	{
-		thread_pool.shutdown();
-		try { thread_pool.awaitTermination(2, TimeUnit.MINUTES); }
-		catch (InterruptedException e) { e.printStackTrace(); }
-		thread_pool.shutdownNow();
+		threadpool.stopThreadpool();
 		saveToFile();
+	}
+	
+	@Override
+	public WinsomeData getWinsomeData()
+	{
+		return winsome_data;
+	}
+	
+	@Override
+	public ServerSettings getSettings()
+	{
+		return settings;
+	}
+	
+	@Override
+	public ServerThreadpool getThreadpool()
+	{
+		return threadpool;
 	}
 	
 	public void saveToFile()
 	{
-		pauseTaskExecutors();		
-		WinsomeData clone = server_data.clone();		
-		resumeTaskExecutors();
+		threadpool.pauseThreadpool();		
+		WinsomeDataImpl clone = winsome_data.clone();		
+		threadpool.resumeThreadpool();
 		serializeAndSave(clone);
-	}
-	
-	private void pauseTaskExecutors()
-	{
-		thread_factory.pauseAllExecutions();
-	}
-	
-	private void resumeTaskExecutors()
-	{
-		thread_factory.resumeAllExecutions();
 	}
 	
 	private void serializeAndSave(Object obj)
@@ -92,17 +90,5 @@ public class WinsomeServerImpl implements WinsomeServer
 		{
 			System.err.println(e.getMessage());
 		}
-	}
-	
-	public void executeTask(WinsomeTask task)
-	{
-		WinsomeRunnable runnable = new WinsomeRunnable(this, server_data, task);
-		thread_pool.execute(runnable);
-	}
-	
-	public void executeTaskNow(WinsomeTask task)
-	{
-		WinsomeRunnable runnable = new WinsomeRunnable(this, server_data, task);
-		runnable.run();
 	}
 }

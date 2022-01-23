@@ -10,13 +10,24 @@ import winsome.connection.protocols.WalletNotification;
 
 public class WalletNotificationUpdater
 {
+	private static String multicast_address = "";
+	
 	private WalletNotificationUpdater() { }
 	
-	public static void NotifyWalletUpdated(String multicast_address) throws IOException
+	public static void notifyWalletUpdated()
 	{
-		InetAddress address = InetAddress.getByName(multicast_address);
-		DatagramPacket packet = makeWalletNotificationDatagram(address, WinsomeConnectionProtocol.getUDPMulticastPort());
-		sendDatagram(packet);
+		try
+		{
+			InetAddress address = InetAddress.getByName(multicast_address);
+			DatagramPacket packet = makeWalletNotificationDatagram(address, WinsomeConnectionProtocol.getUDPMulticastPort());
+			sendDatagram(packet);
+		}
+		catch (IOException e) { throw new RuntimeException(e.toString()); }
+	}
+	
+	public static void setMulticastAddress(String multicast_address)
+	{
+		WalletNotificationUpdater.multicast_address = multicast_address;
 	}
 	
 	private static DatagramPacket makeWalletNotificationDatagram(InetAddress multicast_address, int port)

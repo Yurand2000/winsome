@@ -1,15 +1,16 @@
 package winsome.connection.server_api.socket.tasks;
 
-import java.nio.channels.SelectionKey;
-
+import winsome.connection.server_api.socket.SocketState;
+import winsome.server_app.internal.WinsomeData;
 import winsome.server_app.internal.tasks.WinsomeTask;
 
-public abstract class SocketTask implements WinsomeTask
+public abstract class SocketTask extends WinsomeTask
 {
-	protected SelectionKey key;
+	protected SocketState socket;
 	
-	public SocketTask(SelectionKey key)
+	public SocketTask(SocketState socket, WinsomeData data)
 	{
-		this.key = key;
+		super(data);
+		this.socket = socket;
 	}
 }

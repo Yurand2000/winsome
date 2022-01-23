@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 
 import winsome.connection.server_api.socket.SocketState;
+import winsome.connection.socket_messages.Message;
 
 class SocketStateTest implements SocketState
 {
@@ -17,9 +18,6 @@ class SocketStateTest implements SocketState
 		writer = new SocketWriterTest();
 	}
 
-	public String getSocketUser() { fail(); return null; }
-	public void setSocketUser(String username) { fail(); }
-
 	@Override
 	public SocketReaderTest getReader()
 	{
@@ -30,5 +28,37 @@ class SocketStateTest implements SocketState
 	public SocketWriterTest getWriter()
 	{
 		return writer;
+	}
+
+	@Override
+	public String getClientUser() { fail(); return null; }
+
+	@Override
+	public void setClientUser(String username) { }
+
+	@Override
+	public Message getRequestMessage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private boolean send_answer_invoked = false;
+	
+	@Override
+	public void sendAnswerMessage(Message answer)
+	{
+		send_answer_invoked = true;
+	}
+	
+	public void checkSendAnswerInvoked()
+	{
+		assertTrue(send_answer_invoked);
+		send_answer_invoked = false;
+	}
+
+	@Override
+	public void setRequestMessage(Message incoming) {
+		// TODO Auto-generated method stub
+		
 	}
 }

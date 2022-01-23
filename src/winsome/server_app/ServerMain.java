@@ -17,7 +17,7 @@ import winsome.server_app.internal.*;
 public class ServerMain
 {
 	public final ServerSettings settings;
-	private final WinsomeServer server;
+	private final WinsomeServerImpl server;
 	private final ServerAutosaver autosaver;
 	private final RegistratorRMIHandler registrator_handler;
 	private final ClientHandler client_handler;
@@ -26,17 +26,19 @@ public class ServerMain
 	public ServerMain(String settings_file)
 	{
 		settings = getServerSettings(settings_file);
+		InetSocketAddress server_address = getServerAddress();
+		MessageUtils.registerJsonDeserializers();
+		
 		server = new WinsomeServerImpl(settings);		
 		autosaver = new ServerAutosaver(server);
-		registrator_handler = new RegistratorRMIHandler(server);
-		client_handler = new ClientHandler(getServerAddress(), server);
+		registrator_handler = new RegistratorRMIHandler(server.getWinsomeData(), server.getThreadpool());
+		client_handler = new ClientHandler(server_address, server.getWinsomeData(), server.getThreadpool());
 		follower_updater_handler = new FollowerUpdaterRegistratorHandler();
 	}
 	
 	public void startServer() throws IOException, AlreadyBoundException
 	{
 		ServerRMIRegistry.startRegistry();
-		MessageUtils.registerJsonDeserializers();
 		server.startServer();
 		
 		autosaver.startAutosaver();

@@ -4,23 +4,30 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-import winsome.server_app.internal.tasks.impl.CalculatePostsRewardTask;
+import winsome.connection.server_api.wallet_notifier.WalletNotificationUpdater;
+import winsome.server_app.internal.tasks.wallet_update.CalculatePostsRewardTask;
+import winsome.server_app.internal.threadpool.ServerThreadpool;
 
 public class WalletUpdater extends TimerTask
 {
-	private final WinsomeServer server;
+	private final String multicast_address;
+	private final WinsomeData winsome_data;
+	private final ServerThreadpool threadpool;
 	private final Timer timer;
 	private final long timer_period;
 	
-	public WalletUpdater(WinsomeServer server, long time, TimeUnit unit)
+	public WalletUpdater(String multicast_address, WinsomeData winsome_data, ServerThreadpool threadpool, long time, TimeUnit unit)
 	{
-		this.server = server;
+		this.multicast_address = multicast_address;
+		this.winsome_data = winsome_data;
+		this.threadpool = threadpool;
 		timer = new Timer();
 		timer_period = timeUnitToMillis(time, unit);
 	}
 	
 	public void startUpdater()
 	{
+		WalletNotificationUpdater.setMulticastAddress(multicast_address);
 		timer.scheduleAtFixedRate(this, 0, timer_period);
 	}
 	
@@ -32,7 +39,7 @@ public class WalletUpdater extends TimerTask
 	@Override
 	public void run()
 	{
-		server.executeTask(new CalculatePostsRewardTask());
+		threadpool.enqueueTask(new CalculatePostsRewardTask(winsome_data));
 	}
 	
 	private long timeUnitToMillis(long time, TimeUnit unit)

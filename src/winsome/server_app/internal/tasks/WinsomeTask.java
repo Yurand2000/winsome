@@ -1,9 +1,14 @@
 package winsome.server_app.internal.tasks;
 
 import winsome.server_app.internal.WinsomeData;
-import winsome.server_app.internal.WinsomeServer;
+import winsome.server_app.internal.threadpool.ServerThreadpoolTask;
 
-public interface WinsomeTask
+public abstract class WinsomeTask implements ServerThreadpoolTask
 {
-	public void run(WinsomeServer server, WinsomeData server_data);
+	protected WinsomeData data;
+	
+	public WinsomeTask(WinsomeData data)
+	{
+		this.data = data;
+	}
 }

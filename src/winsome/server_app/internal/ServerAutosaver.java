@@ -6,9 +6,9 @@ import java.util.TimerTask;
 public class ServerAutosaver extends TimerTask
 {
 	private final Timer timer;
-	private final WinsomeServer server;
+	private final WinsomeServerImpl server;
 
-	public ServerAutosaver(WinsomeServer server)
+	public ServerAutosaver(WinsomeServerImpl server)
 	{
 		this.timer = new Timer();
 		this.server = server;

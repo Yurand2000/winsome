@@ -5,8 +5,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 
-import winsome.server_app.internal.tasks.TaskUtils;
-
 public class SocketWriterImpl implements SocketWriter
 {
 	private final SelectionKey key;
@@ -42,12 +40,12 @@ public class SocketWriterImpl implements SocketWriter
 		if(write_buffer.hasRemaining())
 		{
 			write_buffer.compact();
-			TaskUtils.setSocketReadyToWrite(key);
+			SocketUtils.setSocketReadyToWrite(key);
 		}
 		else
 		{
 			write_buffer.clear();
-			TaskUtils.setSocketReadyToRead(key);
+			SocketUtils.setSocketReadyToRead(key);
 		}
 	}
 

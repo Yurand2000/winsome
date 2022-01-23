@@ -10,24 +10,28 @@ import java.util.Iterator;
 
 import winsome.connection.server_api.socket.tasks.SocketReadTask;
 import winsome.connection.server_api.socket.tasks.SocketWriteTask;
-import winsome.server_app.internal.WinsomeServer;
+import winsome.server_app.internal.WinsomeData;
 import winsome.server_app.internal.pausable_threads.PausableThread;
 import winsome.server_app.internal.pausable_threads.PausableThreadMonitor;
+import winsome.server_app.internal.threadpool.ServerThreadpool;
 
 public class ClientHandler implements Runnable
 {
 	private final InetSocketAddress address;
-	private final WinsomeServer server;
+	private final ServerThreadpool threadpool;
+	private final WinsomeData winsome_data;
 
 	private ServerSocketChannel listening_socket;
 	private Selector selector;
 	private PausableThreadMonitor selector_thread_monitor;
 	private PausableThread selector_thread;
 	
-	public ClientHandler(InetSocketAddress address, WinsomeServer server)
+	public ClientHandler(InetSocketAddress address, WinsomeData data, ServerThreadpool pool)
 	{
 		this.address = address;
-		this.server = server;
+		
+		threadpool = pool;
+		winsome_data = data;
 
 		listening_socket = null;
 		selector = null;
@@ -139,14 +143,16 @@ public class ClientHandler implements Runnable
 	
 	private void executeReadWriteKey(SelectionKey key)
 	{
-		key.interestOps(0);		
+		key.interestOps(0);
+		SocketState socket = (SocketState) key.attachment();
+		
 		if(key.isReadable())
 		{
-			server.executeTask(new SocketReadTask(key));
+			threadpool.enqueueTask(new SocketReadTask(socket, winsome_data));
 		}
 		else if(key.isWritable())
 		{
-			server.executeTask(new SocketWriteTask(key));
+			threadpool.enqueueTask(new SocketWriteTask(socket, winsome_data));
 		}
 	}
 }

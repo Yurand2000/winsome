@@ -11,16 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import winsome.client_app.api.LoggedClientAPI;
-import winsome.client_app.api.Post;
-import winsome.client_app.api.PostShort;
-import winsome.client_app.api.User;
-import winsome.client_app.api.Wallet;
+import winsome.client_app.api.*;
+import winsome.client_app.internal.tasks.*;
 import winsome.connection.client_api.follower_updater.FollowerUpdaterRMIHandler;
 import winsome.connection.client_api.follower_updater.FollowerUpdaterRMIHandlerImpl;
 import winsome.connection.client_api.socket.ApplicationLoggedAPI;
 import winsome.connection.client_api.socket.ConnectionHandler;
-import winsome.connection.client_api.socket.tasks.*;
 import winsome.connection.client_api.wallet_notifier.WalletNotificationUpdater;
 import winsome.connection.client_api.wallet_notifier.WalletNotificationUpdaterImpl;
 

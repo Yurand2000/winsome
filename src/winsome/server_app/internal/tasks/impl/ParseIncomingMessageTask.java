@@ -1,38 +1,35 @@
 package winsome.server_app.internal.tasks.impl;
 
-import java.nio.channels.SelectionKey;
-
 import winsome.connection.socket_messages.Message;
 import winsome.connection.socket_messages.client.*;
+import winsome.connection.socket_messages.server.RequestExceptionAnswer;
 import winsome.server_app.internal.WinsomeData;
-import winsome.server_app.internal.WinsomeServer;
-import winsome.server_app.internal.tasks.WinsomeTask;
+import winsome.server_app.internal.tasks.SocketClientTask;
+import winsome.server_app.internal.tasks.SocketTaskState;
+import winsome.server_app.internal.threadpool.ServerThreadpool;
 
-public class ParseIncomingMessageTask implements WinsomeTask
+public class ParseIncomingMessageTask extends SocketClientTask
 {
-	private final SelectionKey socket;
-	private final Message message;
-
-	public ParseIncomingMessageTask(SelectionKey socket, Message message)
+	public ParseIncomingMessageTask(SocketTaskState socket, WinsomeData data)
 	{
-		this.socket = socket;
-		this.message = message;
+		super(socket, data);
 	}
 	
 	@Override
-	public void run(WinsomeServer server, WinsomeData server_data)
+	public void run(ServerThreadpool pool)
 	{
+		Message message = socket.getRequestMessage();
 		if(message.getClass() == LoginRequest.class)
 		{
-			server.executeTask(new LoginUserTask(socket, (LoginRequest) message));
+			pool.enqueueTask(new LoginUserTask(socket, data, (LoginRequest) message));
 		}
 		else if(message.getClass() == LogoutRequest.class)
 		{
-			server.executeTask(new LogoutUserTask(socket, (LogoutRequest) message));
+			pool.enqueueTask(new LogoutUserTask(socket, data, (LogoutRequest) message));
 		}
 		else
 		{
-			server.executeTask(new UnknownTask(socket));
+			socket.sendAnswerMessage( new RequestExceptionAnswer("Unknown task.") );
 		}
 	}
 }

@@ -1,23 +1,20 @@
 package winsome.connection.server_api.socket.tasks;
 
-import java.nio.channels.SelectionKey;
-
 import winsome.connection.server_api.socket.SocketState;
 import winsome.server_app.internal.WinsomeData;
-import winsome.server_app.internal.WinsomeServer;
+import winsome.server_app.internal.threadpool.ServerThreadpool;
 
 public class SocketWriteTask extends SocketTask
 {	
-	public SocketWriteTask(SelectionKey key)
+	public SocketWriteTask(SocketState socket, WinsomeData data)
 	{
-		super(key);
+		super(socket, data);
 	}
 	
 	@Override
-	public void run(WinsomeServer server, WinsomeData server_data)
+	public void run(ServerThreadpool pool)
 	{
-		SocketState data = (SocketState) key.attachment();
-		data.getWriter().executeWriteOperation();
+		socket.getWriter().executeWriteOperation();
 	}
 
 }

@@ -9,28 +9,25 @@ import winsome.connection.server_api.socket.tasks.SocketWriteTask;
 
 class TEST_SocketWriteTask
 {
-	private SelectorTest selector;
-	private SelectionKeyTest key;
-	private WinsomeServerTest server;
 	private SocketStateTest state;
+	private WinsomeDataTest data;
+	private ServerThreadpoolTest pool;
 	
 	private SocketWriteTask task;
 	
 	@BeforeEach
 	void setup() throws IOException
 	{
-		server = new WinsomeServerTest();
-		selector = new SelectorTest();
-		key = new SelectionKeyTest(selector);
 		state = new SocketStateTest();
-		key.attach(state);
+		data = new WinsomeDataTest();
+		pool = new ServerThreadpoolTest();
 		
-		task = new SocketWriteTask(key);
+		task = new SocketWriteTask(state, data);
 	}
 	@Test
 	void testRun()
 	{
-		task.run(server, null);
+		task.run(pool);
 		
 		state.getWriter().checkWriteExecuted();
 	}

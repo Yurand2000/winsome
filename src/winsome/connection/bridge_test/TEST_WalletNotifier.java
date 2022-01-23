@@ -30,6 +30,7 @@ class TEST_WalletNotifier
 	void testWalletNotifier() throws IOException, InterruptedException
 	{
 		AtomicBoolean notified = new AtomicBoolean(false);
+		WalletNotificationUpdater.setMulticastAddress(multicast_address);
 		client_updater.registerWalletUpdateNotifications(multicast_address, () -> {
 			notified.set(true);
 		});
@@ -37,7 +38,7 @@ class TEST_WalletNotifier
 		while(!notified.get() && !Thread.currentThread().isInterrupted())
 		{
 			Thread.sleep(50);
-			WalletNotificationUpdater.NotifyWalletUpdated(multicast_address);
+			WalletNotificationUpdater.notifyWalletUpdated();
 			Thread.yield();
 		}
 		

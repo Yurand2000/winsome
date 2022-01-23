@@ -8,6 +8,6 @@ public class TooManyTagsException extends APIException
 
 	public TooManyTagsException()
 	{
-		super("Too many tags specified for registration");
+		super("Too many or no tags specified for registration.");
 	}
 }

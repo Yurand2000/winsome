@@ -16,15 +16,17 @@ import winsome.server_app.internal.ServerRMIRegistry;
 
 class TEST_RegistratorRMIHandler 
 {
-	private WinsomeServerTest server_test = null;
+	private WinsomeDataTest data = null;
+	private ServerThreadpoolTest pool = null;
 	private RegistratorRMIHandler registrator = null;
 	
 	@BeforeEach
 	void setup() throws IOException, AlreadyBoundException
 	{
-		server_test = new WinsomeServerTest();
+		data = new WinsomeDataTest();
+		pool = new ServerThreadpoolTest();
 		ServerRMIRegistry.startRegistry();
-		registrator = new RegistratorRMIHandler(server_test);
+		registrator = new RegistratorRMIHandler(data, pool);
 		registrator.bindObject();		
 	}
 	
@@ -34,11 +36,12 @@ class TEST_RegistratorRMIHandler
 		Registrator registrator = RMIObjectLookup.getStub("localhost", Registrator.class, RegistratorRMI.getRegistratorName());
 
 		registrator.register("", "", new String[0]);
-		server_test.checkExecuteTaskNowCalled();
+		
+		pool.checkEnqueueCalled();
 	}
 	
 	@AfterEach
-	void stopRegister() throws IOException, NotBoundException
+	void teardown() throws IOException, NotBoundException
 	{
 		registrator.unbindObject();
 		ServerRMIRegistry.shutdownRegistry();
