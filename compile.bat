@@ -15,11 +15,15 @@ for /r %%f in (*.java) do (
 	set "sources=!sources!%%f "
 )
 cd ..
+
 REM echo !sources!
 REM echo !libs!
 
 echo Compiling
-call javac -d bin -classpath !libs! -sourcepath src !sources!
-if !ERRORLEVEL! NEQ 0 (
-	pause
-)
+echo !sources! > sources.txt
+echo !libs! > libs.txt
+mkdir bin
+call javac -d bin -classpath @libs.txt -sourcepath src @sources.txt
+del sources.txt
+del libs.txt
+pause

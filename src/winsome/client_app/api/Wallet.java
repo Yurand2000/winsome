@@ -38,6 +38,22 @@ public class Wallet
 		return string.toString();
 	}
 	
+	@Override
+	public boolean equals(Object w)
+	{
+		if(w.getClass() == Wallet.class)
+		{
+			Wallet cast = (Wallet) w;
+			
+			return current_total == cast.current_total &&
+				transactions.equals(cast.transactions);
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	public class Transaction
 	{
 		public final Date timestamp;
@@ -58,6 +74,22 @@ public class Wallet
 		public String toString()
 		{
 			return "Date: " + timestamp.toString() + ". Amount: " + amount.toString();
+		}
+		
+		@Override
+		public boolean equals(Object w)
+		{
+			if(w.getClass() == Transaction.class)
+			{
+				Transaction cast = (Transaction) w;
+				
+				return timestamp == cast.timestamp &&
+					amount == cast.amount;
+			}
+			else
+			{
+				return false;
+			}
 		}
 	}
 }

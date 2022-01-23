@@ -3,6 +3,7 @@ package winsome.client_app.internal;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,6 +19,8 @@ import winsome.client_app.api.Wallet;
 import winsome.connection.client_api.follower_updater.FollowerUpdaterRMIHandler;
 import winsome.connection.client_api.follower_updater.FollowerUpdaterRMIHandlerImpl;
 import winsome.connection.client_api.socket.ApplicationLoggedAPI;
+import winsome.connection.client_api.socket.ConnectionHandler;
+import winsome.connection.client_api.socket.tasks.*;
 import winsome.connection.client_api.wallet_notifier.WalletNotificationUpdater;
 import winsome.connection.client_api.wallet_notifier.WalletNotificationUpdaterImpl;
 
@@ -29,8 +32,9 @@ public class ApplicationLoggedAPIImpl implements LoggedClientAPI, ApplicationLog
 	public final Map<Integer, PostShort> blog;
 	public final WalletNotificationUpdaterImpl wallet_notifier;
 	public final FollowerUpdaterRMIHandlerImpl follower_updater;
+	private final ConnectionHandler client_connection;
 	
-	public ApplicationLoggedAPIImpl(String server_host, String me) throws IOException, NotBoundException
+	public ApplicationLoggedAPIImpl(String server_host, String me, ConnectionHandler client_connection) throws IOException, NotBoundException
 	{
 		this.me = me;
 		this.followers = Collections.synchronizedSet(new HashSet<String>());
@@ -38,48 +42,52 @@ public class ApplicationLoggedAPIImpl implements LoggedClientAPI, ApplicationLog
 		this.blog = Collections.synchronizedMap(new HashMap<Integer, PostShort>());
 		this.wallet_notifier = new WalletNotificationUpdaterImpl();
 		this.follower_updater = new FollowerUpdaterRMIHandlerImpl(server_host, me, followers);
+		this.client_connection = client_connection;
 	}
 
 	@Override
 	public List<User> listUsers()
 	{
-		return null;
+		List<User> list = new ArrayList<User>();
+		ListUserExecutor executor = new ListUserExecutor(list);
+		runExecutor(executor);
+		return list;
 	}
 
 	@Override
 	public List<User> listFollowers()
 	{
-		List<User> ret_followers = new ArrayList<User>();
-		for(String user : followers)
-		{
-			ret_followers.add(new User(user));
-		}
-		
-		return ret_followers;
+		return cloneList(followers);
 	}
 
 	@Override
 	public List<User> listFollowing()
 	{
-		List<User> ret_following = new ArrayList<User>();
-		for(String user : following)
+		return cloneList(following);
+	}
+	
+	private List<User> cloneList(Collection<String> users)
+	{
+		List<User> list = new ArrayList<User>();
+		for(String user : users)
 		{
-			ret_following.add(new User(user));
+			list.add(new User(user));
 		}
-		
-		return ret_following;
+		return list;
 	}
 
 	@Override
-	public void followUser(String username) {
-		// TODO Auto-generated method stub
-		
+	public void followUser(String username)
+	{
+		FollowUserExecutor executor = new FollowUserExecutor(username);
+		runExecutor(executor);
 	}
 
 	@Override
-	public void unfollowUser(String username) {
-		// TODO Auto-generated method stub
-		
+	public void unfollowUser(String username) 
+	{
+		UnfollowUserExecutor executor = new UnfollowUserExecutor(username);
+		runExecutor(executor);
 	}
 
 	@Override
@@ -89,57 +97,78 @@ public class ApplicationLoggedAPIImpl implements LoggedClientAPI, ApplicationLog
 	}
 
 	@Override
-	public Integer createPost(String title, String content) {
-		// TODO Auto-generated method stub
-		return null;
+	public Integer createPost(String title, String content)
+	{
+		CreatePostExecutor executor = new CreatePostExecutor(title, content);
+		runExecutor(executor);
+		return executor.getNewPostId();
 	}
 
 	@Override
-	public List<PostShort> showFeed() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<PostShort> showFeed()
+	{
+		List<PostShort> feed = new ArrayList<PostShort>();
+		GetFeedExecutor executor = new GetFeedExecutor(feed);
+		runExecutor(executor);
+		return feed;
 	}
 
 	@Override
-	public Post showPost(Integer postId) {
-		// TODO Auto-generated method stub
-		return null;
+	public Post showPost(Integer postId)
+	{
+		GetPostExecutor executor = new GetPostExecutor(postId);
+		runExecutor(executor);
+		return executor.getRetrivedPost();
 	}
 
 	@Override
-	public void deletePost(Integer postId) {
-		// TODO Auto-generated method stub
-		
+	public void deletePost(Integer postId)
+	{
+		DeletePostExecutor executor = new DeletePostExecutor(postId);
+		runExecutor(executor);
 	}
 
 	@Override
-	public Integer rewinPost(Integer postId) {
-		// TODO Auto-generated method stub
-		return null;
+	public Integer rewinPost(Integer postId)
+	{
+		RewinPostExecutor executor = new RewinPostExecutor(postId);
+		runExecutor(executor);
+		return executor.getNewPostId();
 	}
 
 	@Override
-	public void ratePost(Integer postId, boolean rating) {
-		// TODO Auto-generated method stub
-		
+	public void ratePost(Integer postId, boolean rating)
+	{
+		RatePostExecutor executor = new RatePostExecutor(postId, rating);
+		runExecutor(executor);
 	}
 
 	@Override
-	public void addComment(Integer postId, String comment) {
-		// TODO Auto-generated method stub
-		
+	public void addComment(Integer postId, String comment)
+	{
+		CommentPostExecutor executor = new CommentPostExecutor(postId, comment);
+		runExecutor(executor);
 	}
 
 	@Override
-	public Wallet getWallet() {
-		// TODO Auto-generated method stub
-		return null;
+	public Wallet getWallet()
+	{
+		GetWalletExecutor executor = new GetWalletExecutor();
+		runExecutor(executor);
+		return executor.getRequestedWallet();
 	}
 
 	@Override
-	public Integer getWalletInBitcoin() {
-		// TODO Auto-generated method stub
-		return null;
+	public Integer getWalletInBitcoin()
+	{
+		GetWalletInBitcoinExecutor executor = new GetWalletInBitcoinExecutor();
+		runExecutor(executor);
+		return executor.getRequestedWalletInBitcoin();
+	}
+
+	private void runExecutor(ClientTaskExecutor executor)
+	{
+		executor.run(client_connection, this);
 	}
 	
 	
@@ -179,5 +208,4 @@ public class ApplicationLoggedAPIImpl implements LoggedClientAPI, ApplicationLog
 	{
 		return follower_updater;
 	}
-
 }

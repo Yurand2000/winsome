@@ -43,7 +43,7 @@ public class ApplicationAPIImpl implements ApplicationAPI
 		try
 		{
 			client_connection = new ConnectionHandlerImpl(server_address);
-			logged_client = new ApplicationLoggedAPIImpl(server_address.getHostString(), username);
+			logged_client = new ApplicationLoggedAPIImpl(server_address.getHostString(), username, client_connection);
 			
 			executeTask(new LoginTaskExecutor(username, password, wallet_notification_runnable));			
 		}

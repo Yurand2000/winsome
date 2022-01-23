@@ -8,4 +8,17 @@ public class User
 	{
 		this.username = username;
 	}
+	
+	@Override
+	public boolean equals(Object u)
+	{
+		if(u.getClass() == User.class)
+		{
+			return username == ((User)u).username;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }

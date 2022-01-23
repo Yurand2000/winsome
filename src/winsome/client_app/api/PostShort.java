@@ -23,4 +23,21 @@ public class PostShort
 	{
 		return String.format("ID: %8d; Author: %s; Title: %s", postId.intValue(), author, title);
 	}
+	
+	@Override
+	public boolean equals(Object p)
+	{
+		if(p.getClass() == PostShort.class)
+		{
+			PostShort cast = (PostShort) p;
+			
+			return cast.postId == postId &&
+				cast.author == author &&
+				cast.title == title;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }

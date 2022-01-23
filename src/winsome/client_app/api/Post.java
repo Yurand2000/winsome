@@ -25,29 +25,6 @@ public class Post
 		this.negative_ratings = negative_ratings;
 		this.comments = unmodifiableList(new ArrayList<Comment>(comments));
 	}
-	
-	public static class Comment
-	{
-		public final String username;
-		public final String comment;
-		
-		public Comment(String username, String comment)
-		{
-			this.username = username;
-			this.comment = comment;
-		}
-		
-		public Comment(Comment comment)
-		{
-			this(comment.username, comment.comment);
-		}
-		
-		@Override
-		public String toString()
-		{
-			return username + ": " + comment;
-		}
-	}
 
 	private static String format_string =
 		"Post ID: %8d; Title: %s\n" +
@@ -71,5 +48,65 @@ public class Post
 			string.append(comment.toString());
 		}
 		return string.toString();
+	}
+	
+	@Override
+	public boolean equals(Object p)
+	{
+		if(p.getClass() == Post.class)
+		{
+			Post cast = (Post) p;
+			
+			return cast.postId == postId &&
+				cast.author == author &&
+				cast.title == title &&
+				cast.content == content &&
+				cast.positive_ratings == positive_ratings &&
+				cast.negative_ratings == negative_ratings &&
+				comments.equals(cast.comments);
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public static class Comment
+	{
+		public final String username;
+		public final String comment;
+		
+		public Comment(String username, String comment)
+		{
+			this.username = username;
+			this.comment = comment;
+		}
+		
+		public Comment(Comment comment)
+		{
+			this(comment.username, comment.comment);
+		}
+		
+		@Override
+		public String toString()
+		{
+			return username + ": " + comment;
+		}
+		
+		@Override
+		public boolean equals(Object c)
+		{
+			if(c.getClass() == Post.Comment.class)
+			{
+				Post.Comment cast = (Post.Comment) c;
+				
+				return cast.username == username &&
+					cast.comment == comment;
+			}
+			else
+			{
+				return false;
+			}
+		}
 	}
 }
