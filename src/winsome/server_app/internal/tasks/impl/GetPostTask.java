@@ -27,12 +27,12 @@ public class GetPostTask extends LoggedUserTask
 	@Override
 	public void executeTask(ServerThreadpool pool)
 	{		
-		Post client_post = makeClientPost(message.postId);
+		Post client_post = getClientPost(message.postId);
 		GetPostAnswer answer = new GetPostAnswer(client_post);
 		socket.sendAnswerMessage(answer);
 	}
 	
-	private Post makeClientPost(Integer postId)
+	private Post getClientPost(Integer postId)
 	{
 		GenericPost post = TaskUtils.getPost(postId, data);
 		Content content = TaskUtils.getPostContent(postId, data);

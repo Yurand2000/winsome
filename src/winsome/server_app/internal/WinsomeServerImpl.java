@@ -39,8 +39,7 @@ public class WinsomeServerImpl implements WinsomeServer
 			}
 			catch (IOException e)
 			{
-				System.err.println(e.getMessage());
-				return new WinsomeDataImpl();
+				throw new RuntimeException(e.toString());
 			}
 		}
 	}

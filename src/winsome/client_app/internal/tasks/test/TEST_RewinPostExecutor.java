@@ -36,7 +36,6 @@ class TEST_RewinPostExecutor extends TaskExecutorTest
 		
 		assertTrue(connection.sent_message.getClass() == RewinPostRequest.class);
 		assertEquals( ((RewinPostRequest)connection.sent_message).postId, postId );
-		assertTrue(app_api.getBlog().containsKey(newpostId));
 		assertEquals( task.getNewPostId(), newpostId );
 	}
 }

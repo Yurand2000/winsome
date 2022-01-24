@@ -8,20 +8,9 @@ import java.net.URL;
 
 public class RandomGeneratorImpl implements RandomGenerator
 {
-	private final String request_string;
-	private final Integer decimals;
+	private static final String request_string = "/integers/?num=1&min=3500&max=5000&col=1&base=10&format=plain&rnd=new";
 	
-	public RandomGeneratorImpl()
-	{
-		request_string = makeRequestString(100.0, 1000.0, 3);
-		decimals = 3;
-	}
-	
-	public RandomGeneratorImpl(Double min, Double max, Integer decimals)
-	{
-		request_string = makeRequestString(min, max, decimals);
-		this.decimals = decimals;
-	}
+	public RandomGeneratorImpl() { }
 
 	@Override
 	public synchronized Double next()
@@ -37,7 +26,7 @@ public class RandomGeneratorImpl implements RandomGenerator
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			
-			Double read = Double.parseDouble(reader.readLine()) / Math.pow(10, decimals);
+			Double read = Double.parseDouble(reader.readLine()) / 100.0;
 			
 			connection.disconnect();					
 			return read;
@@ -46,12 +35,5 @@ public class RandomGeneratorImpl implements RandomGenerator
 		{
 			return 1.0;
 		}
-	}
-
-	private String makeRequestString(Double min, Double max, Integer decimals)
-	{
-		Integer request_min = (int) (min * Math.pow(10, decimals));
-		Integer request_max = (int) (max * Math.pow(10, decimals));
-		return "/integers/?num=1&min=" + request_min.toString() + "&max=" + request_max.toString() + "&col=1&base=10&format=plain&rnd=new";
 	}
 }

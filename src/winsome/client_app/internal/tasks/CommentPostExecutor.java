@@ -2,7 +2,6 @@ package winsome.client_app.internal.tasks;
 
 import java.io.IOException;
 
-import winsome.client_app.api.exceptions.PostOwnedException;
 import winsome.connection.client_api.socket.ApplicationLoggedAPI;
 import winsome.connection.client_api.socket.ConnectionHandler;
 import winsome.connection.socket_messages.client.CommentPostRequest;
@@ -21,21 +20,11 @@ public class CommentPostExecutor extends DefaultTaskExecutor
 
 	@Override
 	protected void execute(ConnectionHandler connection, ApplicationLoggedAPI api) throws IOException
-	{
-		checkIsNotPostAuthor(api);
-		
+	{		
 		CommentPostRequest request = new CommentPostRequest(postId, comment);
 		connection.sendMessage(request);
 		
 		@SuppressWarnings("unused")
 		CommentPostAnswer answer = connection.readMessage(CommentPostAnswer.class);
-	}
-	
-	private void checkIsNotPostAuthor(ApplicationLoggedAPI api)
-	{
-		if(api.getBlog().containsKey(postId))
-		{
-			throw new PostOwnedException(postId);
-		}
 	}
 }

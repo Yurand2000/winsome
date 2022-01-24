@@ -61,6 +61,7 @@ public class ConsoleAppMain
 		chain_executors.add(ShowPostExecutor.class);
 		chain_executors.add(UnfollowUserExecutor.class);
 		chain_executors.add(ViewBlogExecutor.class);
+		chain_executors.add(HelpExecutor.class);
 		
 		return chain_executors;
 	}

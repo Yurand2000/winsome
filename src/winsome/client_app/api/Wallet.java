@@ -1,14 +1,20 @@
 package winsome.client_app.api;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import static java.util.Collections.unmodifiableList;
 import java.util.Date;
 
 public class Wallet
 {
-	public final Double current_total;
-	public final List<Transaction> transactions;
+	@JsonProperty public final Double current_total;
+	@JsonProperty public final List<Transaction> transactions;
+	
+	@SuppressWarnings("unused")
+	private Wallet() { current_total = null; transactions = null; }
 	
 	public Wallet(Double current_total, List<Transaction> transactions)
 	{
@@ -54,10 +60,13 @@ public class Wallet
 		}
 	}
 	
-	public class Transaction
+	public static class Transaction
 	{
-		public final Date timestamp;
-		public final Double amount;
+		@JsonProperty public final Date timestamp;
+		@JsonProperty public final Double amount;
+		
+		@SuppressWarnings("unused")
+		private Transaction() { timestamp = null; amount = null; }
 		
 		public Transaction(Date timestamp, Double amount)
 		{

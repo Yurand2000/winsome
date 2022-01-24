@@ -24,7 +24,6 @@ class TEST_GetPostTask extends SocketTaskTest
 	{
 		super.setup();
 		
-		
 		data.getUsers().put( "user", UserFactory.makeNewUser("user", "pass", new Tag[]{ new Tag("tag1") }) );
 		data.getUsers().put( "Nicola", UserFactory.makeNewUser("Nicola", "pass", new Tag[]{ new Tag("tag1") }) );
 		

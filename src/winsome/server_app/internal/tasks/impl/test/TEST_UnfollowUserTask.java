@@ -63,4 +63,19 @@ class TEST_UnfollowUserTask extends SocketTaskTest
 		assertTrue(state.sent_message.getClass() == RequestExceptionAnswer.class);
 	}
 
+	@Test
+	void testOnUnfollowingSelf()
+	{
+		message = new UnfollowUserRequest("user");
+		task = new UnfollowUserTask(state, data, message);
+
+		task.run(pool);
+		
+		assertFalse(data.getFollowerUpdater().newFollowerCalled);
+		assertFalse(data.getFollowerUpdater().removeFollowerCalled);
+		assertFalse(data.getUsers().get("user").getFollowing().contains("user"));
+		assertFalse(data.getUsers().get("user").getFollowers().contains("user"));
+		assertTrue(state.sent_message.getClass() == RequestExceptionAnswer.class);
+	}
+
 }

@@ -89,7 +89,7 @@ public class User implements Cloneable
 	}
 	
 	@JsonIgnore()
-	public synchronized ArrayList<String> getFollowers()
+	public synchronized List<String> getFollowers()
 	{
 		return new ArrayList<String>(followers);
 	}

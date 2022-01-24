@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import winsome.server_app.post.PostComments.Comment;
 import winsome.server_app.post.RewardState.Reward;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 public abstract class GenericPost implements Cloneable
 {
 	@JsonProperty() public final Integer postId;

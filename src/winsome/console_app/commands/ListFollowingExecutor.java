@@ -32,7 +32,7 @@ public class ListFollowingExecutor extends ConsoleCommandExecutor
 	{		
 		List<User> users = ClientAppAPI.getLoggedClientAPI().listFollowing();
 		StringBuilder string = new StringBuilder();
-		string.append("My followers:");
+		string.append("My followed:");
 		for(User user : users)
 		{
 			string.append("\n  ");

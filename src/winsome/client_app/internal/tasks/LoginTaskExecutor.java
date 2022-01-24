@@ -3,7 +3,6 @@ package winsome.client_app.internal.tasks;
 import java.io.IOException;
 import java.util.Arrays;
 
-import winsome.client_app.api.PostShort;
 import winsome.connection.client_api.socket.*;
 import winsome.connection.socket_messages.client.*;
 import winsome.connection.socket_messages.server.*;
@@ -47,11 +46,6 @@ public class LoginTaskExecutor extends DefaultTaskExecutor
 	{
 		api.getFollowers().addAll(Arrays.asList(answer.followed_by_users));
 		api.getFollowing().addAll(Arrays.asList(answer.following_users));
-		
-		for(LoginAnswer.PostIdAndTitle post : answer.my_blog)
-		{
-			api.getBlog().put(post.postId, new PostShort(post.postId, api.getThisUser(), post.title));
-		}
 	}
 	
 	private void startWalletNotificationListener(ApplicationLoggedAPI api, LoginAnswer answer) throws IOException

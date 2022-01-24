@@ -2,7 +2,6 @@ package winsome.client_app.internal.tasks;
 
 import java.io.IOException;
 
-import winsome.client_app.api.PostShort;
 import winsome.connection.client_api.socket.ApplicationLoggedAPI;
 import winsome.connection.client_api.socket.ConnectionHandler;
 import winsome.connection.socket_messages.client.CreatePostRequest;
@@ -30,12 +29,6 @@ public class CreatePostExecutor extends DefaultTaskExecutor
 		CreatePostAnswer answer = connection.readMessage(CreatePostAnswer.class);
 		
 		newPostId = answer.newPostId;
-		api.getBlog().put(answer.newPostId, makeNewPost(answer.newPostId, api));
-	}
-	
-	private PostShort makeNewPost(Integer postId, ApplicationLoggedAPI api)
-	{
-		return new PostShort(postId, api.getThisUser(), title);
 	}
 	
 	public Integer getNewPostId()

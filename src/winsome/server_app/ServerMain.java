@@ -14,6 +14,7 @@ import winsome.connection.server_api.socket.ClientHandler;
 import winsome.connection.server_api.wallet_notifier.WalletNotificationUpdaterImpl;
 import winsome.connection.socket_messages.MessageUtils;
 import winsome.server_app.internal.*;
+import winsome.server_app.post.PostUtils;
 
 public class ServerMain
 {
@@ -29,6 +30,7 @@ public class ServerMain
 	{
 		settings = getServerSettings(settings_file);
 		InetSocketAddress server_address = getServerAddress();
+		PostUtils.registerJsonDeserializers();
 		MessageUtils.registerJsonDeserializers();
 		
 		wallet_updater = new WalletNotificationUpdaterImpl(settings.server_udp_address);

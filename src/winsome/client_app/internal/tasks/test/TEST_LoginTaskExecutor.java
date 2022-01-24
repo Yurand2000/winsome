@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import winsome.client_app.api.APIException;
-import winsome.client_app.api.PostShort;
 import winsome.client_app.api.exceptions.ServerInternalException;
 import winsome.client_app.internal.tasks.LoginTaskExecutor;
 import winsome.connection.socket_messages.Message;
@@ -35,7 +34,6 @@ class TEST_LoginTaskExecutor extends TaskExecutorTest
 		LoginAnswer answer = new LoginAnswer(
 			new String[] {"Luca"},
 			new String[] {"Gianni"},
-			new LoginAnswer.PostIdAndTitle[] { new LoginAnswer.PostIdAndTitle(50, "Titolo") },
 			"multicast_address"
 		);
 		connection.setReceiveMessage(answer);
@@ -52,11 +50,6 @@ class TEST_LoginTaskExecutor extends TaskExecutorTest
 		
 		assertTrue(app_api.getFollowers().contains("Luca"));
 		assertTrue(app_api.getFollowing().contains("Gianni"));
-		assertTrue(app_api.getBlog().containsKey(50));
-		PostShort post = app_api.getBlog().get(50);
-		assertEquals(post.postId, 50);
-		assertEquals(post.author, "user");
-		assertEquals(post.title, "Titolo");
 		
 		app_api.getWalletNotifier().checkRegisterCalled();
 		app_api.getFollowerUpdater().checkRegisterCalled();

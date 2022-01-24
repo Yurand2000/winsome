@@ -1,10 +1,15 @@
 package winsome.client_app.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class PostShort implements Comparable<PostShort>
 {
-	public final Integer postId;
-	public final String author;
-	public final String title;
+	@JsonProperty public final Integer postId;
+	@JsonProperty public final String author;
+	@JsonProperty public final String title;
+	
+	@SuppressWarnings("unused")
+	private PostShort() { postId = 0; author = null; title = null; }
 	
 	public PostShort(Integer postId, String author, String title)
 	{

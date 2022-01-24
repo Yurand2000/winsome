@@ -36,9 +36,9 @@ class TEST_GetFeedTask extends SocketTaskTest
 		data.getUsers().get("user").addFollowing("Nicola");
 		data.getUsers().get("Nicola").addFollower("user");
 		
-		GenericPost post1 = data.getPostFactory().makeNewPost("titolo1", "Laura", "content1");
-		GenericPost post2 = data.getPostFactory().makeRewinPost(post1.postId, "Laura");
-		GenericPost post3 = data.getPostFactory().makeNewPost("titolo3", "Nicola", "content3");
+		GenericPost post1 = data.getPostFactory().makeNewPostId(1, "titolo1", "Laura", "content1");
+		GenericPost post2 = data.getPostFactory().makeRewinPostId(2, post1.postId, "Laura");
+		GenericPost post3 = data.getPostFactory().makeNewPostId(3, "titolo3", "Nicola", "content3");
 		data.getPosts().put(post1.postId, post1);
 		data.getPosts().put(post2.postId, post2);
 		data.getPosts().put(post3.postId, post3);

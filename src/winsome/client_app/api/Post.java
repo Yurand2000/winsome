@@ -1,18 +1,24 @@
 package winsome.client_app.api;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import static java.util.Collections.unmodifiableList;
 
 public class Post implements Comparable<Post>
 {
-	public final Integer postId;
-	public final String author;
-	public final String title;
-	public final String content;
-	public final Integer positive_ratings;
-	public final Integer negative_ratings;
-	public final List<Comment> comments;
+	@JsonProperty public final Integer postId;
+	@JsonProperty public final String author;
+	@JsonProperty public final String title;
+	@JsonProperty public final String content;
+	@JsonProperty public final Integer positive_ratings;
+	@JsonProperty public final Integer negative_ratings;
+	@JsonProperty public final List<Comment> comments;
+	
+	@SuppressWarnings("unused")
+	private Post() { postId = 0; author = null; title = null; content = null; positive_ratings = null; negative_ratings = null; comments = null; }
 	
 	public Post(Integer postId, String author, String title, String content,
 			Integer positive_ratings, Integer negative_ratings, List<Comment> comments)

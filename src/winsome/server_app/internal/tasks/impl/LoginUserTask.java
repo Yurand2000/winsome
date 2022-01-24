@@ -50,7 +50,6 @@ public class LoginUserTask extends SocketClientTask
 		List<String> following = new ArrayList<String>();
 		List<String> followers = new ArrayList<String>();
 		List<Integer> posts = new ArrayList<Integer>();
-		List<LoginAnswer.PostIdAndTitle> postsAndTitle = new ArrayList<LoginAnswer.PostIdAndTitle>();
 		
 		TaskUtils.lockUser(user, () ->
 		{
@@ -59,18 +58,9 @@ public class LoginUserTask extends SocketClientTask
 			posts.addAll(user.getPosts());
 		});
 		
-		for(Integer postId : posts)
-		{
-			postsAndTitle.add( new LoginAnswer.PostIdAndTitle(
-				postId,
-				TaskUtils.getPostContent(postId, server_data).title
-			));
-		}
-		
 		LoginAnswer answer = new LoginAnswer(
 			followers.toArray(new String[0]),
 			following.toArray(new String[0]),
-			postsAndTitle.toArray(new LoginAnswer.PostIdAndTitle[0]),
 			server_data.getWalletUpdater().getMulticastAddress()
 		);
 

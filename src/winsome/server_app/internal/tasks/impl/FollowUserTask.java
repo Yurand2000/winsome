@@ -30,6 +30,11 @@ public class FollowUserTask extends LoggedUserTask
 	
 	private void checkUserNotAlreadyFollowed(User user)
 	{
+		if(user.username == message.username)
+		{
+			throw new RuntimeException("Cannot follow yourself.");
+		}
+		
 		if(user.getFollowing().contains(message.username))
 		{
 			throw new RuntimeException("User already followed.");

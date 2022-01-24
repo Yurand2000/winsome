@@ -5,10 +5,8 @@ import java.rmi.NotBoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import winsome.client_app.api.*;
@@ -25,7 +23,6 @@ public class ApplicationLoggedAPIImpl implements LoggedClientAPI, ApplicationLog
 	public final String me;
 	public final Set<String> followers;
 	public final Set<String> following;
-	public final Map<Integer, PostShort> blog;
 	public final WalletNotificationUpdaterImpl wallet_notifier;
 	public final FollowerUpdaterRMIHandlerImpl follower_updater;
 	private final ConnectionHandler client_connection;
@@ -35,7 +32,6 @@ public class ApplicationLoggedAPIImpl implements LoggedClientAPI, ApplicationLog
 		this.me = me;
 		this.followers = Collections.synchronizedSet(new HashSet<String>());
 		this.following = Collections.synchronizedSet(new HashSet<String>());
-		this.blog = Collections.synchronizedMap(new HashMap<Integer, PostShort>());
 		this.wallet_notifier = new WalletNotificationUpdaterImpl();
 		this.follower_updater = new FollowerUpdaterRMIHandlerImpl(server_host, me, followers);
 		this.client_connection = client_connection;
@@ -89,7 +85,10 @@ public class ApplicationLoggedAPIImpl implements LoggedClientAPI, ApplicationLog
 	@Override
 	public List<PostShort> viewBlog() 
 	{
-		return new ArrayList<PostShort>(blog.values());
+		List<PostShort> blog = new ArrayList<PostShort>();
+		GetBlogExecutor executor = new GetBlogExecutor(blog);
+		runExecutor(executor);
+		return blog;
 	}
 
 	@Override
@@ -185,12 +184,6 @@ public class ApplicationLoggedAPIImpl implements LoggedClientAPI, ApplicationLog
 	public Set<String> getFollowing()
 	{
 		return following;
-	}
-
-	@Override
-	public Map<Integer, PostShort> getBlog()
-	{
-		return blog;
 	}
 
 	@Override

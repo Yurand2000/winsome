@@ -30,9 +30,14 @@ public class UnfollowUserTask extends LoggedUserTask
 	
 	private void checkUserIsFollowed(User user)
 	{
+		if(user.username == message.username)
+		{
+			throw new RuntimeException("Cannot unfollow yourself.");
+		}
+		
 		if(!user.getFollowing().contains(message.username))
 		{
-			throw new RuntimeException("User already followed.");
+			throw new RuntimeException("User already not followed.");
 		}
 	}
 	

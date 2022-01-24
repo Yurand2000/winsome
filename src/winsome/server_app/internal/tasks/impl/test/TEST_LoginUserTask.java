@@ -13,9 +13,6 @@ import winsome.connection.socket_messages.client.LoginRequest;
 import winsome.connection.socket_messages.server.LoginAnswer;
 import winsome.connection.socket_messages.server.RequestExceptionAnswer;
 import winsome.server_app.internal.tasks.impl.LoginUserTask;
-import winsome.server_app.post.GenericPost;
-import winsome.server_app.post.PostFactory;
-import winsome.server_app.post.PostFactoryImpl;
 import winsome.server_app.user.Tag;
 import winsome.server_app.user.User;
 import winsome.server_app.user.UserFactory;
@@ -82,23 +79,15 @@ class TEST_LoginUserTask extends SocketTaskTest
 		assertTrue(followed_by.contains("Lucia"));
 		assertEquals(answer.following_users.length, 1);
 		assertEquals(answer.following_users[0], "Nicola");
-		assertEquals(answer.my_blog.length, 1);
-		assertEquals(answer.my_blog[0].postId, 1);
-		assertEquals(answer.my_blog[0].title, "Title");
 		assertEquals(answer.udp_multicast_address, "multicast_address");
 	}
 	
 	void prepareReturnsAllUserData()
-	{
-		PostFactory factory = new PostFactoryImpl();
-		GenericPost p = factory.makeNewPost("Title", "user", "Content");
-		data.getPosts().put(p.postId, p);
-		
+	{		
 		User u = UserFactory.makeNewUser("user", "pass", new Tag[]{ new Tag("car") });
 		u.addFollower("Benito");
 		u.addFollower("Lucia");
 		u.addFollowing("Nicola");
-		u.addPost(p.postId);
 		data.getUsers().put("user", u);		
 	}
 }
