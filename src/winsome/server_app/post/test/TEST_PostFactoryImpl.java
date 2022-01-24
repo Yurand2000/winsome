@@ -13,25 +13,26 @@ import winsome.server_app.post.ContentPost;
 import winsome.server_app.post.GenericPost;
 import winsome.server_app.post.PostCommentsImpl;
 import winsome.server_app.post.PostFactory;
+import winsome.server_app.post.PostFactoryImpl;
 import winsome.server_app.post.PostLikesImpl;
 import winsome.server_app.post.RewardStateImpl;
 import winsome.server_app.post.RewinPost;
 
-class TEST_PostFactory
+class TEST_PostFactoryImpl
 {
 	@Test
 	void testConstructor()
 	{
-		assertDoesNotThrow(() -> new PostFactory());
+		assertDoesNotThrow(() -> new PostFactoryImpl());
 
 		List<GenericPost> posts = makePostsList();		
-		assertDoesNotThrow(() -> new PostFactory(posts));
+		assertDoesNotThrow(() -> new PostFactoryImpl(posts));
 	}
 	
 	@Test
 	void testMakeContentPost()
 	{
-		PostFactory factory = new PostFactory();
+		PostFactory factory = new PostFactoryImpl();
 		ContentPost post = (ContentPost) factory.makeNewPost("title", "author", "content");
 		
 		assertEquals(post.content.title, "title");
@@ -47,7 +48,7 @@ class TEST_PostFactory
 	@Test
 	void testMakeRewinPost()
 	{
-		PostFactory factory = new PostFactory();
+		PostFactory factory = new PostFactoryImpl();
 		RewinPost post = (RewinPost) factory.makeRewinPost(50, "author");
 		
 		assertEquals(post.getOriginalPostId(), 50);
@@ -62,7 +63,7 @@ class TEST_PostFactory
 	@Test
 	void testFirstPostHasIdOne()
 	{
-		PostFactory factory = new PostFactory();
+		PostFactory factory = new PostFactoryImpl();
 		GenericPost post = factory.makeRewinPost(50, "author");
 		
 		assertEquals(post.postId, 1);
@@ -71,7 +72,7 @@ class TEST_PostFactory
 	@Test
 	void testMakePostsFromEmptyFactory()
 	{
-		PostFactory factory = new PostFactory();
+		PostFactory factory = new PostFactoryImpl();
 		
 		GenericPost post = factory.makeRewinPost(50, "author");		
 		assertEquals(post.postId, 1);
@@ -84,7 +85,7 @@ class TEST_PostFactory
 	@Test
 	void testMakePostsAfterErasing()
 	{
-		PostFactory factory = new PostFactory();
+		PostFactory factory = new PostFactoryImpl();
 		
 		GenericPost post = factory.makeRewinPost(50, "author");
 		post = factory.makeRewinPost(50, "author");
@@ -101,7 +102,7 @@ class TEST_PostFactory
 	@Test
 	void testMakePostsAfterErasing2()
 	{
-		PostFactory factory = new PostFactory();
+		PostFactory factory = new PostFactoryImpl();
 		
 		GenericPost post = factory.makeRewinPost(50, "author");
 		post = factory.makeRewinPost(50, "author");
@@ -131,7 +132,7 @@ class TEST_PostFactory
 	@Test
 	void testMakePostsFromParamConstructedFactory()
 	{
-		PostFactory factory = new PostFactory(makePostsList());
+		PostFactory factory = new PostFactoryImpl(makePostsList());
 		
 		GenericPost post = factory.makeRewinPost(50, "author");
 		assertEquals(post.postId, 2);

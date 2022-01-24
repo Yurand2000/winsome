@@ -46,6 +46,12 @@ public class SocketStateImpl implements SocketState
 	}
 
 	@Override
+	public void unsetClientUser()
+	{
+		this.username = null;		
+	}
+
+	@Override
 	public Message getRequestMessage()
 	{
 		return incoming_message;

@@ -18,7 +18,7 @@ import winsome.server_app.internal.ServerRMIRegistry;
 
 class TEST_FollowerUpdater
 {
-	private FollowerUpdaterRegistratorHandler server_handler;
+	private FollowerUpdaterRegistratorHandlerImpl server_handler;
 	private FollowerUpdaterRMIHandler client_handler;
 	private Set<String> followers;
 	
@@ -26,7 +26,7 @@ class TEST_FollowerUpdater
 	void setup() throws IOException, AlreadyBoundException, NotBoundException
 	{
 		ServerRMIRegistry.startRegistry();
-		server_handler = new FollowerUpdaterRegistratorHandler();
+		server_handler = new FollowerUpdaterRegistratorHandlerImpl();
 		server_handler.bindObject();
 		
 		followers = new HashSet<String>();

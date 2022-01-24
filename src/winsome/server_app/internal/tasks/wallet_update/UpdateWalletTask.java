@@ -2,7 +2,6 @@ package winsome.server_app.internal.tasks.wallet_update;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import winsome.connection.server_api.wallet_notifier.WalletNotificationUpdater;
 import winsome.server_app.internal.WinsomeData;
 import winsome.server_app.internal.tasks.TaskUtils;
 import winsome.server_app.internal.tasks.WinsomeTask;
@@ -31,7 +30,7 @@ public class UpdateWalletTask extends WinsomeTask
 		
 		if(total_wallet_updates.decrementAndGet() == 0)
 		{
-			WalletNotificationUpdater.notifyWalletUpdated();
+			data.getWalletUpdater().notifyWalletUpdated();
 		}
 	}
 

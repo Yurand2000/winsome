@@ -19,8 +19,8 @@ public class ExitExecutor extends ConsoleCommandExecutor
 	{
 		try
 		{
-			ClientAppAPI.getAPI().logout();
 			Thread.currentThread().interrupt();
+			ClientAppAPI.getAPI().logout();
 		}
 		catch(NotLoggedInException e) { }		
 		return "Exiting...";

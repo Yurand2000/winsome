@@ -12,12 +12,12 @@ import winsome.connection.client_api.RMIObjectLookup;
 import winsome.connection.client_api.follower_updater.FollowerUpdater;
 import winsome.connection.protocols.FollowerUpdaterRMI;
 import winsome.connection.server_api.follower_updater.FollowerUpdaterRegistrator;
-import winsome.connection.server_api.follower_updater.FollowerUpdaterRegistratorHandler;
+import winsome.connection.server_api.follower_updater.FollowerUpdaterRegistratorHandlerImpl;
 import winsome.server_app.internal.ServerRMIRegistry;
 
-class TEST_FollowerUpdaterRegistratorHandler
+class TEST_FollowerUpdaterRegistratorHandlerImpl
 {
-	private FollowerUpdaterRegistratorHandler handler;
+	private FollowerUpdaterRegistratorHandlerImpl handler;
 	private FollowerUpdaterRegistrator registrator;
 	private FollowerUpdaterTest updater;
 	
@@ -25,7 +25,7 @@ class TEST_FollowerUpdaterRegistratorHandler
 	void setup() throws IOException, AlreadyBoundException
 	{
 		ServerRMIRegistry.startRegistry();
-		handler = new FollowerUpdaterRegistratorHandler();
+		handler = new FollowerUpdaterRegistratorHandlerImpl();
 		handler.bindObject();
 
 		}

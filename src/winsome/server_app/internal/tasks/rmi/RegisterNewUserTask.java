@@ -1,4 +1,4 @@
-package winsome.server_app.internal.tasks.impl;
+package winsome.server_app.internal.tasks.rmi;
 
 import java.util.Arrays;
 import java.util.regex.Pattern;
@@ -39,16 +39,6 @@ public class RegisterNewUserTask extends WinsomeFutureTask<Void>
 		checkUsernameIsNotAlreadyTaken(data);
 		createUsername(data);
 		return null;
-	}
-	
-	private Tag[] makeTags(String[] string_tags)
-	{		
-		Tag[] tags = new Tag[string_tags.length];
-		for(int i = 0; i < string_tags.length; i++)
-		{
-			tags[i] = new Tag(string_tags[i]);
-		}
-		return tags;
 	}
 	
 	private void checkArguments()
@@ -92,5 +82,15 @@ public class RegisterNewUserTask extends WinsomeFutureTask<Void>
 		{
 			throw new UsernameAlreadyTakenException();
 		}
+	}
+	
+	private Tag[] makeTags(String[] string_tags)
+	{		
+		Tag[] tags = new Tag[string_tags.length];
+		for(int i = 0; i < string_tags.length; i++)
+		{
+			tags[i] = new Tag(string_tags[i]);
+		}
+		return tags;
 	}
 }

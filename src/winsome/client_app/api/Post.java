@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import static java.util.Collections.unmodifiableList;
 
-public class Post
+public class Post implements Comparable<Post>
 {
 	public final Integer postId;
 	public final String author;
@@ -69,6 +69,12 @@ public class Post
 		{
 			return false;
 		}
+	}
+
+	@Override
+	public int compareTo(Post post)
+	{
+		return postId.compareTo(post.postId);
 	}
 	
 	public static class Comment

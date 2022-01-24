@@ -2,9 +2,7 @@ package winsome.server_app.internal.tasks.impl;
 
 import winsome.connection.socket_messages.Message;
 import winsome.connection.socket_messages.client.*;
-import winsome.connection.socket_messages.server.RequestExceptionAnswer;
 import winsome.server_app.internal.WinsomeData;
-import winsome.server_app.internal.tasks.SocketClientTask;
 import winsome.server_app.internal.tasks.SocketTaskState;
 import winsome.server_app.internal.threadpool.ServerThreadpool;
 
@@ -16,7 +14,7 @@ public class ParseIncomingMessageTask extends SocketClientTask
 	}
 	
 	@Override
-	public void run(ServerThreadpool pool)
+	public void execute(ServerThreadpool pool)
 	{
 		Message message = socket.getRequestMessage();
 		if(message.getClass() == LoginRequest.class)
@@ -29,7 +27,7 @@ public class ParseIncomingMessageTask extends SocketClientTask
 		}
 		else
 		{
-			socket.sendAnswerMessage( new RequestExceptionAnswer("Unknown task.") );
+			throw new RuntimeException("Unknown task.");
 		}
 	}
 }

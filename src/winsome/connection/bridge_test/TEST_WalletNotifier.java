@@ -11,18 +11,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
-import winsome.connection.server_api.wallet_notifier.WalletNotificationUpdater;
-
 class TEST_WalletNotifier
 {
 	private String multicast_address;
-	private winsome.connection.client_api.wallet_notifier.WalletNotificationUpdaterImpl client_updater;
+	private winsome.connection.client_api.wallet_notifier.WalletNotificationUpdater client_updater;
+	private winsome.connection.server_api.wallet_notifier.WalletNotificationUpdater server_updater;
 	
 	@BeforeEach
 	void setup() throws UnknownHostException
 	{
 		multicast_address = "224.0.0.128";
 		client_updater = new winsome.connection.client_api.wallet_notifier.WalletNotificationUpdaterImpl();
+		server_updater = new winsome.connection.server_api.wallet_notifier.WalletNotificationUpdaterImpl(multicast_address);
 	}
 	
 	@Test
@@ -30,7 +30,6 @@ class TEST_WalletNotifier
 	void testWalletNotifier() throws IOException, InterruptedException
 	{
 		AtomicBoolean notified = new AtomicBoolean(false);
-		WalletNotificationUpdater.setMulticastAddress(multicast_address);
 		client_updater.registerWalletUpdateNotifications(multicast_address, () -> {
 			notified.set(true);
 		});
@@ -38,7 +37,7 @@ class TEST_WalletNotifier
 		while(!notified.get() && !Thread.currentThread().isInterrupted())
 		{
 			Thread.sleep(50);
-			WalletNotificationUpdater.notifyWalletUpdated();
+			server_updater.notifyWalletUpdated();
 			Thread.yield();
 		}
 		

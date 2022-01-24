@@ -13,7 +13,7 @@ import winsome.server_app.internal.threadpool.ServerThreadpool;
 import winsome.server_app.post.GenericPost;
 
 public class CalculatePostsRewardTask extends WinsomeTask
-{
+{	
 	public CalculatePostsRewardTask(WinsomeData data)
 	{
 		super(data);

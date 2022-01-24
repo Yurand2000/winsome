@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import winsome.connection.server_api.socket.tasks.SocketReadTask;
+import winsome.connection.socket_messages.Message;
 import winsome.server_app.internal.tasks.impl.ParseIncomingMessageTask;
 
 class TEST_SocketReadTask
@@ -32,6 +34,9 @@ class TEST_SocketReadTask
 		
 		pool.checkEnqueueCalled();
 		pool.checkExpectedTask(ParseIncomingMessageTask.class);
+		
+		assertTrue(state.setRequestMessage_executed);
+		assertTrue(state.getRequestMessage().getClass() == Message.class);
 	}
 	
 	@Test

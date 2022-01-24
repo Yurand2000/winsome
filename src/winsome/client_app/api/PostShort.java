@@ -1,6 +1,6 @@
 package winsome.client_app.api;
 
-public class PostShort
+public class PostShort implements Comparable<PostShort>
 {
 	public final Integer postId;
 	public final String author;
@@ -39,5 +39,11 @@ public class PostShort
 		{
 			return false;
 		}
+	}
+
+	@Override
+	public int compareTo(PostShort post)
+	{
+		return postId.compareTo(post.postId);
 	}
 }

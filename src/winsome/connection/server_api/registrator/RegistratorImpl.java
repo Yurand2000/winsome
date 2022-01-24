@@ -4,7 +4,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.RemoteObject;
 
 import winsome.server_app.internal.WinsomeData;
-import winsome.server_app.internal.tasks.impl.RegisterNewUserTask;
+import winsome.server_app.internal.tasks.rmi.RegisterNewUserTask;
 import winsome.server_app.internal.threadpool.ServerThreadpool;
 
 public class RegistratorImpl  extends RemoteObject implements Registrator

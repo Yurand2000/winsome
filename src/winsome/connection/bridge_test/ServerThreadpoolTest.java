@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.lang.reflect.Field;
 
 import winsome.server_app.internal.tasks.WinsomeFutureTask;
-import winsome.server_app.internal.tasks.impl.RegisterNewUserTask;
+import winsome.server_app.internal.tasks.rmi.RegisterNewUserTask;
 import winsome.server_app.internal.threadpool.ServerThreadpool;
 import winsome.server_app.internal.threadpool.ServerThreadpoolTask;
 

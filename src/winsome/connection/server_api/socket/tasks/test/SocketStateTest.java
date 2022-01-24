@@ -34,12 +34,25 @@ class SocketStateTest implements SocketState
 	public String getClientUser() { fail(); return null; }
 
 	@Override
-	public void setClientUser(String username) { }
+	public void setClientUser(String username) { fail(); }
+	
+	@Override
+	public void unsetClientUser() { fail(); }
+
+	public boolean setRequestMessage_executed = false;
+	private Message requestMessage = null;
+	
+	@Override
+	public void setRequestMessage(Message incoming)
+	{
+		setRequestMessage_executed = true;
+		requestMessage = incoming;
+	}
 
 	@Override
-	public Message getRequestMessage() {
-		// TODO Auto-generated method stub
-		return null;
+	public Message getRequestMessage()
+	{
+		return requestMessage;
 	}
 
 	private boolean send_answer_invoked = false;
@@ -54,11 +67,5 @@ class SocketStateTest implements SocketState
 	{
 		assertTrue(send_answer_invoked);
 		send_answer_invoked = false;
-	}
-
-	@Override
-	public void setRequestMessage(Message incoming) {
-		// TODO Auto-generated method stub
-		
 	}
 }

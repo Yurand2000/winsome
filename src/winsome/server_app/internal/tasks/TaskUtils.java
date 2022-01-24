@@ -11,19 +11,45 @@ public class TaskUtils
 {
 	private TaskUtils() { }
 	
-	public boolean doesPostExist(Integer postId, WinsomeData server_data)
-	{
-		return server_data.getPosts().containsKey(postId);
-	}
-	
-	public boolean doesUserExist(String username, WinsomeData server_data)
+	public static boolean doesUserExist(String username, WinsomeData server_data)
 	{
 		return server_data.getUsers().containsKey(username);
 	}
 	
-	public static String getPostAuthor(Integer postId, WinsomeData server_data)
+	public static User getUser(String username, WinsomeData server_data)
+	{
+		User user = server_data.getUsers().get(username);
+		if(user == null)
+		{
+			throw new RuntimeException("Given user with username " + username + " does not exist.");
+		}
+		else
+		{
+			return user;
+		}
+	}
+	
+	public static boolean doesPostExist(Integer postId, WinsomeData server_data)
+	{
+		return server_data.getPosts().containsKey(postId);
+	}
+	
+	public static GenericPost getPost(Integer postId, WinsomeData server_data)
 	{
 		GenericPost post = server_data.getPosts().get(postId);
+		if(post == null)
+		{
+			throw new RuntimeException("Given post with id " + postId.toString() + " does not exist.");
+		}
+		else
+		{
+			return post;
+		}
+	}
+	
+	public static String getPostAuthor(Integer postId, WinsomeData server_data)
+	{
+		GenericPost post = getPost(postId, server_data);
 		return post.getAuthor();
 	}
 	
@@ -35,7 +61,7 @@ public class TaskUtils
 	
 	private static Content getPostContent(Integer postId, String author, WinsomeData server_data)
 	{
-		GenericPost post = server_data.getPosts().get(postId);
+		GenericPost post = getPost(postId, server_data);
 		
 		if(post.isRewin())
 		{

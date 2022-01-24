@@ -6,6 +6,7 @@ public interface SocketTaskState
 {
 	String getClientUser();
 	void setClientUser(String username);
+	void unsetClientUser();
 	
 	Message getRequestMessage();
 	void sendAnswerMessage(Message answer); 
