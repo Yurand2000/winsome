@@ -1,7 +1,9 @@
 package winsome.client_app.internal;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
 
 import winsome.client_app.api.APIException;
@@ -32,7 +34,13 @@ public class ApplicationAPIImpl implements ApplicationAPI
 		this.logged_client = null;
 		this.client_connection = null;
 		this.wallet_notification_runnable = wallet_notification_runnable;
-		System.setProperty("java.rmi.server.hostname", server_address.getHostString());
+		setRMIHostnameToLocalhost();
+	}
+	
+	private void setRMIHostnameToLocalhost()
+	{
+		try { System.setProperty("java.rmi.server.hostname", InetAddress.getLocalHost().getHostName()); }
+		catch (UnknownHostException e) { }
 	}
 
 	@Override
