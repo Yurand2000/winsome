@@ -1,29 +1,12 @@
 @echo off
 
-setlocal enabledelayedexpansion
-
-cd src
-dir /s /B *.java > ../bin/sources.txt
-cd ..
-
-set libs=
-for %%f in (libs\jackson\*.jar) do (
-    set "libs=!libs!;%%f"
-)
-for %%f in (libs\junit\*.jar) do (
-    set "libs=!libs!;%%f"
-)
-
-REM echo !libs!
 
 echo Compiling
-call javac -d bin -cp !libs! @bin\sources.txt
-del bin\sources.txt
+call javac -d bin -cp @compile_data\libs_jar.txt @compile_data\sources.txt
 
-cd bin
 echo Making Jars
-jar cf WinsomeServer.jar *
-jar cf WinsomeClient.jar *
+cd bin
+jar cfe WinsomeServer.jar winsome.server_app.ServerAppMain @..\compile_data\classes_server.txt @com_libs.txt
+jar cfe WinsomeClient.jar winsome.console_app.ConsoleAppMain @..\compile_data\classes_client.txt @com_libs.txt
 cd ..
-
 pause

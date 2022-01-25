@@ -15,7 +15,6 @@ public class SerializerWrapper
 		{
 			mapper = new ObjectMapper();
 			mapper.enable(SerializationFeature.INDENT_OUTPUT);
-			//mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
 			mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 			mapper.registerModule(new com.fasterxml.jackson.datatype.jsr310.JavaTimeModule());
 		}
