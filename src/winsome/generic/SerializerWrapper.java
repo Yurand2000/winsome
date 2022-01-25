@@ -2,8 +2,6 @@ package winsome.generic;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -41,16 +39,6 @@ public class SerializerWrapper
 	public static <T> T deserialize(byte[] data, Class<T> arrayClass) throws IOException
 	{
 		return instance().readValue(data, arrayClass);
-	}
-	
-	public static <T> T deserialize(JsonParser data, Class<T> arrayClass) throws IOException
-	{
-		return instance().readValue(data, arrayClass);
-	}
-	
-	public static <T> T deserialize(TreeNode data, Class<T> arrayClass) throws IOException
-	{
-		return deserialize(data.traverse(), arrayClass);
 	}
 	
 	public static void addDeserializer(Class<?> type)

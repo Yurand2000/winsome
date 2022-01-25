@@ -2,6 +2,7 @@ package winsome.server_app.internal.tasks.wallet_update;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -33,18 +34,47 @@ public class CalculatePostRewardTask extends WinsomeTask
 	{
 		Reward reward = post.calculateReward();
 		
-		BigDecimal author_reward = new BigDecimal(reward.reward).multiply(author_part);
-		BigDecimal contributor_part = new BigDecimal(reward.reward).subtract(author_reward).divide(new BigDecimal(reward.contributors.size()), RoundingMode.FLOOR);
+		Long author_reward = getAuthorReward(reward.reward);
+		Long contributor_reward = getContributorReward(reward.reward, reward.contributors.size());
 		
-		user_rewards.get(post.getAuthor()).addAndGet(author_reward.longValueExact());
-		for(String contributor : reward.contributors)
+		addRewards(reward.contributors, author_reward, contributor_reward);		
+		updateOperationCounter(pool);
+	}
+	
+	private Long getAuthorReward(Double total_reward)
+	{
+		BigDecimal reward = new BigDecimal(total_reward).multiply(author_part);
+		return reward.longValue();
+	}
+	
+	private Long getContributorReward(Double total_reward, Integer contributors)
+	{
+		BigDecimal contibutor_part = new BigDecimal(1).subtract(author_part);		
+		BigDecimal reward = new BigDecimal(total_reward).multiply(contibutor_part).divide(new BigDecimal(contributors), RoundingMode.FLOOR);
+		return reward.longValue();
+	}
+	
+	private void addRewards(Set<String> contributors, Long author_reward, Long contributor_reward)
+	{
+		addUserReward(post.getAuthor(), author_reward);
+		for(String contributor : contributors)
 		{
-			user_rewards.get(contributor).addAndGet(contributor_part.longValueExact());
+			addUserReward(contributor, contributor_reward);
 		}
-		
+	}
+	
+	private void addUserReward(String user, Long amount)
+	{
+		AtomicLong user_total = user_rewards.get(user);
+		if(user_total != null)
+			user_total.addAndGet(amount);
+	}
+	
+	private void updateOperationCounter(ServerThreadpool pool)
+	{
 		if(total_posts.decrementAndGet() == 0)
 		{
 			pool.enqueueTask(new UpdateWalletsTask(data, user_rewards));
-		}		
+		}
 	}
 }

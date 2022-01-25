@@ -2,6 +2,7 @@ package winsome.connection.server_api.socket.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 
 import winsome.connection.server_api.socket.SocketState;
@@ -51,7 +52,8 @@ class ServerThreadpoolTest implements ServerThreadpool
 		
 		if(isReadOperation(task))
 		{
-			state.getReader().executeReadOperation();
+			try { state.getReader().executeReadOperation(); }
+			catch (IOException e) { state.cleanupSocketState(); }
 			
 			if(state.getReader().hasMessageBeenRetrived())
 			{
@@ -67,7 +69,8 @@ class ServerThreadpoolTest implements ServerThreadpool
 		}
 		else
 		{
-			state.getWriter().executeWriteOperation();
+			try { state.getWriter().executeWriteOperation(); }
+			catch (IOException e) { state.cleanupSocketState(); }
 		}
 	}
 	

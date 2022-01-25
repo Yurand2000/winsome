@@ -17,7 +17,7 @@ public class SocketWriterImpl implements SocketWriter
 	}
 	
 	@Override
-	public void executeWriteOperation()
+	public void executeWriteOperation() throws IOException
 	{
 		try 
 		{
@@ -25,10 +25,9 @@ public class SocketWriterImpl implements SocketWriter
 		}
 		catch (IOException e)
 		{
-			try { key.channel().close(); }
-			catch (IOException e1) { }
-			
 			key.cancel();
+			key.channel().close();
+			throw e;
 		}
 	}
 	

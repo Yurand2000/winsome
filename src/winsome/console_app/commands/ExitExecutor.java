@@ -16,13 +16,17 @@ public class ExitExecutor extends ConsoleCommandExecutor
 	
 	@Override
 	protected String execute(String line)
-	{
+	{		
 		try
 		{
-			Thread.currentThread().interrupt();
 			ClientAppAPI.getAPI().logout();
 		}
-		catch(NotLoggedInException e) { }		
+		catch(NotLoggedInException e) { }
+		finally
+		{
+			Thread.currentThread().interrupt();	
+		}
+		
 		return "Exiting...";
 	}
 }

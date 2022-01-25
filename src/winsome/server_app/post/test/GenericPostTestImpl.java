@@ -3,6 +3,7 @@ package winsome.server_app.post.test;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import winsome.server_app.post.GenericPost;
 import winsome.server_app.post.PostComments;
@@ -10,6 +11,7 @@ import winsome.server_app.post.PostLikes;
 import winsome.server_app.post.RewardState;
 
 @JsonTypeName("generic_post_test")
+@JsonSerialize
 class GenericPostTestImpl extends GenericPost
 {
 	@SuppressWarnings("unused")

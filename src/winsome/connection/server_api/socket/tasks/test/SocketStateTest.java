@@ -35,6 +35,9 @@ class SocketStateTest implements SocketState
 
 	@Override
 	public void setClientUser(String username) { fail(); }
+
+	@Override
+	public void cleanupSocketState() { fail(); }
 	
 	@Override
 	public void unsetClientUser() { fail(); }

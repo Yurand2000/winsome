@@ -24,6 +24,11 @@ public class RMIObjectLookup
 		return obj_class.cast( UnicastRemoteObject.exportObject(object, 0) );
 	}
 	
+	public static <T extends Remote> void destroyStub(T object) throws RemoteException
+	{
+		UnicastRemoteObject.unexportObject(object, true);
+	}
+	
 	private static Registry getRegistry(String hostname) throws RemoteException
 	{
 		return LocateRegistry.getRegistry(hostname, WinsomeConnectionProtocol.getRMIRegistryPort());

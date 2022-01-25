@@ -4,15 +4,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import winsome.server_app.post.RewardState;
 
-@JsonSerialize
 @JsonTypeName("reward_state_test_impl")
 class RewardStateTestImpl implements RewardState
 {
+	@JsonProperty() private final int just_for_test_serialization = 0;
 	@JsonIgnore() private String expected_user;
 	@JsonIgnore() private boolean like_called = false;
 	@JsonIgnore() private boolean dislike_called = false;

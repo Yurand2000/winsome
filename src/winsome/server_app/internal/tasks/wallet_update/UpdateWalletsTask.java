@@ -1,7 +1,6 @@
 package winsome.server_app.internal.tasks.wallet_update;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -11,9 +10,9 @@ import winsome.server_app.internal.threadpool.ServerThreadpool;
 
 public class UpdateWalletsTask extends WinsomeTask
 {
-	private final ConcurrentMap<String, AtomicLong> rewards;
+	private final Map<String, AtomicLong> rewards;
 	
-	public UpdateWalletsTask(WinsomeData data, ConcurrentMap<String, AtomicLong> rewards)
+	public UpdateWalletsTask(WinsomeData data, Map<String, AtomicLong> rewards)
 	{
 		super(data);
 		this.rewards = rewards;

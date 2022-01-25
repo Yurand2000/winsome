@@ -22,18 +22,17 @@ public class SocketReaderImpl implements SocketReader
 	}
 	
 	@Override
-	public void executeReadOperation()
+	public void executeReadOperation() throws IOException
 	{
 		try
 		{
 			tryExecuteReadOperation();
 		}
 		catch (IOException e)
-		{
-			try { key.channel().close(); }
-			catch (IOException e1) { }
-			
+		{	
 			key.cancel();
+			key.channel().close();
+			throw e;
 		}
 	}
 	

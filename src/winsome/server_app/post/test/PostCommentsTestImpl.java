@@ -6,16 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import winsome.server_app.post.PostComments;
 
-@JsonSerialize
 @JsonTypeName("post_comments_test_impl")
 class PostCommentsTestImpl implements PostComments
 {
-	@JsonIgnore() private List<Comment> comments = new ArrayList<Comment>();
+	@JsonProperty() private List<Comment> comments = new ArrayList<Comment>();
 	@JsonIgnore() private Comment expected_comment;
 	@JsonIgnore() private boolean add_comment_called = false;
 	@JsonIgnore() private boolean clone_called = false;

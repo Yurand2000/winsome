@@ -19,7 +19,15 @@ public class SocketReadTask extends SocketTask
 	@Override
 	public void run(ServerThreadpool pool)
 	{
-		socket.getReader().executeReadOperation();
+		try
+		{
+			socket.getReader().executeReadOperation();
+		}
+		catch (IOException e)
+		{
+			socket.cleanupSocketState();
+			return;
+		}
 		
 		if(socket.getReader().hasMessageBeenRetrived())
 		{

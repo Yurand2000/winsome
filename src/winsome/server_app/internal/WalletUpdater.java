@@ -13,11 +13,13 @@ public class WalletUpdater extends TimerTask
 	private final ServerThreadpool threadpool;
 	private final Timer timer;
 	private final long timer_period;
+	private final String author_part;
 	
-	public WalletUpdater(WinsomeData winsome_data, ServerThreadpool threadpool, long time, TimeUnit unit)
+	public WalletUpdater(WinsomeData winsome_data, ServerThreadpool threadpool, long time, TimeUnit unit, String author_part)
 	{
 		this.winsome_data = winsome_data;
 		this.threadpool = threadpool;
+		this.author_part = author_part;
 		timer = new Timer();
 		timer_period = timeUnitToMillis(time, unit);
 	}
@@ -35,7 +37,7 @@ public class WalletUpdater extends TimerTask
 	@Override
 	public void run()
 	{
-		threadpool.enqueueTask(new CalculatePostsRewardTask(winsome_data));
+		threadpool.enqueueTask(new CalculatePostsRewardTask(winsome_data, author_part));
 	}
 	
 	private long timeUnitToMillis(long time, TimeUnit unit)

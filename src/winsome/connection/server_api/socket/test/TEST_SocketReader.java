@@ -45,7 +45,7 @@ class TEST_SocketReader
 	}
 	
 	@Test
-	void testNothingReadSetsKeyToReadAndWakesUpSelector()
+	void testNothingReadSetsKeyToReadAndWakesUpSelector() throws IOException
 	{
 		assertEquals(key.interestOps(), 0);
 		

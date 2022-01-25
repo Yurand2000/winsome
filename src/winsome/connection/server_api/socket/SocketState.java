@@ -8,4 +8,5 @@ public interface SocketState extends SocketTaskState
 	SocketReader getReader();
 	SocketWriter getWriter();
 	void setRequestMessage(Message incoming);
+	void cleanupSocketState();
 }

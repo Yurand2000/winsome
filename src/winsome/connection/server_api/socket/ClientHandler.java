@@ -20,6 +20,7 @@ public class ClientHandler implements Runnable
 	private final InetSocketAddress address;
 	private final ServerThreadpool threadpool;
 	private final WinsomeData winsome_data;
+	private final SocketStateCommon common_state;
 
 	private ServerSocketChannel listening_socket;
 	private Selector selector;
@@ -32,6 +33,7 @@ public class ClientHandler implements Runnable
 		
 		threadpool = pool;
 		winsome_data = data;
+		common_state = new SocketStateCommonImpl();
 
 		listening_socket = null;
 		selector = null;
@@ -138,7 +140,7 @@ public class ClientHandler implements Runnable
 		new_channel.configureBlocking(false);
 		
 		SelectionKey new_key = new_channel.register(selector, SelectionKey.OP_READ);
-		new_key.attach(new SocketStateImpl(new_key));
+		new_key.attach(new SocketStateImpl(new_key, common_state));
 	}
 	
 	private void executeReadWriteKey(SelectionKey key)

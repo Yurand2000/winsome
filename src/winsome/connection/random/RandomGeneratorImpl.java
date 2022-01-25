@@ -28,7 +28,7 @@ public class RandomGeneratorImpl implements RandomGenerator
 			
 			Double read = Double.parseDouble(reader.readLine()) / 100.0;
 			
-			connection.disconnect();					
+			connection.disconnect();
 			return read;
 		}
 		catch (IOException e)

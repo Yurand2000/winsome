@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
-import java.net.UnknownHostException;
 
 import winsome.connection.protocols.WinsomeConnectionProtocol;
 import winsome.connection.protocols.WalletNotification;
@@ -36,10 +35,11 @@ public class WalletNotificationUpdaterImpl implements WalletNotificationUpdater,
 				throw new RuntimeException("given address " + address  + " is not a multicast address");
 			}
 			notification_task = task;
+			socket = new MulticastSocket(WinsomeConnectionProtocol.getUDPMulticastPort());
 			notifier_thread = new Thread(this);
 			notifier_thread.start();
 		}
-		catch (UnknownHostException e)
+		catch (IOException e)
 		{
 			throw new RuntimeException(e.toString());
 		}
@@ -52,6 +52,7 @@ public class WalletNotificationUpdaterImpl implements WalletNotificationUpdater,
 			socket.close();
 			notifier_thread.interrupt();
 			notifier_thread.join();
+			notifier_thread = null;
 			socket = null;
 		}
 		catch (InterruptedException e) { }
@@ -78,7 +79,6 @@ public class WalletNotificationUpdaterImpl implements WalletNotificationUpdater,
 	
 	private void setupUdpSocket() throws IOException
 	{
-		socket = new MulticastSocket(WinsomeConnectionProtocol.getUDPMulticastPort());
 		socket.joinGroup(multicast_address);
 	}
 	
@@ -87,13 +87,13 @@ public class WalletNotificationUpdaterImpl implements WalletNotificationUpdater,
 		try { socket.receive(incoming_packet); }
 		catch(IOException e) { return; }
 		
-		if(checkIncomingPacket())
+		if(incomingPacketIsWalletNotification())
 		{
 			notification_task.run();
 		}
 	}
 	
-	private boolean checkIncomingPacket()
+	private boolean incomingPacketIsWalletNotification()
 	{
 		if(incoming_packet.getLength() != WalletNotification.getNotificationMessage().length)
 		{

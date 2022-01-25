@@ -7,18 +7,20 @@ import winsome.connection.socket_messages.Message;
 public class SocketStateImpl implements SocketState
 {
 	private Message incoming_message;
-	private String username;
+	private String local_socket_user;
 	private final SocketReader reader;
 	private final SocketWriter writer;
 	private final SelectionKey socket;
+	private final SocketStateCommon common_state;
 	
-	public SocketStateImpl(SelectionKey key)
+	public SocketStateImpl(SelectionKey key, SocketStateCommon common)
 	{
 		socket = key;
+		common_state = common;
 		reader = new SocketReaderImpl(socket);
 		writer = new SocketWriterImpl(socket);
 		incoming_message = null;
-		username = null;
+		local_socket_user = null;
 	}
 
 	@Override
@@ -36,19 +38,32 @@ public class SocketStateImpl implements SocketState
 	@Override
 	public String getClientUser()
 	{
-		return username;
+		return local_socket_user;
 	}
 
 	@Override
 	public void setClientUser(String username)
 	{
-		this.username = username;		
+		common_state.setUserLoggedIn(username);
+		this.local_socket_user = username;
 	}
 
 	@Override
 	public void unsetClientUser()
 	{
-		this.username = null;		
+		common_state.setUserLoggedOut(local_socket_user);
+		this.local_socket_user = null;
+	}
+
+	@Override
+	public void cleanupSocketState()
+	{
+		try
+		{
+			common_state.setUserLoggedOut(local_socket_user);
+			local_socket_user = null;
+		}
+		catch(RuntimeException e) { }
 	}
 
 	@Override

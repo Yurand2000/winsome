@@ -34,6 +34,8 @@ class TEST_DeletePostTask extends SocketTaskTest
 	@Test
 	void testOnPostNotOwned()
 	{
+		User user = UserFactory.makeNewUser("user", "pass", new Tag[] { new Tag("a") });
+		data.getUsers().put("user", user);
 		User luigi = UserFactory.makeNewUser("Luigi", "pass", new Tag[] { new Tag("a") });
 		luigi.addPost(10);
 		data.getUsers().put("Luigi", luigi);

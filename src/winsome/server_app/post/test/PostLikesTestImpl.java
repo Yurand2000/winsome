@@ -3,12 +3,10 @@ package winsome.server_app.post.test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import winsome.server_app.post.PostLikes;
 
-@JsonSerialize
 @JsonTypeName("post_likes_test_impl")
 class PostLikesTestImpl implements PostLikes
 {
@@ -16,8 +14,8 @@ class PostLikesTestImpl implements PostLikes
 	@JsonIgnore() private boolean like_called = false;
 	@JsonIgnore() private boolean dislike_called = false;
 	@JsonIgnore() private boolean clone_called = false;
-	@JsonIgnore() private int likes = 0;
-	@JsonIgnore() private int dislikes = 0;
+	@JsonProperty() private int likes = 0;
+	@JsonProperty() private int dislikes = 0;
 
 	@Override
 	public void addLike(String username)

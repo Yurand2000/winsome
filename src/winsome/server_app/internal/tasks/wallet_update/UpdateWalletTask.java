@@ -14,24 +14,32 @@ public class UpdateWalletTask extends WinsomeTask
 	private final Long reward;
 	private final AtomicInteger total_wallet_updates;
 	
-	public UpdateWalletTask(WinsomeData data, String username, Long amount, AtomicInteger total_wallet_updates)
+	public UpdateWalletTask(WinsomeData data, String username, Long reward, AtomicInteger total_wallet_updates)
 	{
 		super(data);
 		this.username = username;
-		this.reward = amount;
+		this.reward = reward;
 		this.total_wallet_updates = total_wallet_updates;
 	}
 
 	@Override
 	public void run(ServerThreadpool pool)
 	{
-		User user = data.getUsers().get(username);
+		updateWallet();
+		updateOperationCounter();
+	}
+	
+	private void updateWallet()
+	{
+		User user = TaskUtils.getUser(username, data);
 		TaskUtils.lockUser(user, () -> { user.wallet.addTransaction(reward); });
-		
+	}
+	
+	private void updateOperationCounter()
+	{
 		if(total_wallet_updates.decrementAndGet() == 0)
 		{
 			data.getWalletUpdater().notifyWalletUpdated();
 		}
 	}
-
 }
