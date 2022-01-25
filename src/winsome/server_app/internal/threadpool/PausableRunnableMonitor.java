@@ -1,10 +1,10 @@
-package winsome.server_app.internal.pausable_threads;
+package winsome.server_app.internal.threadpool;
 
-public class PausableThreadMonitor
+public class PausableRunnableMonitor
 {
 	private boolean threadsPaused;
 	
-	public PausableThreadMonitor()
+	public PausableRunnableMonitor()
 	{
 		threadsPaused = false;
 	}
@@ -26,5 +26,21 @@ public class PausableThreadMonitor
 		{
 			wait();
 		}
+	}
+	
+	public Runnable makePausableRunnable(Runnable task)
+	{
+		return () ->
+		{
+			try
+			{
+				this.checkNotPaused();
+				task.run();
+			}
+			catch (InterruptedException e)
+			{
+				return;
+			}
+		};
 	}
 }

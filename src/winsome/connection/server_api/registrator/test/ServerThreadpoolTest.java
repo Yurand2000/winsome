@@ -40,10 +40,4 @@ class ServerThreadpoolTest implements ServerThreadpool
 		enqueue_called = false;
 	}
 
-	@Override
-	public void executeTaskNow(ServerThreadpoolTask new_task)
-	{
-		fail();
-	}
-
 }

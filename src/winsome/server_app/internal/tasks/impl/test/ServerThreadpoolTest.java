@@ -11,11 +11,4 @@ class ServerThreadpoolTest implements ServerThreadpool
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void executeTaskNow(ServerThreadpoolTask new_task) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

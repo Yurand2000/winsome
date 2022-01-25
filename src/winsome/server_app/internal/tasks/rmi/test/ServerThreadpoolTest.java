@@ -9,7 +9,4 @@ class ServerThreadpoolTest implements ServerThreadpool
 {
 	@Override
 	public void enqueueTask(ServerThreadpoolTask new_task) { fail(); }
-
-	@Override
-	public void executeTaskNow(ServerThreadpoolTask new_task) { fail(); }
 }

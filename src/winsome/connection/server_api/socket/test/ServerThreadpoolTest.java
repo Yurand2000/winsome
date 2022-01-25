@@ -39,12 +39,6 @@ class ServerThreadpoolTest implements ServerThreadpool
 	{
 		assertTrue(enqueued_task == expected_task);
 	}
-
-	@Override
-	public void executeTaskNow(ServerThreadpoolTask new_task)
-	{
-		fail();
-	}
 	
 	private void fakeExecuteTask(ServerThreadpoolTask task)
 	{

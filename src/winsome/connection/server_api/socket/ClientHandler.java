@@ -11,8 +11,7 @@ import java.util.Iterator;
 import winsome.connection.server_api.socket.tasks.SocketReadTask;
 import winsome.connection.server_api.socket.tasks.SocketWriteTask;
 import winsome.server_app.internal.WinsomeData;
-import winsome.server_app.internal.pausable_threads.PausableThread;
-import winsome.server_app.internal.pausable_threads.PausableThreadMonitor;
+import winsome.server_app.internal.threadpool.PausableRunnableMonitor;
 import winsome.server_app.internal.threadpool.ServerThreadpool;
 
 public class ClientHandler implements Runnable
@@ -24,8 +23,8 @@ public class ClientHandler implements Runnable
 
 	private ServerSocketChannel listening_socket;
 	private Selector selector;
-	private PausableThreadMonitor selector_thread_monitor;
-	private PausableThread selector_thread;
+	private PausableRunnableMonitor pausable_runnable_monitor;
+	private Thread selector_thread;
 	
 	public ClientHandler(InetSocketAddress address, WinsomeData data, ServerThreadpool pool)
 	{
@@ -38,7 +37,7 @@ public class ClientHandler implements Runnable
 		listening_socket = null;
 		selector = null;
 		selector_thread = null;
-		selector_thread_monitor = null;
+		pausable_runnable_monitor = null;
 	}
 	
 	public void startClientHandler() throws IOException
@@ -46,11 +45,11 @@ public class ClientHandler implements Runnable
 		selector = Selector.open();
 		listening_socket = ServerSocketChannel.open();
 		listening_socket.socket().bind(address);
-		listening_socket.configureBlocking(false);		
+		listening_socket.configureBlocking(false);
 		listening_socket.register(selector, SelectionKey.OP_ACCEPT);
 		
-		selector_thread_monitor = new PausableThreadMonitor();
-		selector_thread = new PausableThread(selector_thread_monitor, this);
+		pausable_runnable_monitor = new PausableRunnableMonitor();
+		selector_thread = new Thread(pausable_runnable_monitor.makePausableRunnable(this));
 		selector_thread.start();
 	}
 	
@@ -66,18 +65,18 @@ public class ClientHandler implements Runnable
 			listening_socket = null;
 			selector = null;
 			selector_thread = null;
-			selector_thread_monitor = null;
+			pausable_runnable_monitor = null;
 		}
 	}
 	
 	public void pauseClientHandler()
 	{
-		selector_thread_monitor.pauseAllThreads();
+		pausable_runnable_monitor.pauseAllThreads();
 	}
 	
 	public void resumeClientHandler()
 	{
-		selector_thread_monitor.resumeAllThreads();
+		pausable_runnable_monitor.resumeAllThreads();
 	}
 
 	@Override

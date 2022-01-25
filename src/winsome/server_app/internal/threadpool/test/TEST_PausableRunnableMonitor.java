@@ -1,4 +1,4 @@
-package winsome.server_app.internal.pausable_threads.test;
+package winsome.server_app.internal.threadpool.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,16 +9,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
-import winsome.server_app.internal.pausable_threads.PausableThreadMonitor;
+import winsome.server_app.internal.threadpool.PausableRunnableMonitor;
 
-class TEST_PausableThreadMonitor
+class TEST_PausableRunnableMonitor
 {
-	private PausableThreadMonitor monitor;
+	private PausableRunnableMonitor monitor;
 
 	@BeforeEach
 	void setup()
 	{
-		monitor = new PausableThreadMonitor();
+		monitor = new PausableRunnableMonitor();
 	}
 	
 	@Test
@@ -34,7 +34,7 @@ class TEST_PausableThreadMonitor
 	@Timeout(value= 500, unit= TimeUnit.MILLISECONDS)
 	void testPauseAndResumeAllThreads() throws InterruptedException
 	{		
-		monitor = new PausableThreadMonitor();
+		monitor = new PausableRunnableMonitor();
 		monitor.pauseAllThreads();
 		
 		AtomicBoolean executed = new AtomicBoolean(false);

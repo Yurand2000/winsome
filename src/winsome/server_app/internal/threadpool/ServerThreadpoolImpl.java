@@ -4,16 +4,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import winsome.server_app.internal.pausable_threads.PausableThreadFactory;
-
 public class ServerThreadpoolImpl implements ServerThreadpoolControl, ServerThreadpool
 {
 	private ExecutorService pool;
-	private final PausableThreadFactory factory;
+	private final PausableRunnableMonitor monitor;
 	
 	public ServerThreadpoolImpl()
 	{
-		factory = new PausableThreadFactory();
+		monitor = new PausableRunnableMonitor();
 		pool = null;
 	}
 
@@ -23,7 +21,7 @@ public class ServerThreadpoolImpl implements ServerThreadpoolControl, ServerThre
 		if(pool == null)
 		{
 			int processors = Runtime.getRuntime().availableProcessors();
-			pool = Executors.newFixedThreadPool(processors, factory);
+			pool = Executors.newFixedThreadPool(processors);
 		}
 	}
 
@@ -43,24 +41,23 @@ public class ServerThreadpoolImpl implements ServerThreadpoolControl, ServerThre
 	@Override
 	public void pauseThreadpool()
 	{
-		factory.pauseAllExecutions();
+		monitor.pauseAllThreads();
 	}
 
 	@Override
 	public void resumeThreadpool()
 	{
-		factory.resumeAllExecutions();
+		monitor.resumeAllThreads();
 	}
 
 	@Override
 	public void enqueueTask(ServerThreadpoolTask new_task)
 	{
-		pool.execute(() -> new_task.run(this));
+		pool.execute(makePausableRunnable(new_task));
 	}
-
-	@Override
-	public void executeTaskNow(ServerThreadpoolTask new_task)
+	
+	private Runnable makePausableRunnable(ServerThreadpoolTask new_task)
 	{
-		new_task.run(this);
+		return monitor.makePausableRunnable( () -> new_task.run(this) );
 	}
 }
