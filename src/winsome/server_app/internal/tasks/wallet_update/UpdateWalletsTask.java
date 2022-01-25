@@ -24,7 +24,15 @@ public class UpdateWalletsTask extends WinsomeTask
 		AtomicInteger total_wallet_updates = new AtomicInteger(rewards.size());
 		for(Map.Entry<String, AtomicLong> entry : rewards.entrySet())
 		{
-			pool.enqueueTask(new UpdateWalletTask( data, entry.getKey(), entry.getValue().get(), total_wallet_updates ));
+			if(entry.getValue().get() > 0)
+			{
+				pool.enqueueTask(new UpdateWalletTask( data, entry.getKey(),
+					entry.getValue().get(), total_wallet_updates ));
+			}
+			else
+			{
+				total_wallet_updates.decrementAndGet();
+			}
 		}
 	}
 

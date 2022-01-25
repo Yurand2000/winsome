@@ -25,15 +25,15 @@ class TEST_RegistratorRMIHandler
 	{
 		data = new WinsomeDataTest();
 		pool = new ServerThreadpoolTest();
-		ServerRMIRegistry.startRegistry();
-		registrator = new RegistratorRMIHandler(data, pool);
+		ServerRMIRegistry.startRegistry(8081);
+		registrator = new RegistratorRMIHandler(data, pool, 8081);
 		registrator.bindObject();		
 	}
 	
 	@Test
 	void testProxyCallsOriginalObject() throws IOException, NotBoundException
 	{
-		Registrator registrator = RMIObjectLookup.getStub("localhost", Registrator.class, RegistratorRMI.getRegistratorName());
+		Registrator registrator = RMIObjectLookup.getStub("localhost", 8081, Registrator.class, RegistratorRMI.getRegistratorName());
 
 		registrator.register("", "", new String[0]);
 		

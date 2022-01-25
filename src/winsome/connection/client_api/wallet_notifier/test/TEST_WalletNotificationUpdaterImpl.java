@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Timeout;
 
 import winsome.connection.client_api.wallet_notifier.WalletNotificationUpdaterImpl;
 import winsome.connection.protocols.WalletNotification;
-import winsome.connection.protocols.WinsomeConnectionProtocol;
 
 class TEST_WalletNotificationUpdaterImpl
 {
@@ -26,7 +25,7 @@ class TEST_WalletNotificationUpdaterImpl
 		assertThrows(RuntimeException.class, () ->
 		{
 			new WalletNotificationUpdaterImpl()
-				.registerWalletUpdateNotifications("unknown address", () -> { });
+				.registerWalletUpdateNotifications("unknown address", 8082, () -> { });
 		});
 	}
 	
@@ -38,7 +37,7 @@ class TEST_WalletNotificationUpdaterImpl
 		multicast_address = "224.0.0.128";
 		
 		WalletNotificationUpdaterImpl updater = new WalletNotificationUpdaterImpl();
-		updater.registerWalletUpdateNotifications(multicast_address,	
+		updater.registerWalletUpdateNotifications(multicast_address, 8082,	
 			() -> {
 				notification_received.set(true);
 			});
@@ -61,7 +60,7 @@ class TEST_WalletNotificationUpdaterImpl
 	{
 		DatagramPacket packet = new DatagramPacket(message, message.length);
 		packet.setAddress(InetAddress.getByName(multicast_address));
-		packet.setPort(WinsomeConnectionProtocol.getUDPMulticastPort());
+		packet.setPort(8082);
 		DatagramSocket socket = new DatagramSocket();
 		socket.send(packet);
 		socket.close();

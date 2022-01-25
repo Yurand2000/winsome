@@ -49,9 +49,16 @@ public class CalculatePostRewardTask extends WinsomeTask
 	
 	private Long getContributorReward(Double total_reward, Integer contributors)
 	{
-		BigDecimal contibutor_part = new BigDecimal(1).subtract(author_part);		
-		BigDecimal reward = new BigDecimal(total_reward).multiply(contibutor_part).divide(new BigDecimal(contributors), RoundingMode.FLOOR);
-		return reward.longValue();
+		if(contributors == 0)
+		{
+			return 0L;
+		}
+		else
+		{
+			BigDecimal contibutor_part = new BigDecimal(1).subtract(author_part);
+			BigDecimal reward = new BigDecimal(total_reward).multiply(contibutor_part).divide(new BigDecimal(contributors), RoundingMode.FLOOR);
+			return reward.longValue();
+		}
 	}
 	
 	private void addRewards(Set<String> contributors, Long author_reward, Long contributor_reward)

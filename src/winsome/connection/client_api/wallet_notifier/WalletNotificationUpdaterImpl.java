@@ -5,7 +5,6 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 
-import winsome.connection.protocols.WinsomeConnectionProtocol;
 import winsome.connection.protocols.WalletNotification;
 
 public class WalletNotificationUpdaterImpl implements WalletNotificationUpdater, Runnable
@@ -25,7 +24,7 @@ public class WalletNotificationUpdaterImpl implements WalletNotificationUpdater,
 		incoming_packet = new DatagramPacket(message, message.length);
 	}
 
-	public void registerWalletUpdateNotifications(String address, Runnable task)
+	public void registerWalletUpdateNotifications(String address, Integer port, Runnable task)
 	{
 		try
 		{
@@ -35,7 +34,7 @@ public class WalletNotificationUpdaterImpl implements WalletNotificationUpdater,
 				throw new RuntimeException("given address " + address  + " is not a multicast address");
 			}
 			notification_task = task;
-			socket = new MulticastSocket(WinsomeConnectionProtocol.getUDPMulticastPort());
+			socket = new MulticastSocket(port);
 			notifier_thread = new Thread(this);
 			notifier_thread.start();
 		}

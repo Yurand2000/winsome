@@ -24,8 +24,8 @@ class TEST_FollowerUpdaterRegistratorHandlerImpl
 	@BeforeEach
 	void setup() throws IOException, AlreadyBoundException
 	{
-		ServerRMIRegistry.startRegistry();
-		handler = new FollowerUpdaterRegistratorHandlerImpl();
+		ServerRMIRegistry.startRegistry(8081);
+		handler = new FollowerUpdaterRegistratorHandlerImpl(8081);
 		handler.bindObject();
 
 		}
@@ -33,7 +33,7 @@ class TEST_FollowerUpdaterRegistratorHandlerImpl
 	@Test
 	void testNotifyNewFollower() throws IOException, NotBoundException
 	{
-		registrator = RMIObjectLookup.getStub("localhost", FollowerUpdaterRegistrator.class, FollowerUpdaterRMI.getFollowerUpdaterRegistratorName());
+		registrator = RMIObjectLookup.getStub("localhost", 8081, FollowerUpdaterRegistrator.class, FollowerUpdaterRMI.getFollowerUpdaterRegistratorName());
 		updater = new FollowerUpdaterTest();
 		FollowerUpdater stub = RMIObjectLookup.generateStub(FollowerUpdater.class, updater);
 		
@@ -46,7 +46,7 @@ class TEST_FollowerUpdaterRegistratorHandlerImpl
 	@Test
 	void testNotifyRemovedFollower() throws IOException, NotBoundException
 	{
-		registrator = RMIObjectLookup.getStub("localhost", FollowerUpdaterRegistrator.class, FollowerUpdaterRMI.getFollowerUpdaterRegistratorName());
+		registrator = RMIObjectLookup.getStub("localhost", 8081, FollowerUpdaterRegistrator.class, FollowerUpdaterRMI.getFollowerUpdaterRegistratorName());
 		updater = new FollowerUpdaterTest();
 		FollowerUpdater stub = RMIObjectLookup.generateStub(FollowerUpdater.class, updater);
 		

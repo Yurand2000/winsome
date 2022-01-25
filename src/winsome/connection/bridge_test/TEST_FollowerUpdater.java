@@ -25,12 +25,12 @@ class TEST_FollowerUpdater
 	@BeforeEach
 	void setup() throws IOException, AlreadyBoundException, NotBoundException
 	{
-		ServerRMIRegistry.startRegistry();
-		server_handler = new FollowerUpdaterRegistratorHandlerImpl();
+		ServerRMIRegistry.startRegistry(8081);
+		server_handler = new FollowerUpdaterRegistratorHandlerImpl(8081);
 		server_handler.bindObject();
 		
 		followers = new HashSet<String>();
-		client_handler = new FollowerUpdaterRMIHandlerImpl("localhost", "Luca", followers);
+		client_handler = new FollowerUpdaterRMIHandlerImpl("localhost", 8081, "Luca", followers);
 		client_handler.registerFollowerUpdater();
 	}
 	

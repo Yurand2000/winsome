@@ -22,15 +22,15 @@ class TEST_RegistratorTest
 	{
 		data = new WinsomeDataTest();
 		pool = new ServerThreadpoolTest();
-		ServerRMIRegistry.startRegistry();
-		server_registrator = new winsome.connection.server_api.registrator.RegistratorRMIHandler(data, pool);
+		ServerRMIRegistry.startRegistry(8081);
+		server_registrator = new winsome.connection.server_api.registrator.RegistratorRMIHandler(data, pool, 8081);
 		server_registrator.bindObject();
 	}
 	
 	@Test
 	void testRegistration()
 	{
-		RegistratorRMIHandler.register("localhost", "Benito", "password", new String[] {"Auto"});
+		RegistratorRMIHandler.register("localhost", 8081, "Benito", "password", new String[] {"Auto"});
 		pool.checkEnqueueCalled();
 	}
 

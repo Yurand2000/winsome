@@ -8,15 +8,13 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-import winsome.connection.protocols.WinsomeConnectionProtocol;
-
 public class RMIObjectLookup
 {
 	private RMIObjectLookup() { }
 
-	public static <T extends Remote> T getStub(String hostname, Class<T> obj_class, String name) throws IOException, NotBoundException
+	public static <T extends Remote> T getStub(String hostname, Integer port, Class<T> obj_class, String name) throws IOException, NotBoundException
 	{
-		return obj_class.cast( getRegistry(hostname).lookup(name) );
+		return obj_class.cast( getRegistry(hostname, port).lookup(name) );
 	}
 	
 	public static <T extends Remote> T generateStub(Class<T> obj_class, T object) throws RemoteException
@@ -29,8 +27,8 @@ public class RMIObjectLookup
 		UnicastRemoteObject.unexportObject(object, true);
 	}
 	
-	private static Registry getRegistry(String hostname) throws RemoteException
+	private static Registry getRegistry(String hostname, Integer port) throws RemoteException
 	{
-		return LocateRegistry.getRegistry(hostname, WinsomeConnectionProtocol.getRMIRegistryPort());
+		return LocateRegistry.getRegistry(hostname, port);
 	}
 }

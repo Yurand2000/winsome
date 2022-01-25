@@ -34,10 +34,11 @@ class TEST_LoginTaskExecutor extends TaskExecutorTest
 		LoginAnswer answer = new LoginAnswer(
 			new String[] {"Luca"},
 			new String[] {"Gianni"},
-			"multicast_address"
+			"multicast_address",
+			8082
 		);
 		connection.setReceiveMessage(answer);
-		app_api.getWalletNotifier().setExpectedArguments("multicast_address", wallet_notification_runnable);
+		app_api.getWalletNotifier().setExpectedArguments("multicast_address", 8082, wallet_notification_runnable);
 		
 		task.run(connection, app_api);
 		

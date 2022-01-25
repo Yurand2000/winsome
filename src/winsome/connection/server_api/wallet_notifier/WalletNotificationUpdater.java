@@ -4,4 +4,5 @@ public interface WalletNotificationUpdater
 {
 	public void notifyWalletUpdated();
 	public String getMulticastAddress();
+	public Integer getMulticastPort();
 }

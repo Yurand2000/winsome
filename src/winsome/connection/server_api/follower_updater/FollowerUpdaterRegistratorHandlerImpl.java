@@ -1,14 +1,13 @@
 package winsome.connection.server_api.follower_updater;
 
 import winsome.connection.protocols.FollowerUpdaterRMI;
-import winsome.connection.protocols.WinsomeConnectionProtocol;
 import winsome.connection.server_api.RMIObjectRegistrator;
 
 public class FollowerUpdaterRegistratorHandlerImpl extends RMIObjectRegistrator<FollowerUpdaterRegistratorImpl> implements FollowerUpdaterRegistratorHandler
 {	
-	public FollowerUpdaterRegistratorHandlerImpl()
+	public FollowerUpdaterRegistratorHandlerImpl(Integer registry_port)
 	{
-		super( new FollowerUpdaterRegistratorImpl(), FollowerUpdaterRMI.getFollowerUpdaterRegistratorName(), WinsomeConnectionProtocol.getRMIRegistryPort() );
+		super( new FollowerUpdaterRegistratorImpl(), FollowerUpdaterRMI.getFollowerUpdaterRegistratorName(), registry_port );
 	}
 	
 	@Override

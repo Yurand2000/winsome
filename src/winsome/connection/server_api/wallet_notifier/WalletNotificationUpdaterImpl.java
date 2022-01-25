@@ -5,16 +5,17 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-import winsome.connection.protocols.WinsomeConnectionProtocol;
 import winsome.connection.protocols.WalletNotification;
 
 public class WalletNotificationUpdaterImpl implements WalletNotificationUpdater
 {
 	private final String multicast_address;
+	private final Integer multicast_port;
 	
-	public WalletNotificationUpdaterImpl(String address)
+	public WalletNotificationUpdaterImpl(String address, Integer port)
 	{
 		multicast_address = address;
+		multicast_port = port;
 	}
 	
 	public void notifyWalletUpdated()
@@ -22,7 +23,7 @@ public class WalletNotificationUpdaterImpl implements WalletNotificationUpdater
 		try
 		{
 			InetAddress address = InetAddress.getByName(multicast_address);
-			DatagramPacket packet = makeWalletNotificationDatagram(address, WinsomeConnectionProtocol.getUDPMulticastPort());
+			DatagramPacket packet = makeWalletNotificationDatagram(address, multicast_port);
 			sendDatagram(packet);
 		}
 		catch (IOException e) { throw new RuntimeException(e.toString()); }
@@ -47,5 +48,11 @@ public class WalletNotificationUpdaterImpl implements WalletNotificationUpdater
 		DatagramSocket socket = new DatagramSocket();
 		socket.send(packet);
 		socket.close();
+	}
+
+	@Override
+	public Integer getMulticastPort()
+	{
+		return multicast_port;
 	}
 }

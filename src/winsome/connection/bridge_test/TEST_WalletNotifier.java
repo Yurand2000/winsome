@@ -22,7 +22,7 @@ class TEST_WalletNotifier
 	{
 		multicast_address = "224.0.0.128";
 		client_updater = new winsome.connection.client_api.wallet_notifier.WalletNotificationUpdaterImpl();
-		server_updater = new winsome.connection.server_api.wallet_notifier.WalletNotificationUpdaterImpl(multicast_address);
+		server_updater = new winsome.connection.server_api.wallet_notifier.WalletNotificationUpdaterImpl(multicast_address, 8082);
 	}
 	
 	@Test
@@ -30,7 +30,7 @@ class TEST_WalletNotifier
 	void testWalletNotifier() throws IOException, InterruptedException
 	{
 		AtomicBoolean notified = new AtomicBoolean(false);
-		client_updater.registerWalletUpdateNotifications(multicast_address, () -> {
+		client_updater.registerWalletUpdateNotifications(multicast_address, 8082, () -> {
 			notified.set(true);
 		});
 		

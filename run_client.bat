@@ -12,7 +12,7 @@ for %%f in (libs\junit\*.jar) do (
 set "libs=!libs!;../bin/WinsomeClient.jar"
 REM echo !libs!
 
-cd server_working_directory
+cd client_working_directory
 call java -cp !libs! winsome.console_app.ConsoleAppMain
 cd ..
 pause

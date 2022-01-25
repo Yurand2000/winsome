@@ -51,7 +51,9 @@ public class LoginTaskExecutor extends DefaultTaskExecutor
 	private void startWalletNotificationListener(ApplicationLoggedAPI api, LoginAnswer answer) throws IOException
 	{
 		api.getWalletNotifier().registerWalletUpdateNotifications(
-			answer.udp_multicast_address, wallet_notification_runnable);
+			answer.udp_multicast_address,
+			answer.udp_multicast_port,
+			wallet_notification_runnable);
 	}
 	
 	private void startFollowerNotificationListener(ApplicationLoggedAPI api) throws IOException

@@ -16,7 +16,7 @@ public class ServerAutosaver extends TimerTask
 	
 	public void startAutosaver()
 	{
-		timer.scheduleAtFixedRate(this, 0, 300000);
+		timer.scheduleAtFixedRate(this, 300000, 300000);
 	}
 	
 	public void stopAutosaver()

@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import winsome.client_app.api.exceptions.ServerInternalException;
 import winsome.connection.client_api.registrator.RegistratorRMIHandler;
 import winsome.connection.protocols.RegistratorRMI;
-import winsome.connection.protocols.WinsomeConnectionProtocol;
 import winsome.connection.server_api.RMIObjectRegistrator;
 import winsome.connection.server_api.registrator.Registrator;
 import winsome.server_app.internal.ServerRMIRegistry;
@@ -30,11 +29,11 @@ class TEST_RegistratorRMIHandler
 	
 	void startRegister() throws IOException, AlreadyBoundException
 	{
-		ServerRMIRegistry.startRegistry();
+		ServerRMIRegistry.startRegistry(8081);
 		registrator = new RMIObjectRegistrator<Registrator>(
 			registratorImpl,
 			RegistratorRMI.getRegistratorName(),
-			WinsomeConnectionProtocol.getRMIRegistryPort()
+			8081
 		);
 		registrator.bindObject();
 	}
@@ -51,7 +50,7 @@ class TEST_RegistratorRMIHandler
 		startRegister();
 		
 		registratorImpl.setExpectedValues("username", "pass", new String[] {"ciao", "ciao2"});
-		RegistratorRMIHandler.register("localhost", "username", "pass", new String[] {"ciao", "ciao2"});
+		RegistratorRMIHandler.register("localhost", 8081, "username", "pass", new String[] {"ciao", "ciao2"});
 		assertTrue(registratorImpl.wasRegisterCalled());
 		
 		stopRegister();
@@ -63,7 +62,7 @@ class TEST_RegistratorRMIHandler
 		registratorImpl.setExpectedValues("username", "pass", new String[] {"ciao", "ciao2"});
 		
 		assertThrows(ServerInternalException.class, () -> {
-			RegistratorRMIHandler.register("localhost", "username", "pass", new String[] {"ciao", "ciao2"});
+			RegistratorRMIHandler.register("localhost", 8081, "username", "pass", new String[] {"ciao", "ciao2"});
 		});
 		assertFalse(registratorImpl.wasRegisterCalled());
 	}

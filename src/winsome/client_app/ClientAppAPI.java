@@ -27,14 +27,21 @@ public class ClientAppAPI
 		MessageUtils.registerJsonDeserializers();
 		
 		ClientSettings settings = getClientSettings();
-		client_api = new ApplicationAPIImpl(settings.makeServerAdddress(), wallet_notification);
+		client_api = new ApplicationAPIImpl(settings.makeServerAdddress(), settings.server_rmi_port, wallet_notification);
 	}
 	
 	public static void stopClient()
 	{
-		if(client_api != null)
+		try
 		{
-			client_api.logout();
+			if(client_api != null)
+			{
+				client_api.logout();
+			}
+		}
+		catch(RuntimeException e) { }
+		finally
+		{
 			client_api = null;
 		}
 	}

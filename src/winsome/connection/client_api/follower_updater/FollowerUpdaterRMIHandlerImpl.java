@@ -12,13 +12,15 @@ import winsome.connection.server_api.follower_updater.FollowerUpdaterRegistrator
 public class FollowerUpdaterRMIHandlerImpl implements FollowerUpdaterRMIHandler
 {
 	private final String hostname;
+	private final Integer port;
 	private final FollowerUpdaterImpl updater;
 	private FollowerUpdaterRegistrator registrator;
 	private FollowerUpdater stub;
 	
-	public FollowerUpdaterRMIHandlerImpl(String hostname, String user, Set<String> followers) throws IOException, NotBoundException
+	public FollowerUpdaterRMIHandlerImpl(String hostname, Integer port, String user, Set<String> followers) throws IOException, NotBoundException
 	{
 		this.hostname = hostname;
+		this.port = port;
 		updater = new FollowerUpdaterImpl(user, followers);
 		
 		registrator = null;
@@ -33,26 +35,32 @@ public class FollowerUpdaterRMIHandlerImpl implements FollowerUpdaterRMIHandler
 		{
 			try
 			{
-				registrator = RMIObjectLookup.getStub(hostname, FollowerUpdaterRegistrator.class, FollowerUpdaterRMI.getFollowerUpdaterRegistratorName() );
+				registrator = RMIObjectLookup.getStub(hostname, port, FollowerUpdaterRegistrator.class, FollowerUpdaterRMI.getFollowerUpdaterRegistratorName() );
 				registrator.registerFollowerUpdater(stub);
 			}
-			catch (IOException | NotBoundException e)
+			catch (NotBoundException | IOException e)
 			{
 				destroyStub();
-				throw new RuntimeException(e.toString());
+				registrator = null;
 			}
 		}
 	}
 	
 	public void unregisterFollowerUpdater() throws RemoteException
 	{
-		if(registrator != null)
+		try
 		{
-			registrator.unregisterFollowerUpdater(stub);
-			registrator = null;
+			if(registrator != null)
+			{
+				registrator.unregisterFollowerUpdater(stub);
+				registrator = null;
+			}
 		}
-		
-		destroyStub();
+		catch(RemoteException e) { }
+		finally
+		{
+			destroyStub();
+		}
 	}
 	
 	private void createStub() throws RemoteException

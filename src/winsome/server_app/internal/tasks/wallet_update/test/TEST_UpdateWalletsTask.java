@@ -42,16 +42,15 @@ class TEST_UpdateWalletsTask extends WalletUpdateTest
 		
 		task.run(pool);
 		
-		assertEquals(pool.enqueued_tasks.size(), 4);
+		assertEquals(pool.enqueued_tasks.size(), 3);
 		for(ServerThreadpoolTask task : pool.enqueued_tasks)
 		{
 			assertTrue(task.getClass() == UpdateWalletTask.class);
 		}
 		
-		checkUpdateWalletTaskArguments((UpdateWalletTask)pool.enqueued_tasks.get(0), "user1", 50L, 4);
-		checkUpdateWalletTaskArguments((UpdateWalletTask)pool.enqueued_tasks.get(1), "user2", 10L, 4);
-		checkUpdateWalletTaskArguments((UpdateWalletTask)pool.enqueued_tasks.get(2), "user3", 0L, 4);
-		checkUpdateWalletTaskArguments((UpdateWalletTask)pool.enqueued_tasks.get(3), "user4", 196L, 4);
+		checkUpdateWalletTaskArguments((UpdateWalletTask)pool.enqueued_tasks.get(0), "user1", 50L, 3);
+		checkUpdateWalletTaskArguments((UpdateWalletTask)pool.enqueued_tasks.get(1), "user2", 10L, 3);
+		checkUpdateWalletTaskArguments((UpdateWalletTask)pool.enqueued_tasks.get(2), "user4", 196L, 3);
 	}
 	
 	private void checkUpdateWalletTaskArguments(UpdateWalletTask task, String username, Long reward, Integer total_wallet_updates) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException

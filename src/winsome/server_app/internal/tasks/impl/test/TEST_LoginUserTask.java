@@ -67,6 +67,7 @@ class TEST_LoginUserTask extends SocketTaskTest
 	{
 		prepareReturnsAllUserData();
 		data.getWalletUpdater().multicast_address = "multicast_address";
+		data.getWalletUpdater().multicast_port = 8082;
 		
 		task.run(pool);
 		
@@ -80,6 +81,7 @@ class TEST_LoginUserTask extends SocketTaskTest
 		assertEquals(answer.following_users.length, 1);
 		assertEquals(answer.following_users[0], "Nicola");
 		assertEquals(answer.udp_multicast_address, "multicast_address");
+		assertEquals(answer.udp_multicast_port, 8082);
 	}
 	
 	void prepareReturnsAllUserData()

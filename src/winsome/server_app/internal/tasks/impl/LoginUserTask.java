@@ -61,7 +61,8 @@ public class LoginUserTask extends SocketClientTask
 		LoginAnswer answer = new LoginAnswer(
 			followers.toArray(new String[0]),
 			following.toArray(new String[0]),
-			server_data.getWalletUpdater().getMulticastAddress()
+			server_data.getWalletUpdater().getMulticastAddress(),
+			server_data.getWalletUpdater().getMulticastPort()
 		);
 
 		socket.sendAnswerMessage(answer);	

@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import winsome.connection.server_api.wallet_notifier.WalletNotificationUpdaterImpl;
 import winsome.connection.protocols.WalletNotification;
-import winsome.connection.protocols.WinsomeConnectionProtocol;
 
 class TEST_WalletNotificationUpdaterImpl
 {
@@ -21,7 +20,7 @@ class TEST_WalletNotificationUpdaterImpl
 	@Test
 	void testThrowsOnUnknownAddress()
 	{
-		updater = new WalletNotificationUpdaterImpl("unknown address");
+		updater = new WalletNotificationUpdaterImpl("unknown address", 8082);
 		assertThrows(RuntimeException.class, () ->
 		{
 			updater.notifyWalletUpdated();
@@ -35,9 +34,9 @@ class TEST_WalletNotificationUpdaterImpl
 		DatagramPacket incoming_packet = new DatagramPacket(message, message.length);
 		String multicast_address = "224.0.0.128";
 		InetAddress address = InetAddress.getByName(multicast_address);
-		updater = new WalletNotificationUpdaterImpl(multicast_address);
+		updater = new WalletNotificationUpdaterImpl(multicast_address, 8082);
 		
-		MulticastSocket socket = new MulticastSocket(WinsomeConnectionProtocol.getUDPMulticastPort());
+		MulticastSocket socket = new MulticastSocket(8082);
 		socket.joinGroup(address);
 
 		updater.notifyWalletUpdated();
@@ -53,7 +52,8 @@ class TEST_WalletNotificationUpdaterImpl
 	@Test
 	void testGetAddress()
 	{
-		updater = new WalletNotificationUpdaterImpl("address");
+		updater = new WalletNotificationUpdaterImpl("address", 8082);
 		assertEquals(updater.getMulticastAddress(), "address");
+		assertEquals(updater.getMulticastPort(), 8082);
 	}
 }

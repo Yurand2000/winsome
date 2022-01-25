@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import winsome.connection.client_api.follower_updater.FollowerUpdaterRMIHandler;
 import winsome.connection.client_api.follower_updater.FollowerUpdaterRMIHandlerImpl;
 import winsome.connection.protocols.FollowerUpdaterRMI;
-import winsome.connection.protocols.WinsomeConnectionProtocol;
 import winsome.connection.server_api.RMIObjectRegistrator;
 import winsome.connection.server_api.follower_updater.FollowerUpdaterRegistrator;
 import winsome.server_app.internal.ServerRMIRegistry;
@@ -28,11 +27,11 @@ class TEST_FollowerUpdaterRMIHandlerImplTest
 	void startRegister() throws IOException, AlreadyBoundException
 	{
 		registratorImpl = new FollowerUpdaterRegistratorTest();
-		ServerRMIRegistry.startRegistry();
+		ServerRMIRegistry.startRegistry(8081);
 		registrator = new RMIObjectRegistrator<FollowerUpdaterRegistrator>(
 				registratorImpl,
 				FollowerUpdaterRMI.getFollowerUpdaterRegistratorName(),
-				WinsomeConnectionProtocol.getRMIRegistryPort()
+				8081
 			);
 		registrator.bindObject();
 	}
@@ -42,14 +41,14 @@ class TEST_FollowerUpdaterRMIHandlerImplTest
 	void testConstructor() throws IOException, NotBoundException
 	{
 		assertDoesNotThrow(() -> {
-			FollowerUpdaterRMIHandler handler = new FollowerUpdaterRMIHandlerImpl("localhost", "Luigi", null);
+			FollowerUpdaterRMIHandler handler = new FollowerUpdaterRMIHandlerImpl("localhost", 8081, "Luigi", null);
 		});
 	}
 	
 	@Test
 	void testRegisterFollowerUpdater() throws IOException, NotBoundException
 	{
-		FollowerUpdaterRMIHandler handler = new FollowerUpdaterRMIHandlerImpl("localhost", "Luigi", null);
+		FollowerUpdaterRMIHandler handler = new FollowerUpdaterRMIHandlerImpl("localhost", 8081, "Luigi", null);
 		
 		handler.registerFollowerUpdater();
 		registratorImpl.checkCalledRegister();
@@ -58,7 +57,7 @@ class TEST_FollowerUpdaterRMIHandlerImplTest
 	@Test
 	void testUnregisterFollowerUpdater() throws IOException, NotBoundException, RemoteException
 	{
-		FollowerUpdaterRMIHandler handler = new FollowerUpdaterRMIHandlerImpl("localhost", "Luigi", null);
+		FollowerUpdaterRMIHandler handler = new FollowerUpdaterRMIHandlerImpl("localhost", 8081, "Luigi", null);
 		handler.registerFollowerUpdater();
 		
 		handler.unregisterFollowerUpdater();

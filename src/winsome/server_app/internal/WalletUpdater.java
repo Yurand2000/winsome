@@ -15,8 +15,9 @@ public class WalletUpdater extends TimerTask
 	private final long timer_period;
 	private final String author_part;
 	
-	public WalletUpdater(WinsomeData winsome_data, ServerThreadpool threadpool, long time, TimeUnit unit, String author_part)
+	public WalletUpdater(WinsomeData winsome_data, ServerThreadpool threadpool, Long time, TimeUnit unit, String author_part)
 	{
+		checkArguments(time, author_part);
 		this.winsome_data = winsome_data;
 		this.threadpool = threadpool;
 		this.author_part = author_part;
@@ -24,9 +25,23 @@ public class WalletUpdater extends TimerTask
 		timer_period = timeUnitToMillis(time, unit);
 	}
 	
+	private void checkArguments(Long time, String author_part)
+	{
+		if(time < 0)
+		{
+			throw new IllegalArgumentException();
+		}
+		
+		Double author_part_number = Double.parseDouble(author_part);
+		if(author_part_number < 0 || author_part_number > 1)
+		{
+			throw new IllegalArgumentException();
+		}
+	}
+	
 	public void startUpdater()
 	{
-		timer.scheduleAtFixedRate(this, 0, timer_period);
+		timer.scheduleAtFixedRate(this, timer_period, timer_period);
 	}
 	
 	public void stopUpdater()
@@ -40,7 +55,7 @@ public class WalletUpdater extends TimerTask
 		threadpool.enqueueTask(new CalculatePostsRewardTask(winsome_data, author_part));
 	}
 	
-	private long timeUnitToMillis(long time, TimeUnit unit)
+	private long timeUnitToMillis(Long time, TimeUnit unit)
 	{
 		return unit.toMillis(time);
 	}

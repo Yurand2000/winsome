@@ -6,16 +6,19 @@ import java.net.UnknownHostException;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import winsome.connection.protocols.WinsomeConnectionProtocol;
 import winsome.generic.SettingsReader;
 
 public class ClientSettings extends SettingsReader
 {
 	@JsonProperty() public final String server_address;
+	@JsonProperty() public final Integer server_port;
+	@JsonProperty() public final Integer server_rmi_port;
 	
 	public ClientSettings()
 	{
 		server_address = "127.0.0.1";
+		server_port = 8080;
+		server_rmi_port = 8081;
 	}
 	
 	public static ClientSettings deserializeFromFile(String filename)
@@ -25,6 +28,6 @@ public class ClientSettings extends SettingsReader
 	
 	public InetSocketAddress makeServerAdddress() throws UnknownHostException
 	{
-		return new InetSocketAddress(InetAddress.getByName(server_address), WinsomeConnectionProtocol.getTCPListenerPort());
+		return new InetSocketAddress(InetAddress.getByName(server_address), server_port);
 	}
 }

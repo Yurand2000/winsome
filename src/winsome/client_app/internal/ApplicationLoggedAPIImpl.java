@@ -27,13 +27,13 @@ public class ApplicationLoggedAPIImpl implements LoggedClientAPI, ApplicationLog
 	public final FollowerUpdaterRMIHandlerImpl follower_updater;
 	private final ConnectionHandler client_connection;
 	
-	public ApplicationLoggedAPIImpl(String server_host, String me, ConnectionHandler client_connection) throws IOException, NotBoundException
+	public ApplicationLoggedAPIImpl(String server_host, Integer rmi_port, String me, ConnectionHandler client_connection) throws IOException, NotBoundException
 	{
 		this.me = me;
 		this.followers = Collections.synchronizedSet(new HashSet<String>());
 		this.following = Collections.synchronizedSet(new HashSet<String>());
 		this.wallet_notifier = new WalletNotificationUpdaterImpl();
-		this.follower_updater = new FollowerUpdaterRMIHandlerImpl(server_host, me, followers);
+		this.follower_updater = new FollowerUpdaterRMIHandlerImpl(server_host, rmi_port, me, followers);
 		this.client_connection = client_connection;
 	}
 
