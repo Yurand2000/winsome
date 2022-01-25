@@ -27,7 +27,7 @@ class TEST_FollowerUpdaterRMIHandlerImplTest
 	void startRegister() throws IOException, AlreadyBoundException
 	{
 		registratorImpl = new FollowerUpdaterRegistratorTest();
-		ServerRMIRegistry.startRegistry(8081);
+		ServerRMIRegistry.startRegistry("localhost", 8081);
 		registrator = new RMIObjectRegistrator<FollowerUpdaterRegistrator>(
 				registratorImpl,
 				FollowerUpdaterRMI.getFollowerUpdaterRegistratorName(),

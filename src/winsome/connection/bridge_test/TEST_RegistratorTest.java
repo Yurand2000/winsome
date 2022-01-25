@@ -22,7 +22,7 @@ class TEST_RegistratorTest
 	{
 		data = new WinsomeDataTest();
 		pool = new ServerThreadpoolTest();
-		ServerRMIRegistry.startRegistry(8081);
+		ServerRMIRegistry.startRegistry("localhost", 8081);
 		server_registrator = new winsome.connection.server_api.registrator.RegistratorRMIHandler(data, pool, 8081);
 		server_registrator.bindObject();
 	}

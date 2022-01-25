@@ -46,7 +46,7 @@ public class ServerMain
 	
 	public void startServer() throws IOException, AlreadyBoundException
 	{
-		ServerRMIRegistry.startRegistry(settings.server_rmi_port);
+		ServerRMIRegistry.startRegistry(settings.server_address, settings.server_rmi_port);
 		server.startServer();
 		
 		autosaver.startAutosaver();

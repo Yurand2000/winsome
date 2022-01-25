@@ -11,8 +11,9 @@ public class ServerRMIRegistry
 	
 	private ServerRMIRegistry() { }
 	
-	public static void startRegistry(Integer port) throws IOException
+	public static void startRegistry(String hostname, Integer port) throws IOException
 	{
+		System.setProperty("java.rmi.server.hostname", hostname);
 		registry = LocateRegistry.createRegistry( port );
 		//after this call, the registry port will be permanently bound to a socket until program shutdown
 	}

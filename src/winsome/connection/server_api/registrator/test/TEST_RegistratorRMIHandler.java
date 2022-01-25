@@ -25,7 +25,7 @@ class TEST_RegistratorRMIHandler
 	{
 		data = new WinsomeDataTest();
 		pool = new ServerThreadpoolTest();
-		ServerRMIRegistry.startRegistry(8081);
+		ServerRMIRegistry.startRegistry("localhost", 8081);
 		registrator = new RegistratorRMIHandler(data, pool, 8081);
 		registrator.bindObject();		
 	}

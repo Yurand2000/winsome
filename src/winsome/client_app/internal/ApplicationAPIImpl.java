@@ -32,6 +32,7 @@ public class ApplicationAPIImpl implements ApplicationAPI
 		this.logged_client = null;
 		this.client_connection = null;
 		this.wallet_notification_runnable = wallet_notification_runnable;
+		System.setProperty("java.rmi.server.hostname", server_address.getHostString());
 	}
 
 	@Override

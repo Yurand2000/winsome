@@ -25,7 +25,7 @@ class TEST_FollowerUpdater
 	@BeforeEach
 	void setup() throws IOException, AlreadyBoundException, NotBoundException
 	{
-		ServerRMIRegistry.startRegistry(8081);
+		ServerRMIRegistry.startRegistry("localhost", 8081);
 		server_handler = new FollowerUpdaterRegistratorHandlerImpl(8081);
 		server_handler.bindObject();
 		

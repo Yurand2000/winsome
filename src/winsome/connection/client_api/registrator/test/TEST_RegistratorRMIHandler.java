@@ -29,7 +29,7 @@ class TEST_RegistratorRMIHandler
 	
 	void startRegister() throws IOException, AlreadyBoundException
 	{
-		ServerRMIRegistry.startRegistry(8081);
+		ServerRMIRegistry.startRegistry("localhost", 8081);
 		registrator = new RMIObjectRegistrator<Registrator>(
 			registratorImpl,
 			RegistratorRMI.getRegistratorName(),
