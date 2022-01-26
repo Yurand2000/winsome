@@ -26,7 +26,10 @@ public class FollowerUpdaterRegistratorImpl extends RemoteObject implements Foll
 			if(updater != null)
 				updater.notifyNewFollowing(new_follower);
 		}
-		catch (RemoteException e) { }
+		catch (RemoteException e)
+		{
+			unregisterFollowerUpdater(user);
+		}
 	}
 	
 	public void notifyRemovedFollower(String user, String removed_follower)
@@ -37,18 +40,48 @@ public class FollowerUpdaterRegistratorImpl extends RemoteObject implements Foll
 			if(updater != null)
 				updater.notifyRemovedFollowing(removed_follower);
 		}
-		catch (RemoteException e) { }
+		catch (RemoteException e)
+		{
+			unregisterFollowerUpdater(user);
+		}
+	}
+	
+	private void unregisterFollowerUpdater(String username)
+	{
+		callback_updaters.remove(username);
 	}
 
 	@Override
 	public void registerFollowerUpdater(FollowerUpdater callback_updater) throws RemoteException
 	{
-		callback_updaters.put(callback_updater.getUserToUpdate(), callback_updater);
+		String username = callback_updater.getUserToUpdate();
+		callback_updaters.put(username, callback_updater);
 	}
 
 	@Override
 	public void unregisterFollowerUpdater(FollowerUpdater callback_updater) throws RemoteException
 	{
-		callback_updaters.remove(callback_updater.getUserToUpdate());
+		try
+		{
+			String username = callback_updater.getUserToUpdate();
+			callback_updaters.remove(username);
+		}
+		catch (RemoteException e)
+		{
+			String username = inverselyFindUserUpdater(callback_updater);
+			unregisterFollowerUpdater(username);
+		}
+	}
+	
+	private String inverselyFindUserUpdater(FollowerUpdater callback_updater)
+	{
+		for(Map.Entry<String, FollowerUpdater> entry : callback_updaters.entrySet())
+		{
+			if(entry.hashCode() == callback_updater.hashCode())
+			{
+				return entry.getKey();
+			}
+		}		
+		return null;
 	}
 }

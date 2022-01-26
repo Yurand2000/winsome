@@ -14,18 +14,18 @@ public class ServerAppMain
 	
 	public static void main(String[] args) throws IOException, InterruptedException, AlreadyBoundException, NotBoundException
 	{		
-		System.out.println("Server starting...");
+		System.out.println("Winsome Server starting...");
 		
 		server = new ServerMain(settings_file);
 		printCurrentSettings(server.settings);
 		
 		server.startServer();
 
-		System.out.println("Server started. Press ENTER to stop.");
+		System.out.println("Winsome Server started. Press ENTER to stop.");
 		System.in.read();
 		
 		server.stopServer();
-		System.out.println("Server stopped. Quitting...");
+		System.out.println("Winsome Server stopped. Quitting...");
 	}
 	
 	private static void printCurrentSettings(ServerSettings settings)

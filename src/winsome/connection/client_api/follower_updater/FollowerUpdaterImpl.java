@@ -1,19 +1,18 @@
 package winsome.connection.client_api.follower_updater;
 
 import java.rmi.RemoteException;
-import java.rmi.server.RemoteObject;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Set;
 
-public class FollowerUpdaterImpl extends RemoteObject implements FollowerUpdater
+public class FollowerUpdaterImpl extends UnicastRemoteObject implements FollowerUpdater
 {
 	private static final long serialVersionUID = 1L;
 	
 	private final String user;
 	private final Set<String> followers;
 	
-	public FollowerUpdaterImpl(String me, Set<String> followers)
+	public FollowerUpdaterImpl(String me, Set<String> followers) throws RemoteException
 	{
-		super();
 		user = me;
 		this.followers = followers;
 	}

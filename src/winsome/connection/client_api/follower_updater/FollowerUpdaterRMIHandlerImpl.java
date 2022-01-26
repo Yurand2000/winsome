@@ -1,8 +1,9 @@
 package winsome.connection.client_api.follower_updater;
 
-import java.io.IOException;
+import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Set;
 
 import winsome.connection.client_api.RMIObjectLookup;
@@ -13,70 +14,63 @@ public class FollowerUpdaterRMIHandlerImpl implements FollowerUpdaterRMIHandler
 {
 	private final String hostname;
 	private final Integer port;
-	private final FollowerUpdaterImpl updater;
+	private final String user;
+	private final Set<String> followers;
+	private FollowerUpdaterImpl updater;
 	private FollowerUpdaterRegistrator registrator;
-	private FollowerUpdater stub;
 	
-	public FollowerUpdaterRMIHandlerImpl(String hostname, Integer port, String user, Set<String> followers) throws IOException, NotBoundException
+	public FollowerUpdaterRMIHandlerImpl(String hostname, Integer port, String user, Set<String> followers)
 	{
 		this.hostname = hostname;
 		this.port = port;
-		updater = new FollowerUpdaterImpl(user, followers);
+		this.user = user;
+		this.followers = followers;
 		
+		updater = null;		
 		registrator = null;
-		stub = null;
 	}
 	
 	public void registerFollowerUpdater() throws RemoteException
-	{
-		createStub();
-		
+	{		
 		if(registrator == null)
 		{
 			try
 			{
 				registrator = RMIObjectLookup.getStub(hostname, port, FollowerUpdaterRegistrator.class, FollowerUpdaterRMI.getFollowerUpdaterRegistratorName() );
-				registrator.registerFollowerUpdater(stub);
+				updater = new FollowerUpdaterImpl(user, followers);
+				registrator.registerFollowerUpdater(updater);
 			}
-			catch (NotBoundException | IOException e)
+			catch (NotBoundException e)
 			{
-				destroyStub();
-				registrator = null;
+				destroy();
+				throw new RuntimeException(e.toString());
+			}
+			catch(RemoteException e)
+			{
+				destroy();
+				throw e;
 			}
 		}
 	}
 	
-	public void unregisterFollowerUpdater() throws RemoteException
+	public void unregisterFollowerUpdater()
 	{
 		try
 		{
 			if(registrator != null)
 			{
-				registrator.unregisterFollowerUpdater(stub);
-				registrator = null;
+				registrator.unregisterFollowerUpdater(updater);
+				destroy();
 			}
 		}
 		catch(RemoteException e) { }
-		finally
-		{
-			destroyStub();
-		}
 	}
 	
-	private void createStub() throws RemoteException
+	private void destroy()
 	{
-		if(stub == null)
-		{
-			stub = RMIObjectLookup.generateStub(FollowerUpdater.class, updater);
-		}
-	}
-	
-	private void destroyStub() throws RemoteException
-	{
-		if(stub != null)
-		{
-			RMIObjectLookup.destroyStub(updater);
-			stub = null;
-		}
+		try { UnicastRemoteObject.unexportObject(updater, true); }
+		catch (NoSuchObjectException e) { }
+		updater = null;
+		registrator = null;
 	}
 }

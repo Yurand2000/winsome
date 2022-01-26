@@ -1,6 +1,8 @@
 package winsome.server_app.internal.tasks.rmi;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import winsome.client_app.api.exceptions.IncorrectFormatException;
@@ -43,26 +45,32 @@ public class RegisterNewUserTask extends WinsomeFutureTask<Void>
 	
 	private void checkArguments()
 	{
-		if(!charset_regex.matcher(username).matches())
+		if(!charset_regex.matcher(username).matches() && username.length() >= 4 && username.length() <= 32)
 		{
-			throw new IncorrectFormatException("Usernames can only have alphanumeric or underscore characters.");
+			throw new IncorrectFormatException("Usernames can only have alphanumeric or underscore characters, min 4 and max 32 characters.");
 		}
 		
-		if(!charset_regex.matcher(password).matches())
+		if(!charset_regex.matcher(password).matches() && password.length() >= 4 && password.length() <= 32)
 		{
-			throw new IncorrectFormatException("Passwords can only have alphanumeric or underscore characters.");
+			throw new IncorrectFormatException("Passwords can only have alphanumeric or underscore characters, min 4 and max 32 characters.");
 		}
 		
 		if(tags.length == 0 || tags.length > 5)
 		{
 			throw new TooManyTagsException();
 		}
+
+		Set<String> unique = new HashSet<String>(Arrays.asList(tags));
+		if(unique.size() != tags.length)
+		{
+			throw new IncorrectFormatException("Some of the given tags are duplicated.");
+		}
 		
 		for(String tag : tags)
 		{
-			if(!charset_regex.matcher(tag).matches())
+			if(!charset_regex.matcher(tag).matches() && tag.length() >= 3 && tag.length() <= 16)
 			{
-				throw new IncorrectFormatException("Tags can only have alphanumeric or underscore characters.");
+				throw new IncorrectFormatException("Tags can only have alphanumeric or underscore characters, min 3 and max 16 characters.");
 			}
 		}
 	}

@@ -65,6 +65,8 @@ class TEST_LoginTaskExecutor extends TaskExecutorTest
 
 		assertTrue(connection.connect_called);
 		assertTrue(connection.disconnect_called);
+		app_api.getWalletNotifier().checkUnregisterCalled();
+		app_api.getFollowerUpdater().checkUnregisterCalled();
 	}
 
 	@Test
@@ -76,5 +78,7 @@ class TEST_LoginTaskExecutor extends TaskExecutorTest
 
 		assertTrue(connection.connect_called);
 		assertTrue(connection.disconnect_called);
+		app_api.getWalletNotifier().checkUnregisterCalled();
+		app_api.getFollowerUpdater().checkUnregisterCalled();
 	}
 }

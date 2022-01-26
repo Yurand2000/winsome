@@ -29,7 +29,7 @@ class FollowerUpdaterRMIHandlerTest implements FollowerUpdaterRMIHandler
 	}
 
 	@Override
-	public void unregisterFollowerUpdater() throws RemoteException
+	public void unregisterFollowerUpdater()
 	{
 		unregister_called = true;
 	}

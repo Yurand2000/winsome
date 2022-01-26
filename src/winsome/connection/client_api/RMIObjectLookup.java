@@ -1,6 +1,6 @@
 package winsome.connection.client_api;
 
-import java.io.IOException;
+import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -12,7 +12,7 @@ public class RMIObjectLookup
 {
 	private RMIObjectLookup() { }
 
-	public static <T extends Remote> T getStub(String hostname, Integer port, Class<T> obj_class, String name) throws IOException, NotBoundException
+	public static <T extends Remote> T getStub(String hostname, Integer port, Class<T> obj_class, String name) throws RemoteException, NotBoundException
 	{
 		return obj_class.cast( getRegistry(hostname, port).lookup(name) );
 	}
@@ -22,7 +22,7 @@ public class RMIObjectLookup
 		return obj_class.cast( UnicastRemoteObject.exportObject(object, 0) );
 	}
 	
-	public static <T extends Remote> void destroyStub(T object) throws RemoteException
+	public static <T extends Remote> void destroyStub(T object) throws NoSuchObjectException
 	{
 		UnicastRemoteObject.unexportObject(object, true);
 	}

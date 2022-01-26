@@ -5,5 +5,5 @@ import java.rmi.RemoteException;
 public interface FollowerUpdaterRMIHandler
 {
 	void registerFollowerUpdater() throws RemoteException;
-	void unregisterFollowerUpdater() throws RemoteException;
+	void unregisterFollowerUpdater();
 }

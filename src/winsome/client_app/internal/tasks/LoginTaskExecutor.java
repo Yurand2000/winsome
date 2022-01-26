@@ -1,6 +1,7 @@
 package winsome.client_app.internal.tasks;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.Arrays;
 
 import winsome.connection.client_api.socket.*;
@@ -39,6 +40,8 @@ public class LoginTaskExecutor extends DefaultTaskExecutor
 	@Override
 	protected void onException(ConnectionHandler connection, ApplicationLoggedAPI api)
 	{
+		api.getFollowerUpdater().unregisterFollowerUpdater();
+		api.getWalletNotifier().unregisterWalletUpdateNotifications();
 		connection.disconnect();
 	}
 
@@ -48,7 +51,7 @@ public class LoginTaskExecutor extends DefaultTaskExecutor
 		api.getFollowing().addAll(Arrays.asList(answer.following_users));
 	}
 	
-	private void startWalletNotificationListener(ApplicationLoggedAPI api, LoginAnswer answer) throws IOException
+	private void startWalletNotificationListener(ApplicationLoggedAPI api, LoginAnswer answer)
 	{
 		api.getWalletNotifier().registerWalletUpdateNotifications(
 			answer.udp_multicast_address,
@@ -56,7 +59,7 @@ public class LoginTaskExecutor extends DefaultTaskExecutor
 			wallet_notification_runnable);
 	}
 	
-	private void startFollowerNotificationListener(ApplicationLoggedAPI api) throws IOException
+	private void startFollowerNotificationListener(ApplicationLoggedAPI api) throws RemoteException
 	{
 		api.getFollowerUpdater().registerFollowerUpdater();
 	}
