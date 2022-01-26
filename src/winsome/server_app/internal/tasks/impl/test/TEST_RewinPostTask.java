@@ -70,4 +70,22 @@ class TEST_RewinPostTask extends SocketTaskTest
 		assertEquals(data.getPosts().get(11).getAuthor(), "user");
 		assertEquals( ((RewinPost)data.getPosts().get(11)).getOriginalPostId(), 10 );
 	}
+	
+	@Test
+	void testPostMarkedForDeletion()
+	{
+		data.getUsers().get("user").addFollowing("user2");
+		data.getUsers().get("user2").addFollower("user");
+		assertEquals(data.getPosts().size(), 1);
+		data.getPosts().get(10).markForDeletion();
+		
+		task.run(pool);
+		
+		assertTrue(state.sent_message.getClass() == RequestExceptionAnswer.class);
+		assertTrue(data.getPostFactory().makeRewinPost_called);
+		assertFalse(data.getPostFactory().makeNewPost_called);
+		assertTrue(data.getPostFactory().signalPostDelete_called);
+		assertTrue(data.getPostFactory().signalledPosts.contains(11));
+		assertEquals(data.getPosts().size(), 1);
+	}
 }

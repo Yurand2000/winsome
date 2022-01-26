@@ -34,12 +34,12 @@ class TEST_GenericPost
 	}
 	
 	@Test
-	@SuppressWarnings("unused")
 	void constructor()
 	{
 		assertDoesNotThrow(() -> {
 			GenericPostTestImpl post = new GenericPostTestImpl(0, new HashSet<Integer>(),
 				new PostLikesTestImpl(), new PostCommentsTestImpl(), new RewardStateTestImpl());
+			assertTrue(post.isNotMarkedForDeletion());
 		});
 	}
 	
@@ -173,6 +173,16 @@ class TEST_GenericPost
 		assertEquals(post.getComments().get(0).username, "Fabio");
 		assertEquals(post.getComments().get(1).username, "Giulio");
 		assertEquals(post.getComments().get(2).username, "Fabio");		
+	}
+	
+	@Test
+	void checkMarkForDeletion()
+	{
+		assertTrue(post.isNotMarkedForDeletion());
+		
+		post.markForDeletion();
+		
+		assertFalse(post.isNotMarkedForDeletion());
 	}
 	
 	@Test

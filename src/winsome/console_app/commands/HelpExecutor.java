@@ -17,9 +17,11 @@ public class HelpExecutor extends ConsoleCommandExecutor
 	{
 		return	"Winsome Console Client - Help:\n" +
 				"Available commands:\n"+
+				"help\n"+
 				"register <username> <password> <tags>\n"+
 				"login <username> <password>\n"+
 				"logout\n"+
+				"exit\n"+
 				"list users\n"+
 				"list followers\n"+
 				"list following\n"+

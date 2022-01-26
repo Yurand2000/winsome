@@ -19,8 +19,9 @@ public abstract class GenericPost implements Cloneable
 	@JsonProperty() private final PostLikes likes;
 	@JsonProperty() private final PostComments comments;
 	@JsonProperty() private final RewardState reward_state;
+	@JsonIgnore() private boolean markedForDeletion;
 	
-	protected GenericPost() { postId = 0; rewins = null; likes = null; comments = null; reward_state = null; }
+	protected GenericPost() { postId = 0; rewins = null; likes = null; comments = null; reward_state = null; markedForDeletion = false; }
 	
 	protected GenericPost(GenericPost post)
 	{
@@ -29,6 +30,7 @@ public abstract class GenericPost implements Cloneable
 		this.likes = post.likes.clone();
 		this.comments = post.comments.clone();
 		this.reward_state = post.reward_state.clone();
+		markedForDeletion = false;
 	}
 	
 	public GenericPost(Integer postId, Set<Integer> rewins,
@@ -39,15 +41,26 @@ public abstract class GenericPost implements Cloneable
 		this.likes = likes;
 		this.comments = comments;
 		this.reward_state = reward_state;
+		markedForDeletion = false;
 	}
 	
 	@JsonIgnore() public abstract boolean isRewin();
 	
 	@JsonIgnore() public abstract String getAuthor();
+	
+	@JsonIgnore() public boolean isNotMarkedForDeletion()
+	{
+		return !markedForDeletion;		
+	}
+	
+	@JsonIgnore() public void markForDeletion()
+	{
+		markedForDeletion = true;
+	}
 
 	public abstract GenericPost clone();
 	
-	public synchronized Set<Integer> getRewins()
+	@JsonIgnore() public synchronized Set<Integer> getRewins()
 	{
 		return new HashSet<Integer>(rewins);
 	}	

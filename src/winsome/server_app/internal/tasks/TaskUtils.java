@@ -102,6 +102,7 @@ public class TaskUtils
 		Set<Integer> rewins = new HashSet<Integer>();
 		lockPost(post, () ->
 		{
+			post.markForDeletion();
 			rewins.addAll(post.getRewins());
 		});
 		

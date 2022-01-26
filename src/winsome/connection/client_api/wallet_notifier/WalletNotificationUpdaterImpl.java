@@ -99,6 +99,7 @@ public class WalletNotificationUpdaterImpl implements WalletNotificationUpdater,
 	{
 		try { socket.receive(incoming_packet); }
 		catch(IOException e) { return; }
+		catch(NullPointerException e) { return; }
 		
 		if(incomingPacketIsWalletNotification())
 		{

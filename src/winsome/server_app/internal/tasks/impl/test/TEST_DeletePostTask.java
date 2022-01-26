@@ -40,9 +40,11 @@ class TEST_DeletePostTask extends SocketTaskTest
 		luigi.addPost(10);
 		data.getUsers().put("Luigi", luigi);
 		data.getPosts().put(10, data.getPostFactory().makeNewPostId(10, "Title", "Luigi", "Content"));
+		assertTrue(data.getPosts().get(10).isNotMarkedForDeletion());
 		
 		task.run(pool);
 		
+		assertTrue(data.getPosts().get(10).isNotMarkedForDeletion());
 		assertTrue(state.sent_message.getClass() == RequestExceptionAnswer.class);
 		assertFalse(data.getPostFactory().signalPostDelete_called);
 		GenericPost post = data.getPosts().get(10);
@@ -55,10 +57,13 @@ class TEST_DeletePostTask extends SocketTaskTest
 		User user = UserFactory.makeNewUser("user", "pass", new Tag[] { new Tag("a") });
 		user.addPost(10);
 		data.getUsers().put("user", user);
-		data.getPosts().put(10, data.getPostFactory().makeNewPostId(10, "Title", "user", "Content"));
+		GenericPost post = data.getPostFactory().makeNewPostId(10, "Title", "user", "Content");
+		data.getPosts().put(10, post);
+		assertTrue(post.isNotMarkedForDeletion());
 		
 		task.run(pool);
-		
+
+		assertFalse(post.isNotMarkedForDeletion());
 		assertTrue(state.sent_message.getClass() == DeletePostAnswer.class);
 		assertTrue(data.getPostFactory().signalPostDelete_called);
 		assertTrue(data.getPosts().isEmpty());
@@ -74,16 +79,21 @@ class TEST_DeletePostTask extends SocketTaskTest
 		GenericPost post = data.getPostFactory().makeNewPostId(9, "Title", "user", "Content");
 		post.addRewin(10);
 		data.getPosts().put(9, post);
-		data.getPosts().put(10, data.getPostFactory().makeRewinPostId(10, 9, "user"));
+		GenericPost rewin = data.getPostFactory().makeRewinPostId(10, 9, "user");
+		data.getPosts().put(10, rewin);
 
 		assertTrue(user.getPosts().contains(9));
 		assertTrue(user.getPosts().contains(10));
 		assertTrue(data.getPosts().containsKey(9));
 		assertTrue(data.getPosts().containsKey(10));
 		assertTrue(data.getPosts().get(9).getRewins().contains(10));
+		assertTrue(post.isNotMarkedForDeletion());
+		assertTrue(rewin.isNotMarkedForDeletion());
 		
 		task.run(pool);
-		
+
+		assertFalse(rewin.isNotMarkedForDeletion());
+		assertTrue(post.isNotMarkedForDeletion());
 		assertTrue(state.sent_message.getClass() == DeletePostAnswer.class);
 		assertTrue(data.getPostFactory().signalPostDelete_called);
 		assertTrue(data.getPostFactory().signalledPosts.contains(10));

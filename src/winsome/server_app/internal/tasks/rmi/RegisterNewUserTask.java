@@ -23,6 +23,8 @@ public class RegisterNewUserTask extends WinsomeFutureTask<Void>
 	
 	private static final String charset_regex_string = "\\w+";
 	private final Pattern charset_regex;
+	private static final String charset_tag_regex_string = "[a-z]+";
+	private final Pattern charset_tag_regex;
 	
 	public RegisterNewUserTask(WinsomeData data, String username, String password, String[] tags)
 	{
@@ -30,8 +32,9 @@ public class RegisterNewUserTask extends WinsomeFutureTask<Void>
 		this.username = username;
 		this.password = password;
 		this.tags = Arrays.copyOf(tags, tags.length);
-		
+
 		this.charset_regex = Pattern.compile(charset_regex_string);
+		this.charset_tag_regex = Pattern.compile(charset_tag_regex_string);
 	}
 	
 	@Override
@@ -68,9 +71,9 @@ public class RegisterNewUserTask extends WinsomeFutureTask<Void>
 		
 		for(String tag : tags)
 		{
-			if(!charset_regex.matcher(tag).matches() && tag.length() >= 3 && tag.length() <= 16)
+			if(!charset_tag_regex.matcher(tag).matches() && tag.length() >= 3 && tag.length() <= 16)
 			{
-				throw new IncorrectFormatException("Tags can only have alphanumeric or underscore characters, min 3 and max 16 characters.");
+				throw new IncorrectFormatException("Tags can only have lowercase letters, min 3 and max 16 characters.");
 			}
 		}
 	}

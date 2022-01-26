@@ -21,7 +21,7 @@ class TEST_RegisterNewUserTask
 	{
 		data = new WinsomeDataTest();
 		pool = new ServerThreadpoolTest();
-		task = new RegisterNewUserTask(data, "user", "pass", new String[] {"tag1"});
+		task = new RegisterNewUserTask(data, "user", "pass", new String[] {"tag"});
 	}
 
 	@Test
@@ -47,15 +47,15 @@ class TEST_RegisterNewUserTask
 	@Test
 	void testCheckArguments()
 	{
-		task = new RegisterNewUserTask(data, "user$!@", "pass", new String[] {"tag1"});
+		task = new RegisterNewUserTask(data, "user$!@", "pass", new String[] {"tag"});
 		task.run(pool);
 		assertThrows(IncorrectFormatException.class, () -> task.get());
 		
-		task = new RegisterNewUserTask(data, "user", "pass^^@", new String[] {"tag1"});
+		task = new RegisterNewUserTask(data, "user", "pass^^@", new String[] {"tag"});
 		task.run(pool);
 		assertThrows(IncorrectFormatException.class, () -> task.get());
 		
-		task = new RegisterNewUserTask(data, "user", "pass", new String[] {"tag1#@@!", "tag2"});
+		task = new RegisterNewUserTask(data, "user", "pass", new String[] {"tag#@@!", "tag"});
 		task.run(pool);
 		assertThrows(IncorrectFormatException.class, () -> task.get());
 		

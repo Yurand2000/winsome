@@ -31,9 +31,17 @@ public class RewinPostTask extends LoggedUserTask
 		
 		TaskUtils.lockUserThenPosts(user, post, original_post, () ->
 		{
-			user.addPost(post.postId);
-			data.getPosts().put(post.postId, post);
-			original_post.addRewin(post.postId);
+			if(original_post.isNotMarkedForDeletion())
+			{
+				user.addPost(post.postId);
+				data.getPosts().put(post.postId, post);
+				original_post.addRewin(post.postId);
+			}
+			else
+			{
+				data.getPostFactory().signalPostDeleted(post.postId);
+				throw new RuntimeException("The given post does not exist.");
+			}
 		});
 		
 		RewinPostAnswer answer = new RewinPostAnswer(post.postId, TaskUtils.getPostContent(original_post.postId, data).title);
