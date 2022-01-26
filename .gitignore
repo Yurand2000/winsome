@@ -5,8 +5,6 @@ javadoc
 server_working_directory
 client_working_directory
 javadocs
-bin/com
-bin/org
 bin/winsome
 bin/WinsomeClient.jar
 bin/WinsomeServer.jar
