@@ -29,7 +29,7 @@ public class WalletNotificationUpdaterImpl implements WalletNotificationUpdater,
 		try
 		{
 			multicast_address = InetAddress.getByName(address);
-			if(!multicast_address.isMulticastAddress())
+			if(multicast_address == null || !multicast_address.isMulticastAddress())
 			{
 				throw new RuntimeException("given address " + address  + " is not a multicast address");
 			}
