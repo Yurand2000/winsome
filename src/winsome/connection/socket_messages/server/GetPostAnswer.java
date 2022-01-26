@@ -16,8 +16,15 @@ public class GetPostAnswer extends Message
 	@SuppressWarnings("unused")
 	private GetPostAnswer() { post = null; }
 	
+	public GetPostAnswer(Integer postId, String author, Integer originalPostId, String originalAuthor,
+		String title, String content, Integer positive_ratings, Integer negative_ratings, List<Comment> comments)
+	{
+		this.post = new Post(postId, author, originalPostId, originalAuthor,
+			title, content, positive_ratings, negative_ratings, comments);
+	}
+	
 	public GetPostAnswer(Integer postId, String author, String title, String content,
-			Integer positive_ratings, Integer negative_ratings, List<Comment> comments)
+		Integer positive_ratings, Integer negative_ratings, List<Comment> comments)
 	{
 		this.post = new Post(postId, author, title, content,
 			positive_ratings, negative_ratings, comments);

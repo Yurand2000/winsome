@@ -13,6 +13,7 @@ import winsome.server_app.internal.threadpool.ServerThreadpool;
 import winsome.server_app.post.Content;
 import winsome.server_app.post.GenericPost;
 import winsome.server_app.post.PostComments;
+import winsome.server_app.post.RewinPost;
 
 public class GetPostTask extends LoggedUserTask
 {
@@ -32,12 +33,23 @@ public class GetPostTask extends LoggedUserTask
 	}
 	
 	private GetPostAnswer makeGetPostAnswer(Integer postId)
-	{
+	{		
 		GenericPost post = TaskUtils.getPost(postId, data);
 		Content content = TaskUtils.getPostContent(postId, data);
+		
+		if(post.isRewin())
+		{
+			RewinPost rewin = (RewinPost) post;
+			Integer originalPostId = TaskUtils.getOriginalPostId(postId, data);
 			
-		return new GetPostAnswer(post.postId, content.author, content.title, content.content,
-			post.getPositiveRatings(), post.getNegativeRatings(), makeComments(post.getComments()));
+			return new GetPostAnswer(rewin.postId, rewin.getAuthor(), originalPostId, content.author, content.title, content.content,
+				post.getPositiveRatings(), post.getNegativeRatings(), makeComments(post.getComments()));
+		}
+		else
+		{			
+			return new GetPostAnswer(post.postId, content.author, content.title, content.content,
+				post.getPositiveRatings(), post.getNegativeRatings(), makeComments(post.getComments()));
+		}		
 	}
 	
 	private List<Post.Comment> makeComments(List<PostComments.Comment> comments)

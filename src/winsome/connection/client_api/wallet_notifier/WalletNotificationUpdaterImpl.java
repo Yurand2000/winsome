@@ -40,21 +40,35 @@ public class WalletNotificationUpdaterImpl implements WalletNotificationUpdater,
 		}
 		catch (IOException e)
 		{
+			unregisterWalletUpdateNotifications();
 			throw new RuntimeException(e.toString());
 		}
 	}
 	
 	public void unregisterWalletUpdateNotifications()
 	{
-		try
+		if(socket != null)
 		{
 			socket.close();
-			notifier_thread.interrupt();
-			notifier_thread.join();
-			notifier_thread = null;
 			socket = null;
 		}
-		catch (InterruptedException e) { }
+		
+		if(notifier_thread != null)
+		{
+			try
+			{
+				notifier_thread.interrupt();
+				notifier_thread.join();
+			}
+			catch (InterruptedException e) { }
+			finally
+			{
+				notifier_thread = null;
+			}
+		}
+		
+		notification_task = null;
+		multicast_address = null;
 	}
 	
 	@Override

@@ -44,6 +44,11 @@ public class RewinPostTask extends LoggedUserTask
 	{
 		String post_author = TaskUtils.getPostAuthor(postId, data);
 		
+		if(user.username == post_author)
+		{
+			throw new RuntimeException("Cannot rewin your own post.");
+		}
+		
 		TaskUtils.lockUser(user, () ->
 		{
 			if(!user.getFollowing().contains(post_author))

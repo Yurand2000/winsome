@@ -56,13 +56,21 @@ public class TaskUtils
 		return post.getAuthor();
 	}
 	
-	public static Content getPostContent(Integer postId, WinsomeData server_data)
+	public static Integer getOriginalPostId(Integer postId, WinsomeData server_data)
 	{
-		String author = getPostAuthor(postId, server_data);
-		return getPostContent(postId, author, server_data);
+		GenericPost post = getPost(postId, server_data);
+		
+		if(post.isRewin())
+		{
+			return getOriginalPostId(((RewinPost)post).getOriginalPostId(), server_data);
+		}
+		else
+		{
+			return postId;
+		}
 	}
 	
-	private static Content getPostContent(Integer postId, String author, WinsomeData server_data)
+	public static Content getPostContent(Integer postId, WinsomeData server_data)
 	{
 		GenericPost post = getPost(postId, server_data);
 		
@@ -70,18 +78,20 @@ public class TaskUtils
 		{
 			Integer original_postId = ((RewinPost)post).getOriginalPostId();
 			
-			return getPostContent(original_postId, author, server_data);
+			return getPostContent(original_postId, server_data);
 		}
 		else
 		{
 			StringBuilder title = new StringBuilder();
+			StringBuilder author = new StringBuilder();
 			StringBuilder content = new StringBuilder();
 			lockPost(post, () -> {
 				title.append( ((ContentPost)post).content.title );
-				content.append( ((ContentPost)post).content.content );
+				author.append( ((ContentPost)post).content.author );
+				content.append( ((ContentPost)post).content.content );				
 			});
 			
-			return new Content(title.toString(), author, content.toString());
+			return new Content(title.toString(), author.toString(), content.toString());
 		}
 	}
 	

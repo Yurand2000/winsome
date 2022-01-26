@@ -34,28 +34,66 @@ public class ShowPostExecutor extends ConsoleCommandExecutor
 		Integer postId = Integer.parseInt(matcher.group(1));
 		
 		Post post = ClientAppAPI.getLoggedClientAPI().showPost(postId);
-		return postToString(post);
+		return printPost(post);
+	}
+	
+	private String printPost(Post post)
+	{
+		if(post.original_author == null)
+		{
+			return postToString(post);
+		}
+		else
+		{
+			return rewinPostToString(post);
+		}
 	}
 
 	private static String format_string =
-		"Title: %s\n" +
+		"\'%s\' by \'%s\'\n" +
 		"%s\n" +
-	    "\n" +
-		"Positive Ratings: %d\n" +
-	    "Negative Ratings: %d\n" +
-		"Comments:";
+		"- Positive Ratings: %d\n" +
+	    "- Negative Ratings: %d\n" +
+		"- Comments:";
 	
 	private String postToString(Post post)
 	{
 		StringBuilder string = new StringBuilder();
 		string.append(
-			String.format(format_string, post.title, post.content, post.positive_ratings.intValue(), post.negative_ratings.intValue()));
+			String.format(format_string, post.title, post.author,
+				post.content, post.positive_ratings.intValue(), post.negative_ratings.intValue())
+		);
+
+		appendComments(string, post);
+		return string.toString();
+	}
+	
+	private static String rewin_format_string =
+		"\'%s\' by \'%s\'\n" +
+		"Original Post: %d by \'%s\'\n" +
+		"%s\n" +
+		"- Positive Ratings: %d\n" +
+	    "- Negative Ratings: %d\n" +
+		"- Comments:";
+				
+	private String rewinPostToString(Post post)
+	{
+		StringBuilder string = new StringBuilder();
+		string.append(
+			String.format(rewin_format_string, post.title, post.author, post.original_postId, post.original_author,
+				post.content, post.positive_ratings.intValue(), post.negative_ratings.intValue())
+		);
 		
+		appendComments(string, post);
+		return string.toString();
+	}
+	
+	private void appendComments(StringBuilder string, Post post)
+	{
 		for(Post.Comment comment : post.comments)
 		{
-			string.append("\n  ");
+			string.append("\n ");
 			string.append(comment.toString());
 		}
-		return string.toString();
 	}
 }

@@ -61,8 +61,9 @@ public class GetFeedTask extends LoggedUserTask
 		{
 			try
 			{
+				String post_author = TaskUtils.getPostAuthor(id, data);
 				Content post_content = TaskUtils.getPostContent(id, data);
-				PostShort post_short = new PostShort(id, post_content.author, post_content.title);
+				PostShort post_short = new PostShort(id, post_author, post_content.title);
 				feed_posts.add(post_short);
 			}
 			catch(RuntimeException e) { /*probably the post has been deleted while trying to fetch it.*/ }
