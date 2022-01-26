@@ -1,7 +1,7 @@
 @echo off
 
 echo Compiling
-call javac -d bin -cp bin @compile_data\sources.txt
+javac -d bin -cp bin @compile_data\sources.txt
 
 echo Making Jars
 cd bin
