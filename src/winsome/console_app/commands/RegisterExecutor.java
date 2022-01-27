@@ -27,14 +27,21 @@ public class RegisterExecutor extends ConsoleCommandExecutor
 	@Override 
 	protected boolean canExecute(String line)
 	{
-		Matcher matcher = regex.matcher(line);
-		if(!matcher.matches())
+		if(line.contains("register "))
 		{
-			throw new CannotExecuteException("wrong command format. Correct format is: register <username> <password> <tags>. Tags is a list of 1 to 5 strings separated by spaces.");
+			Matcher matcher = regex.matcher(line);
+			if(!matcher.matches())
+			{
+				throw new CannotExecuteException("wrong command format. Correct format is: register <username> <password> <tags>. Tags is a list of 1 to 5 strings separated by spaces.");
+			}
+			else
+			{
+				return true;
+			}
 		}
 		else
 		{
-			return true;
+			return false;
 		}
 	}
 	

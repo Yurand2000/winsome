@@ -20,11 +20,11 @@ public class WinsomeServerImpl implements WinsomeServer
 	{
 		this.settings = settings;
 		threadpool = new ServerThreadpoolImpl();
-		winsome_data = tryGetSerializedData(settings.save_file);	
+		winsome_data = getSerializedData(settings.save_file);	
 		winsome_data.setUpdaters(follower_updater, wallet_updater);
 	}
 	
-	private WinsomeDataImpl tryGetSerializedData(String filename)
+	private WinsomeDataImpl getSerializedData(String filename)
 	{
 		if(filename == null || !Files.exists(Paths.get(filename)))
 		{
@@ -32,15 +32,20 @@ public class WinsomeServerImpl implements WinsomeServer
 		}
 		else
 		{
-			try 
-			{
-				byte[] data = Files.readAllBytes(Paths.get(filename));
-				return SerializerWrapper.deserialize(data, WinsomeDataImpl.class);				
-			}
-			catch (IOException e)
-			{
-				throw new RuntimeException(e.toString());
-			}
+			return tryGetSerializedData(filename);
+		}
+	}
+	
+	private WinsomeDataImpl tryGetSerializedData(String filename)
+	{
+		try
+		{
+			byte[] data = Files.readAllBytes(Paths.get(filename));
+			return SerializerWrapper.deserialize(data, WinsomeDataImpl.class);				
+		}
+		catch (IOException e)
+		{
+			throw new RuntimeException(e.toString());
 		}
 	}
 	

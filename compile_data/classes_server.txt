@@ -14,6 +14,8 @@ winsome/client_app/api/exceptions/ServerInternalException.class
 winsome/client_app/api/exceptions/TooManyTagsException.class
 winsome/client_app/api/exceptions/UnknownUsernameException.class
 winsome/client_app/api/exceptions/UsernameAlreadyTakenException.class
+winsome/client_app/api/exceptions/PostDoesNotExistException.class
+winsome/client_app/api/exceptions/UserDoesNotExistException.class
 winsome/client_app/api/LoggedClientAPI.class
 winsome/client_app/api/Post$Comment.class
 winsome/client_app/api/Post.class

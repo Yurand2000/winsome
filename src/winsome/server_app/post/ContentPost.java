@@ -41,13 +41,14 @@ public class ContentPost extends GenericPost
 	}
 
 	@JsonIgnore()
+	@Override
 	public boolean isRewin()
 	{
 		return false;
 	}
 
 	@Override
-	public ContentPost clone()
+	public synchronized ContentPost clone()
 	{
 		return new ContentPost(this);
 	}

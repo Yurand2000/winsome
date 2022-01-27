@@ -9,7 +9,6 @@ public interface PostLikes extends Cloneable
 	void addDislike(String username);
 	int getLikes();
 	int getDislikes();
-	boolean canRate(String username);
-	
+	boolean canRate(String username);	
 	PostLikes clone();
 }

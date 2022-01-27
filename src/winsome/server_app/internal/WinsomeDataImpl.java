@@ -19,14 +19,16 @@ public class WinsomeDataImpl implements Cloneable, WinsomeData
 	@JsonProperty() private final ConcurrentMap<Integer, GenericPost> posts;
 	@JsonProperty() private final ConcurrentMap<String, User> users;
 	@JsonIgnore() private PostFactory post_factory;
-	@JsonIgnore() private FollowerUpdaterRegistratorHandler follower_updater = null;
-	@JsonIgnore() private WalletNotificationUpdater wallet_updater = null;
+	@JsonIgnore() private FollowerUpdaterRegistratorHandler follower_updater;
+	@JsonIgnore() private WalletNotificationUpdater wallet_updater;
 	
 	public WinsomeDataImpl()
 	{
 		posts = new ConcurrentHashMap<Integer, GenericPost>();
 		users = new ConcurrentHashMap<String, User>();
 		post_factory = null;
+		follower_updater = null;
+		wallet_updater = null;
 	}
 
 	@Override

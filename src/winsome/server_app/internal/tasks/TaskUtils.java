@@ -3,6 +3,8 @@ package winsome.server_app.internal.tasks;
 import java.util.HashSet;
 import java.util.Set;
 
+import winsome.client_app.api.exceptions.PostDoesNotExistException;
+import winsome.client_app.api.exceptions.UserDoesNotExistException;
 import winsome.server_app.internal.WinsomeData;
 import winsome.server_app.post.Content;
 import winsome.server_app.post.ContentPost;
@@ -14,17 +16,12 @@ public class TaskUtils
 {
 	private TaskUtils() { }
 	
-	public static boolean doesUserExist(String username, WinsomeData server_data)
-	{
-		return server_data.getUsers().containsKey(username);
-	}
-	
 	public static User getUser(String username, WinsomeData server_data)
 	{
 		User user = server_data.getUsers().get(username);
 		if(user == null)
 		{
-			throw new RuntimeException("Given user with username " + username + " does not exist.");
+			throw new UserDoesNotExistException(username);
 		}
 		else
 		{
@@ -32,17 +29,12 @@ public class TaskUtils
 		}
 	}
 	
-	public static boolean doesPostExist(Integer postId, WinsomeData server_data)
-	{
-		return server_data.getPosts().containsKey(postId);
-	}
-	
 	public static GenericPost getPost(Integer postId, WinsomeData server_data)
 	{
 		GenericPost post = server_data.getPosts().get(postId);
 		if(post == null)
 		{
-			throw new RuntimeException("Given post with id " + postId.toString() + " does not exist.");
+			throw new PostDoesNotExistException(postId);
 		}
 		else
 		{
@@ -62,7 +54,8 @@ public class TaskUtils
 		
 		if(post.isRewin())
 		{
-			return getOriginalPostId(((RewinPost)post).getOriginalPostId(), server_data);
+			Integer original_postId = ((RewinPost)post).getOriginalPostId();	
+			return getOriginalPostId( original_postId, server_data );
 		}
 		else
 		{
@@ -76,40 +69,61 @@ public class TaskUtils
 		
 		if(post.isRewin())
 		{
-			Integer original_postId = ((RewinPost)post).getOriginalPostId();
-			
-			return getPostContent(original_postId, server_data);
+			Integer original_postId = ((RewinPost)post).getOriginalPostId();			
+			return getPostContent( original_postId, server_data );
 		}
 		else
 		{
-			StringBuilder title = new StringBuilder();
-			StringBuilder author = new StringBuilder();
-			StringBuilder content = new StringBuilder();
-			lockPost(post, () -> {
-				title.append( ((ContentPost)post).content.title );
-				author.append( ((ContentPost)post).content.author );
-				content.append( ((ContentPost)post).content.content );				
-			});
-			
-			return new Content(title.toString(), author.toString(), content.toString());
+			return getPostContent( (ContentPost)post );
 		}
+	}
+	
+	private static Content getPostContent(ContentPost post)
+	{
+		StringBuilder title = new StringBuilder();
+		StringBuilder author = new StringBuilder();
+		StringBuilder content = new StringBuilder();
+		lockPost(post, () ->
+		{
+			title.append( post.content.title );
+			author.append( post.content.author );
+			content.append( post.content.content );
+		});
+		
+		return new Content(title.toString(), author.toString(), content.toString());
 	}
 	
 	public static void deletePost(Integer postId, WinsomeData server_data)
 	{
 		GenericPost post = getPost(postId, server_data);
 
+		Set<Integer> rewins = getRewinsAndMarkPostForDeletion(post);
+		deleteRewins(rewins, server_data);
+		effectivelyDeletePost(post, server_data);
+	}
+	
+	private static Set<Integer> getRewinsAndMarkPostForDeletion(GenericPost post)
+	{
 		Set<Integer> rewins = new HashSet<Integer>();
 		lockPost(post, () ->
 		{
 			post.markForDeletion();
 			rewins.addAll(post.getRewins());
 		});
-		
+		return rewins;
+	}
+	
+	private static void deleteRewins(Set<Integer> rewins, WinsomeData server_data)
+	{
 		for(Integer rewin : rewins)
 		{
 			deletePost(rewin, server_data);
 		}
+	}
+	
+	private static void effectivelyDeletePost(GenericPost post, WinsomeData server_data)
+	{
+		Integer postId = post.postId;
 		
 		User user = getUser(post.getAuthor(), server_data);
 		
@@ -119,22 +133,25 @@ public class TaskUtils
 			
 			lockUserThenPosts(user, original_post, post, () ->
 			{
-				user.deletePost(postId);
+				effectivelyDeletePost(user, postId, server_data);
 				original_post.removeRewin(postId);
-				server_data.getPosts().remove(postId);
-				server_data.getPostFactory().signalPostDeleted(postId);
 			});
 		}
 		else
 		{
 			lockUserThenPost(user, post, () ->
 			{
-				user.deletePost(postId);
-				server_data.getPosts().remove(postId);
-				server_data.getPostFactory().signalPostDeleted(postId);
+				effectivelyDeletePost(user, postId, server_data);
 			});
 		}
 	}
+	
+	private static void effectivelyDeletePost(User post_author, Integer postId, WinsomeData server_data)
+	{
+		post_author.deletePost(postId);
+		server_data.getPosts().remove(postId);
+		server_data.getPostFactory().signalPostDeleted(postId);
+	}	
 	
 	
 	
@@ -199,7 +216,7 @@ public class TaskUtils
 	{
 		int cmp = a.postId.compareTo(b.postId);
 		if(cmp == 0)
-			{ throw new RuntimeException("Can't have two posts with the same username."); }
+			{ throw new RuntimeException("Can't have two posts with the same identifier."); }
 		else if(cmp < 0)
 			{ lockTwoOrderedPosts(a, b, r); }
 		else

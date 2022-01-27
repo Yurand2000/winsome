@@ -27,12 +27,9 @@ public class RequestExceptionAnswer extends Message
 	{
 		private static final long serialVersionUID = 1L;
 		
-		public final String message;
-		
 		public Exception(String message)
 		{
-			super("Server answered with exception message: " + message);
-			this.message = message;
+			super(message);
 		}
 	}
 }

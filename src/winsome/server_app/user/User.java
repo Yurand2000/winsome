@@ -23,7 +23,7 @@ public class User implements Cloneable
 	@JsonProperty() private final Set<String> followers;
 	@JsonProperty() private final Set<String> following;
 	@JsonProperty() private final Set<Integer> posts;
-	@JsonProperty() public final Wallet wallet;
+	@JsonProperty() private final Wallet wallet;
 	
 	@SuppressWarnings("unused")
 	private User() { username = null; login = null; tags = null; followers = null; following = null; posts = null; wallet = null; }
@@ -148,9 +148,13 @@ public class User implements Cloneable
 		return posts.size();
 	}
 
-	@JsonIgnore()
-	public synchronized List<Integer> getPosts()
+	@JsonIgnore() public synchronized List<Integer> getPosts()
 	{
 		return new ArrayList<Integer>(posts);
+	}
+
+	@JsonIgnore() public Wallet getWallet()
+	{
+		return wallet;
 	}
 }

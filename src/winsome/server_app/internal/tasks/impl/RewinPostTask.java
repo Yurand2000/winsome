@@ -31,21 +31,26 @@ public class RewinPostTask extends LoggedUserTask
 		
 		TaskUtils.lockUserThenPosts(user, post, original_post, () ->
 		{
-			if(original_post.isNotMarkedForDeletion())
-			{
-				user.addPost(post.postId);
-				data.getPosts().put(post.postId, post);
-				original_post.addRewin(post.postId);
-			}
-			else
-			{
-				data.getPostFactory().signalPostDeleted(post.postId);
-				throw new RuntimeException("The given post does not exist.");
-			}
+			tryToRewinPost(original_post, post, user);
 		});
 		
 		RewinPostAnswer answer = new RewinPostAnswer(post.postId, TaskUtils.getPostContent(original_post.postId, data).title);
 		socket.sendAnswerMessage(answer);
+	}
+	
+	private void tryToRewinPost(GenericPost original_post, GenericPost post, User user)
+	{
+		if(original_post.isNotMarkedForDeletion())
+		{
+			user.addPost(post.postId);
+			data.getPosts().put(post.postId, post);
+			original_post.addRewin(post.postId);
+		}
+		else
+		{
+			data.getPostFactory().signalPostDeleted(post.postId);
+			throw new RuntimeException("The given post does not exist.");
+		}
 	}
 	
 	private void checkUserIsFollowingPostAuthor(User user, Integer postId)

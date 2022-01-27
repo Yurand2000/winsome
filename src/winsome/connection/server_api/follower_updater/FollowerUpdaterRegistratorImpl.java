@@ -18,7 +18,7 @@ public class FollowerUpdaterRegistratorImpl extends RemoteObject implements Foll
 		callback_updaters = new HashMap<String, FollowerUpdater>();
 	}
 	
-	public void notifyNewFollower(String user, String new_follower)
+	public synchronized void notifyNewFollower(String user, String new_follower)
 	{
 		try
 		{
@@ -32,7 +32,7 @@ public class FollowerUpdaterRegistratorImpl extends RemoteObject implements Foll
 		}
 	}
 	
-	public void notifyRemovedFollower(String user, String removed_follower)
+	public synchronized void notifyRemovedFollower(String user, String removed_follower)
 	{
 		try
 		{
@@ -52,14 +52,14 @@ public class FollowerUpdaterRegistratorImpl extends RemoteObject implements Foll
 	}
 
 	@Override
-	public void registerFollowerUpdater(FollowerUpdater callback_updater) throws RemoteException
+	public synchronized void registerFollowerUpdater(FollowerUpdater callback_updater) throws RemoteException
 	{
 		String username = callback_updater.getUserToUpdate();
 		callback_updaters.put(username, callback_updater);
 	}
 
 	@Override
-	public void unregisterFollowerUpdater(FollowerUpdater callback_updater) throws RemoteException
+	public synchronized void unregisterFollowerUpdater(FollowerUpdater callback_updater) throws RemoteException
 	{
 		String username = null;
 		try

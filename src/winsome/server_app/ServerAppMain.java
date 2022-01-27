@@ -40,6 +40,6 @@ public class ServerAppMain
 		System.out.println("*");
 		System.out.println("* Server reward timer (in seconds): " + settings.reward_timer_in_seconds);
 		System.out.println("* Server author / curator reward: " + settings.reward_author_part + " / " +
-		new BigDecimal(1).subtract(new BigDecimal(settings.reward_author_part)).toPlainString());
+			new BigDecimal(1).subtract(new BigDecimal(settings.reward_author_part)).toPlainString());
 	}
 }

@@ -12,14 +12,16 @@ public interface RewardState extends Cloneable
 	void addLike(String username);
 	void addDislike();
 	void addComment(String username);
-	Reward calcLastReward();
-	
+	Reward calcLastReward();	
 	RewardState clone();
 	
 	public static class Reward
 	{
 		@JsonProperty() public final Double reward;
 		@JsonProperty() public final Set<String> contributors;
+		
+		@SuppressWarnings("unused")
+		private Reward() { reward = null; contributors = null; }
 		
 		public Reward(double reward, Set<String> contributors)
 		{

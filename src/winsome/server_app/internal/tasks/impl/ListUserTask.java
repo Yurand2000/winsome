@@ -26,9 +26,15 @@ public class ListUserTask extends LoggedUserTask
 	@Override
 	public void executeTask(ServerThreadpool pool)
 	{
-		List<String> similar_users = new ArrayList<String>();
 		User user = getCurrentUser();
-		
+		List<String> similar_users = getSimilarUsers(user);
+		ListUserAnswer answer = new ListUserAnswer(similar_users.toArray(new String[0]));
+		socket.sendAnswerMessage(answer);
+	}
+	
+	private List<String> getSimilarUsers(User user)
+	{
+		List<String> similar_users = new ArrayList<String>();
 		for(User u : data.getUsers().values())
 		{
 			if(u.username != user.username && hasAtLeastOneTagInCommon(user, u))
@@ -36,9 +42,7 @@ public class ListUserTask extends LoggedUserTask
 				similar_users.add(u.username);
 			}
 		}
-		
-		ListUserAnswer answer = new ListUserAnswer(similar_users.toArray(new String[0]));
-		socket.sendAnswerMessage(answer);
+		return similar_users;
 	}
 	
 	private boolean hasAtLeastOneTagInCommon(User me, User other)

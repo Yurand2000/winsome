@@ -26,7 +26,7 @@ public class GetWalletInBitcoinTask extends LoggedUserTask
 	{
 		User user = getCurrentUser();
 		
-		GetWalletInBitcoinAnswer answer = makeWalletAnswer(user.wallet);
+		GetWalletInBitcoinAnswer answer = makeWalletAnswer(user.getWallet());
 		socket.sendAnswerMessage(answer);
 	}
 	

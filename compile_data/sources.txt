@@ -14,6 +14,8 @@ src/winsome/client_app/api/exceptions/ServerInternalException.java
 src/winsome/client_app/api/exceptions/TooManyTagsException.java
 src/winsome/client_app/api/exceptions/UnknownUsernameException.java
 src/winsome/client_app/api/exceptions/UsernameAlreadyTakenException.java
+src/winsome/client_app/api/exceptions/PostDoesNotExistException.java
+src/winsome/client_app/api/exceptions/UserDoesNotExistException.java
 src/winsome/client_app/api/LoggedClientAPI.java
 src/winsome/client_app/api/Post.java
 src/winsome/client_app/api/PostShort.java

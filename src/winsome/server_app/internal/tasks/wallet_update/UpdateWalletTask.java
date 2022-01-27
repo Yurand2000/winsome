@@ -32,7 +32,7 @@ public class UpdateWalletTask extends WinsomeTask
 	private void updateWallet()
 	{
 		User user = TaskUtils.getUser(username, data);
-		TaskUtils.lockUser(user, () -> { user.wallet.addTransaction(reward); });
+		TaskUtils.lockUser(user, () -> { user.getWallet().addTransaction(reward); });
 	}
 	
 	private void updateOperationCounter()

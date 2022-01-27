@@ -27,8 +27,8 @@ class TEST_GetWalletTask extends SocketTaskTest
 		task = new GetWalletTask(state, data, message);
 		
 		User user = UserFactory.makeNewUser("user", "pass", new Tag[]{ new Tag("tag1") });
-		user.wallet.addTransaction(50L);
-		user.wallet.addTransaction(70L);
+		user.getWallet().addTransaction(50L);
+		user.getWallet().addTransaction(70L);
 		data.getUsers().put( "user", user );
 		state.set_user_called = true;
 	}

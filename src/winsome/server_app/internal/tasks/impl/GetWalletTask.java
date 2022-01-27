@@ -29,7 +29,7 @@ public class GetWalletTask extends LoggedUserTask
 	{
 		User user = getCurrentUser();
 		
-		GetWalletAnswer answer = makeWalletAnswer(user.wallet);
+		GetWalletAnswer answer = makeWalletAnswer(user.getWallet());
 		socket.sendAnswerMessage(answer);
 	}
 	

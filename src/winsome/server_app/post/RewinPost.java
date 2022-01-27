@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("rewin_post")
 public class RewinPost extends GenericPost
 {
+	//constant fields;
 	@JsonProperty() private final Integer originalPostId;
 	@JsonProperty() private final String rewinAuthor;
 
@@ -43,13 +44,14 @@ public class RewinPost extends GenericPost
 		return rewinAuthor;
 	}
 	
+	@Override
 	public boolean isRewin()
 	{
 		return true;
 	}
 	
 	@Override
-	public RewinPost clone()
+	public synchronized RewinPost clone()
 	{
 		return new RewinPost(this);
 	}

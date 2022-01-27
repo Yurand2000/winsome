@@ -9,8 +9,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 public interface PostComments extends Cloneable
 {
 	void addComment(String username, String comment);
-	List<Comment> getComments();
-	
+	List<Comment> getComments();	
 	PostComments clone();
 
 	public static class Comment

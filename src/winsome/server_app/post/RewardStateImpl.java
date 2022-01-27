@@ -86,12 +86,18 @@ public class RewardStateImpl implements RewardState
 	@Override
 	public RewardStateImpl clone()
 	{
+		return new RewardStateImpl(iteration_count, total_likes,
+			recent_likers, recent_commentors, cloneCommentCount());
+	}
+	
+	private Map<String, CommentCounter> cloneCommentCount()
+	{
 		Map<String, CommentCounter> comment_counters = new HashMap<String, CommentCounter>();
 		for(Map.Entry<String, CommentCounter> entry : comment_count_per_user.entrySet())
 		{
 			comment_counters.put(entry.getKey(), entry.getValue().clone());
 		}
-		return new RewardStateImpl(iteration_count, total_likes, recent_likers, recent_commentors, comment_counters);
+		return comment_counters;
 	}
 	
 	private double calcTotalReward()

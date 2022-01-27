@@ -179,7 +179,7 @@ class TEST_User
 		user.addFollower("a");
 		user.addFollowing("b");
 		user.addPost(90);
-		user.wallet.addTransaction(50L);
+		user.getWallet().addTransaction(50L);
 		assertDoesNotThrow(() -> { byte[] data = SerializerWrapper.serialize(user); } );
 		
 		byte[] data = SerializerWrapper.serialize(user);
@@ -192,6 +192,6 @@ class TEST_User
 		assertTrue(u.isFollowedBy("a"));
 		assertTrue(u.isFollowing("b"));
 		assertTrue(u.isAuthorOfPost(90));
-		assertEquals(u.wallet.getCurrentTotal(), user.wallet.getCurrentTotal());
+		assertEquals(u.getWallet().getCurrentTotal(), user.getWallet().getCurrentTotal());
 	}
 }

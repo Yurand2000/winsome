@@ -56,7 +56,7 @@ public class ApplicationAPIImpl implements ApplicationAPI
 		{
 			try
 			{
-				tryLogin(password, password);
+				tryLogin(username, password);
 			}
 			catch (IOException | NotBoundException e)
 			{

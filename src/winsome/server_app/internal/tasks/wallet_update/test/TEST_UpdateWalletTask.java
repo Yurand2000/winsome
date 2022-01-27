@@ -32,8 +32,8 @@ class TEST_UpdateWalletTask extends WalletUpdateTest
 	@Test
 	void test()
 	{
-		assertEquals(data.getUsers().get("user").wallet.getCurrentTotal(), 0L);
-		assertEquals(data.getUsers().get("user2").wallet.getCurrentTotal(), 0L);
+		assertEquals(data.getUsers().get("user").getWallet().getCurrentTotal(), 0L);
+		assertEquals(data.getUsers().get("user2").getWallet().getCurrentTotal(), 0L);
 		assertEquals(total_wallet_updates.get(), 10);
 		assertFalse(data.getWalletUpdater().notifyWalletUpdated_called);
 		
@@ -41,16 +41,16 @@ class TEST_UpdateWalletTask extends WalletUpdateTest
 
 		assertFalse(data.getWalletUpdater().notifyWalletUpdated_called);
 		assertEquals(total_wallet_updates.get(), 9);
-		assertEquals(data.getUsers().get("user").wallet.getCurrentTotal(), 50L);
-		assertEquals(data.getUsers().get("user2").wallet.getCurrentTotal(), 0L);
+		assertEquals(data.getUsers().get("user").getWallet().getCurrentTotal(), 50L);
+		assertEquals(data.getUsers().get("user2").getWallet().getCurrentTotal(), 0L);
 	}
 
 	@Test
 	void testNotifyWalletsUpdated()
 	{
 		total_wallet_updates.set(1);
-		assertEquals(data.getUsers().get("user").wallet.getCurrentTotal(), 0L);
-		assertEquals(data.getUsers().get("user2").wallet.getCurrentTotal(), 0L);
+		assertEquals(data.getUsers().get("user").getWallet().getCurrentTotal(), 0L);
+		assertEquals(data.getUsers().get("user2").getWallet().getCurrentTotal(), 0L);
 		assertEquals(total_wallet_updates.get(), 1);
 		assertFalse(data.getWalletUpdater().notifyWalletUpdated_called);
 		
@@ -58,7 +58,7 @@ class TEST_UpdateWalletTask extends WalletUpdateTest
 
 		assertTrue(data.getWalletUpdater().notifyWalletUpdated_called);
 		assertEquals(total_wallet_updates.get(), 0);
-		assertEquals(data.getUsers().get("user").wallet.getCurrentTotal(), 50L);
-		assertEquals(data.getUsers().get("user2").wallet.getCurrentTotal(), 0L);
+		assertEquals(data.getUsers().get("user").getWallet().getCurrentTotal(), 50L);
+		assertEquals(data.getUsers().get("user2").getWallet().getCurrentTotal(), 0L);
 	}
 }

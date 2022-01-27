@@ -47,20 +47,23 @@ public abstract class GenericPost implements Cloneable
 	@JsonIgnore() public abstract boolean isRewin();
 	
 	@JsonIgnore() public abstract String getAuthor();
+
+	public abstract GenericPost clone();
 	
-	@JsonIgnore() public boolean isNotMarkedForDeletion()
+	@JsonIgnore()
+	public synchronized boolean isNotMarkedForDeletion()
 	{
 		return !markedForDeletion;		
 	}
 	
-	@JsonIgnore() public void markForDeletion()
+	@JsonIgnore()
+	public synchronized void markForDeletion()
 	{
 		markedForDeletion = true;
 	}
-
-	public abstract GenericPost clone();
 	
-	@JsonIgnore() public synchronized Set<Integer> getRewins()
+	@JsonIgnore()
+	public synchronized Set<Integer> getRewins()
 	{
 		return new HashSet<Integer>(rewins);
 	}	
@@ -98,17 +101,20 @@ public abstract class GenericPost implements Cloneable
 		return reward_state.calcLastReward();
 	}
 	
-	@JsonIgnore() public synchronized Integer getPositiveRatings()
+	@JsonIgnore()
+	public synchronized Integer getPositiveRatings()
 	{
 		return likes.getLikes();
 	}
 	
-	@JsonIgnore() public synchronized Integer getNegativeRatings()
+	@JsonIgnore()
+	public synchronized Integer getNegativeRatings()
 	{
 		return likes.getDislikes();
 	}
 	
-	@JsonIgnore() public synchronized List<Comment> getComments()
+	@JsonIgnore()
+	public synchronized List<Comment> getComments()
 	{
 		return comments.getComments();
 	}

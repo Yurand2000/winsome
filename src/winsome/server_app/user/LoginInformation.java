@@ -1,6 +1,7 @@
 package winsome.server_app.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.Instant;
 
 public class LoginInformation
 {
@@ -12,7 +13,7 @@ public class LoginInformation
 	
 	public LoginInformation(String password)
 	{
-		random_integer = java.time.Instant.now().toEpochMilli();
+		random_integer = Instant.now().toEpochMilli();
 		password_digest = PasswordDigester.instance().digestPassword(password, random_integer);
 	}
 	

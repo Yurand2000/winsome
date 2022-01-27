@@ -42,14 +42,14 @@ public class CommentPostTask extends LoggedUserTask
 		
 		if(user.username == post_author)
 		{
-			throw new RuntimeException("Cannot rate your own post.");
+			throw new RuntimeException("Cannot comment your own post.");
 		}
 		
 		TaskUtils.lockUser(user, () ->
 		{			
 			if(!user.getFollowing().contains(post_author))
 			{
-				throw new RuntimeException("The user is not following the author of the post to rewin.");
+				throw new RuntimeException("The user is not following the author of the post to comment.");
 			}
 		});
 	}

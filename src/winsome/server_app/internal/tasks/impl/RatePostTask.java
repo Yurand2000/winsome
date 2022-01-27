@@ -52,7 +52,7 @@ public class RatePostTask extends LoggedUserTask
 		{			
 			if(!user.getFollowing().contains(post_author))
 			{
-				throw new RuntimeException("The user is not following the author of the post to rewin.");
+				throw new RuntimeException("The user is not following the author of the post to rate.");
 			}
 		});
 	}

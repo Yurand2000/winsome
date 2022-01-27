@@ -21,8 +21,8 @@ class TEST_UserFactory
 		assertEquals(new_user.tags.size(), 1);
 		assertTrue(new_user.tags.get(0).equals(new Tag("sport")));
 		
-		assertEquals(new_user.wallet.getCurrentTotal(), 0);
-		assertTrue(new_user.wallet.getTransactions().isEmpty());
+		assertEquals(new_user.getWallet().getCurrentTotal(), 0);
+		assertTrue(new_user.getWallet().getTransactions().isEmpty());
 		
 		assertEquals(new_user.countFollowers(), 0);
 		assertEquals(new_user.countFollowing(), 0);

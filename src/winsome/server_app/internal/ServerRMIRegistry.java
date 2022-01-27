@@ -15,7 +15,7 @@ public class ServerRMIRegistry
 	{
 		System.setProperty("java.rmi.server.hostname", hostname);
 		registry = LocateRegistry.createRegistry( port );
-		//after this call, the registry port will be permanently bound to a socket until program shutdown
+		//after this call, the registry port will be permanently bound to a socket with the given port until jvm destruction (program shutdown)
 	}
 	
 	public static void shutdownRegistry() throws IOException
