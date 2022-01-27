@@ -21,8 +21,6 @@ public class DeletePostExecutor extends DefaultTaskExecutor
 	{		
 		DeletePostRequest request = new DeletePostRequest(postId);
 		connection.sendMessage(request);
-		
-		@SuppressWarnings("unused")
-		DeletePostAnswer answer = connection.readMessage(DeletePostAnswer.class);
+		connection.readMessage(DeletePostAnswer.class);
 	}
 }

@@ -10,7 +10,10 @@ public class HelpExecutor extends ConsoleCommandExecutor
 	}
 
 	@Override 
-	protected boolean canExecute(String line) { return line.equals("help"); }
+	protected boolean canExecute(String line)
+	{
+		return line.equals("help");
+	}
 	
 	@Override
 	protected String execute(String line)

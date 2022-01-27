@@ -61,14 +61,17 @@ public class FollowerUpdaterRegistratorImpl extends RemoteObject implements Foll
 	@Override
 	public void unregisterFollowerUpdater(FollowerUpdater callback_updater) throws RemoteException
 	{
+		String username = null;
 		try
 		{
-			String username = callback_updater.getUserToUpdate();
-			callback_updaters.remove(username);
+			username = callback_updater.getUserToUpdate();
 		}
 		catch (RemoteException e)
 		{
-			String username = inverselyFindUserUpdater(callback_updater);
+			username = inverselyFindUserUpdater(callback_updater);
+		}
+		finally
+		{
 			unregisterFollowerUpdater(username);
 		}
 	}

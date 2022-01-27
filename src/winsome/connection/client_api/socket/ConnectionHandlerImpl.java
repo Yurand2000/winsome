@@ -45,7 +45,7 @@ public class ConnectionHandlerImpl implements ConnectionHandler
 		}
 		else
 		{
-			throw new ServerInternalException("could not deserialize message.");
+			throw new ServerInternalException("Could not deserialize message.");
 		}
 	}
 	

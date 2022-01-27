@@ -12,7 +12,10 @@ public class ExitExecutor extends ConsoleCommandExecutor
 	}
 
 	@Override 
-	protected boolean canExecute(String line) { return line.equals("exit"); }
+	protected boolean canExecute(String line)
+	{
+		return line.equals("exit");
+	}
 	
 	@Override
 	protected String execute(String line)

@@ -25,8 +25,7 @@ public class SocketWriterImpl implements SocketWriter
 		}
 		catch (IOException e)
 		{
-			key.cancel();
-			key.channel().close();
+			SocketUtils.destroyKey(key);
 			throw e;
 		}
 	}

@@ -4,12 +4,13 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.util.Arrays;
 
 import winsome.connection.protocols.WalletNotification;
 
 public class WalletNotificationUpdaterImpl implements WalletNotificationUpdater, Runnable
 {
-	private InetAddress multicast_address;
+	private InetAddress address;
 	private MulticastSocket socket;
 	private Thread notifier_thread;
 	private Runnable notification_task;
@@ -28,15 +29,7 @@ public class WalletNotificationUpdaterImpl implements WalletNotificationUpdater,
 	{
 		try
 		{
-			multicast_address = InetAddress.getByName(address);
-			if(multicast_address == null || !multicast_address.isMulticastAddress())
-			{
-				throw new RuntimeException("given address " + address  + " is not a multicast address");
-			}
-			notification_task = task;
-			socket = new MulticastSocket(port);
-			notifier_thread = new Thread(this);
-			notifier_thread.start();
+			tryRegisterForUpdates(address, port, task);
 		}
 		catch (IOException e)
 		{
@@ -45,14 +38,44 @@ public class WalletNotificationUpdaterImpl implements WalletNotificationUpdater,
 		}
 	}
 	
+	private void tryRegisterForUpdates(String address_name, Integer port, Runnable task) throws IOException
+	{
+		address = InetAddress.getByName(address_name);
+		checkMulticastAddress(address_name, address);
+		notification_task = task;
+		
+		socket = new MulticastSocket(port);
+		notifier_thread = new Thread(this);
+		notifier_thread.start();
+	}
+	
+	private void checkMulticastAddress(String address_name, InetAddress address)
+	{
+		if(address == null || !address.isMulticastAddress())
+		{
+			throw new RuntimeException("given address " + address_name + " is not a multicast address");
+		}
+	}
+	
 	public void unregisterWalletUpdateNotifications()
+	{
+		closeSocket();
+		stopNotifierThread();
+		notification_task = null;
+		address = null;
+	}
+	
+	private void closeSocket()
 	{
 		if(socket != null)
 		{
 			socket.close();
 			socket = null;
 		}
-		
+	}
+	
+	private void stopNotifierThread()
+	{
 		if(notifier_thread != null)
 		{
 			try
@@ -66,9 +89,6 @@ public class WalletNotificationUpdaterImpl implements WalletNotificationUpdater,
 				notifier_thread = null;
 			}
 		}
-		
-		notification_task = null;
-		multicast_address = null;
 	}
 	
 	@Override
@@ -92,7 +112,7 @@ public class WalletNotificationUpdaterImpl implements WalletNotificationUpdater,
 	
 	private void setupUdpSocket() throws IOException
 	{
-		socket.joinGroup(multicast_address);
+		socket.joinGroup(address);
 	}
 	
 	private void waitForPacket()
@@ -108,19 +128,9 @@ public class WalletNotificationUpdaterImpl implements WalletNotificationUpdater,
 	}
 	
 	private boolean incomingPacketIsWalletNotification()
-	{
-		if(incoming_packet.getLength() != WalletNotification.getNotificationMessage().length)
-		{
-			return false;
-		}
-		
-		byte[] incoming = incoming_packet.getData();
+	{		
+		byte[] incoming = Arrays.copyOf(incoming_packet.getData(), incoming_packet.getLength());
 		byte[] expected = WalletNotification.getNotificationMessage();
-		for(int i = 0; i < incoming_packet.getLength(); i++)
-		{
-			if(incoming[i] != expected[i])
-				return false;
-		}
-		return true;
+		return Arrays.equals(incoming, expected);
 	}
 }

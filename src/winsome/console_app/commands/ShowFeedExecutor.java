@@ -30,14 +30,28 @@ public class ShowFeedExecutor extends ConsoleCommandExecutor
 	@Override
 	protected String execute(String line)
 	{		
-		List<PostShort> blog = ClientAppAPI.getLoggedClientAPI().showFeed();
+		List<PostShort> feed = ClientAppAPI.getLoggedClientAPI().showFeed();
+		return createDisplayString(feed);
+	}
+	
+	private String createDisplayString(List<PostShort> feed)
+	{
 		StringBuilder string = new StringBuilder();
 		string.append("My Feed:");
-		for(PostShort post : blog)
+		
+		if(feed.isEmpty())
 		{
-			string.append("\n  ");
-			string.append(post.toString());
+			string.append(" no one you follow has posted anything.");
 		}
+		else
+		{
+			for(PostShort post : feed)
+			{
+				string.append("\n  ");
+				string.append(post.toString());
+			}
+		}
+		
 		return string.toString();
 	}
 }

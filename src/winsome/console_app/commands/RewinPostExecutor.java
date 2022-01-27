@@ -28,11 +28,15 @@ public class RewinPostExecutor extends ConsoleCommandExecutor
 	@Override
 	protected String execute(String line)
 	{
-		Matcher matcher = regex.matcher(line);
-		matcher.find();
-		Integer postId = Integer.parseInt(matcher.group(1));
-		
+		Integer postId = getPostId(line);
 		Integer newPostId = ClientAppAPI.getLoggedClientAPI().rewinPost(postId);
 		return "Successfully rewinned post \"" + postId.toString() + "\". New post id is: \"" + newPostId + "\"";
+	}
+	
+	private Integer getPostId(String line)
+	{
+		Matcher matcher = regex.matcher(line);
+		matcher.find();
+		return Integer.parseInt(matcher.group(1));
 	}
 }

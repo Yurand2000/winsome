@@ -31,12 +31,25 @@ public class ListFollowersExecutor extends ConsoleCommandExecutor
 	protected String execute(String line)
 	{		
 		List<User> users = ClientAppAPI.getLoggedClientAPI().listFollowers();
+		return createDisplayString(users);
+	}
+	
+	private String createDisplayString(List<User> users)
+	{
 		StringBuilder string = new StringBuilder();
-		string.append("My followers:");
-		for(User user : users)
+		
+		string.append("My followers:");		
+		if(users.isEmpty())
 		{
-			string.append("\n  ");
-			string.append(user.username);
+			string.append(" you have no followers");
+		}
+		else
+		{
+			for(User user : users)
+			{
+				string.append("\n  ");
+				string.append(user.username);
+			}
 		}
 		return string.toString();
 	}

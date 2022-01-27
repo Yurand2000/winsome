@@ -23,8 +23,6 @@ public class CommentPostExecutor extends DefaultTaskExecutor
 	{		
 		CommentPostRequest request = new CommentPostRequest(postId, comment);
 		connection.sendMessage(request);
-		
-		@SuppressWarnings("unused")
-		CommentPostAnswer answer = connection.readMessage(CommentPostAnswer.class);
+		connection.readMessage(CommentPostAnswer.class);
 	}
 }

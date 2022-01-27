@@ -42,12 +42,21 @@ public class ClientHandler implements Runnable
 	
 	public void startClientHandler() throws IOException
 	{
+		setupSelectorAndAcceptorSocket();
+		setupSelectorThread();
+	}
+	
+	private void setupSelectorAndAcceptorSocket() throws IOException
+	{
 		selector = Selector.open();
 		listening_socket = ServerSocketChannel.open();
 		listening_socket.socket().bind(address);
 		listening_socket.configureBlocking(false);
 		listening_socket.register(selector, SelectionKey.OP_ACCEPT);
-		
+	}
+	
+	private void setupSelectorThread()
+	{
 		pausable_runnable_monitor = new PausableRunnableMonitor();
 		selector_thread = new Thread(pausable_runnable_monitor.makePausableRunnable(this));
 		selector_thread.start();
@@ -84,15 +93,15 @@ public class ClientHandler implements Runnable
 	{
 		while(!Thread.currentThread().isInterrupted())
 		{
-			tryRunClientHandler();
+			runClientHandler();
 		}
 	}
 	
-	private void tryRunClientHandler()
+	private void runClientHandler()
 	{
 		try
 		{
-			runClientHandler();
+			tryRunClientHandler();
 		}
 		catch (IOException e)
 		{
@@ -100,31 +109,30 @@ public class ClientHandler implements Runnable
 		}
 	}
 	
-	private void runClientHandler() throws IOException
+	private void tryRunClientHandler() throws IOException
 	{
-		int ready_keys = selector.select();
-		if(ready_keys != 0)
+		if(selector.select() != 0)
 		{
-			Iterator<SelectionKey> keys_iterator = selector.selectedKeys().iterator();
-			while(keys_iterator.hasNext())
+			Iterator<SelectionKey> selected_keys = selector.selectedKeys().iterator();
+			while(selected_keys.hasNext())
 			{
-				executeIterator(keys_iterator.next());
-				keys_iterator.remove();
+				handleChannel(selected_keys.next());
+				selected_keys.remove();
 			}
 		}
 	}
 	
-	private void executeIterator(SelectionKey key)
+	private void handleChannel(SelectionKey key)
 	{
 		try
 		{
 			if(key.isAcceptable())
 			{
-				executeAcceptableKey(key);
+				handleAcceptableChannel(key);
 			}
 			else
 			{
-				executeReadWriteKey(key);
+				handleReadWriteChannel(key);
 			}
 		}
 		catch (IOException e)
@@ -133,16 +141,20 @@ public class ClientHandler implements Runnable
 		}
 	}
 	
-	private void executeAcceptableKey(SelectionKey key) throws IOException
+	private void handleAcceptableChannel(SelectionKey key) throws IOException
 	{
 		SocketChannel new_channel = listening_socket.accept();
-		new_channel.configureBlocking(false);
-		
-		SelectionKey new_key = new_channel.register(selector, SelectionKey.OP_READ);
-		new_key.attach(new SocketStateImpl(new_key, common_state));
+		configureNewChannel(new_channel);
 	}
 	
-	private void executeReadWriteKey(SelectionKey key)
+	private void configureNewChannel(SocketChannel new_channel) throws IOException
+	{
+		new_channel.configureBlocking(false);		
+		SelectionKey new_key = new_channel.register(selector, SelectionKey.OP_READ);
+		new_key.attach( new SocketStateImpl(new_key, common_state) );
+	}
+	
+	private void handleReadWriteChannel(SelectionKey key)
 	{
 		key.interestOps(0);
 		SocketState socket = (SocketState) key.attachment();

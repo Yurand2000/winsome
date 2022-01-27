@@ -27,11 +27,16 @@ public class UnfollowUserExecutor extends ConsoleCommandExecutor
 	
 	@Override
 	protected String execute(String line)
-	{		
-		Matcher matcher = regex.matcher(line);
-		matcher.find();
-		String username = matcher.group(1);
+	{
+		String username = getUsername(line);
 		ClientAppAPI.getLoggedClientAPI().unfollowUser(username);
 		return "Not following user \"" + username + "\" anymore.";
+	}
+	
+	private String getUsername(String line)
+	{
+		Matcher matcher = regex.matcher(line);
+		matcher.find();
+		return matcher.group(1);
 	}
 }

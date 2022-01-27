@@ -27,10 +27,10 @@ public class ConsoleExecutor
 	
 	public static void startConsoleExecutor()
 	{
-		instance().startConsoleExecutorPrivate();
+		instance().__startConsoleExecutor();
 	}
 	
-	private void startConsoleExecutorPrivate()
+	private void __startConsoleExecutor()
 	{
 		if(consoleExecutorThread == null)
 		{
@@ -47,10 +47,10 @@ public class ConsoleExecutor
 	
 	public static void joinConsoleExecutor() throws InterruptedException
 	{
-		instance().joinConsoleExecutorPrivate();
+		instance().__joinConsoleExecutor();
 	}
 	
-	private void joinConsoleExecutorPrivate() throws InterruptedException
+	private void __joinConsoleExecutor() throws InterruptedException
 	{
 		if(consoleExecutorThread != null)
 		{
@@ -61,21 +61,15 @@ public class ConsoleExecutor
 	
 	public static void setExecutorChain(List<Class<? extends ConsoleCommandExecutor>> executors)
 	{
-		instance().setExecutorChainPrivate(executors);
+		instance().__setExecutorChain(executors);
 	}
 	
-	private void setExecutorChainPrivate(List<Class<? extends ConsoleCommandExecutor>> executors)
+	private void __setExecutorChain(List<Class<? extends ConsoleCommandExecutor>> executors)
 	{
 		try
 		{
-			ConsoleCommandExecutor root = null;
-			
-			for(Class<? extends ConsoleCommandExecutor> executor_class : executors)
-			{
-				root = executor_class.getConstructor(ConsoleCommandExecutor.class).newInstance(root);
-			}
-			
-			setExecutorChainPrivate(root);
+			ConsoleCommandExecutor chain = createExecutorChain(executors);
+			consoleExecutorRunnable.setExecutorChain(chain);
 		}
 		catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | NoSuchMethodException | SecurityException e)
@@ -85,8 +79,16 @@ public class ConsoleExecutor
 		}
 	}
 	
-	private void setExecutorChainPrivate(ConsoleCommandExecutor executor_chain)
-	{		
-		consoleExecutorRunnable.setExecutorChain(executor_chain);
+	private ConsoleCommandExecutor createExecutorChain(List<Class<? extends ConsoleCommandExecutor>> executors)
+		throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException
+	{
+		ConsoleCommandExecutor root = null;
+		
+		for(Class<? extends ConsoleCommandExecutor> executor_class : executors)
+		{
+			root = executor_class.getConstructor(ConsoleCommandExecutor.class).newInstance(root);
+		}
+		
+		return root;
 	}
 }

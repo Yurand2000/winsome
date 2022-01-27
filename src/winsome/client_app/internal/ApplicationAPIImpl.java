@@ -56,11 +56,7 @@ public class ApplicationAPIImpl implements ApplicationAPI
 		{
 			try
 			{
-				
-					client_connection = new ConnectionHandlerImpl(server_address);
-					logged_client = new ApplicationLoggedAPIImpl(server_address.getHostString(), server_rmi_port, username, client_connection);
-					
-					executeTask(new LoginTaskExecutor(username, password, wallet_notification_runnable));
+				tryLogin(password, password);
 			}
 			catch (IOException | NotBoundException e)
 			{
@@ -81,6 +77,14 @@ public class ApplicationAPIImpl implements ApplicationAPI
 		{
 			throw new AlreadyLoggedInException();
 		}
+	}
+	
+	private void tryLogin(String username, String password) throws IOException, NotBoundException
+	{
+		client_connection = new ConnectionHandlerImpl(server_address);
+		logged_client = new ApplicationLoggedAPIImpl(server_address.getHostString(), server_rmi_port, username, client_connection);
+	
+		executeTask(new LoginTaskExecutor(username, password, wallet_notification_runnable));
 	}
 
 	@Override

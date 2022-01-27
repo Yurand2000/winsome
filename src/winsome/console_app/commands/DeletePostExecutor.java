@@ -28,11 +28,15 @@ public class DeletePostExecutor extends ConsoleCommandExecutor
 	@Override
 	protected String execute(String line)
 	{
-		Matcher matcher = regex.matcher(line);
-		matcher.find();
-		Integer postId = Integer.parseInt(matcher.group(1));
-		
+		Integer postId = getPostId(line);		
 		ClientAppAPI.getLoggedClientAPI().deletePost(postId);
 		return "Successfully deleted post \"" + postId.toString() + "\".";
+	}
+	
+	private Integer getPostId(String line)
+	{
+		Matcher matcher = regex.matcher(line);
+		matcher.find();
+		return Integer.parseInt(matcher.group(1));
 	}
 }

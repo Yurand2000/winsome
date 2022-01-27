@@ -38,4 +38,10 @@ public class SocketUtils
 			return new byte[0];
 		}
 	}
+	
+	public static void destroyKey(SelectionKey key) throws IOException
+	{
+		key.cancel();
+		key.channel().close();
+	}
 }

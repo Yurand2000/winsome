@@ -31,13 +31,27 @@ public class ViewBlogExecutor extends ConsoleCommandExecutor
 	protected String execute(String line)
 	{		
 		List<PostShort> blog = ClientAppAPI.getLoggedClientAPI().viewBlog();
+		return createDisplayString(blog);
+	}
+	
+	private String createDisplayString(List<PostShort> blog)
+	{
 		StringBuilder string = new StringBuilder();
-		string.append("My Blog:");
-		for(PostShort post : blog)
+		
+		string.append("My Blog:");		
+		if(blog.isEmpty())
 		{
-			string.append("\n  ");
-			string.append(post.toString());
+			string.append(" you haven't created any post.");
 		}
+		else
+		{
+			for(PostShort post : blog)
+			{
+				string.append("\n  ");
+				string.append(post.toString());
+			}
+		}
+		
 		return string.toString();
 	}
 }

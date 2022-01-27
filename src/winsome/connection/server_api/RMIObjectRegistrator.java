@@ -2,6 +2,7 @@ package winsome.connection.server_api;
 
 import java.io.IOException;
 import java.rmi.AlreadyBoundException;
+import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -24,18 +25,24 @@ public class RMIObjectRegistrator<T extends Remote>
 	
 	public void bindObject() throws IOException, AlreadyBoundException
 	{
-        getRegistry().bind( object_name, generateStub() );
-	}
-	
-	public void unbindObject() throws IOException, NotBoundException
-	{
-		getRegistry().unbind( object_name );
-		UnicastRemoteObject.unexportObject( object, true );
+		Remote stub = generateStub();
+        getRegistry().bind( object_name, stub );
 	}
 	
 	private Remote generateStub() throws RemoteException
 	{
 		return UnicastRemoteObject.exportObject( object, registry_port );
+	}
+	
+	public void unbindObject() throws IOException, NotBoundException
+	{
+		getRegistry().unbind( object_name );
+		destroyStub();
+	}
+	
+	private void destroyStub() throws NoSuchObjectException
+	{
+		UnicastRemoteObject.unexportObject( object, true );
 	}
 	
 	private Registry getRegistry() throws RemoteException

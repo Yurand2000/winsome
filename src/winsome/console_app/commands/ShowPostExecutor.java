@@ -29,12 +29,16 @@ public class ShowPostExecutor extends ConsoleCommandExecutor
 	@Override
 	protected String execute(String line)
 	{
-		Matcher matcher = regex.matcher(line);
-		matcher.find();
-		Integer postId = Integer.parseInt(matcher.group(1));
-		
+		Integer postId = getPostId(line);		
 		Post post = ClientAppAPI.getLoggedClientAPI().showPost(postId);
 		return printPost(post);
+	}
+	
+	private Integer getPostId(String line)
+	{
+		Matcher matcher = regex.matcher(line);
+		matcher.find();
+		return Integer.parseInt(matcher.group(1));
 	}
 	
 	private String printPost(Post post)
@@ -58,14 +62,14 @@ public class ShowPostExecutor extends ConsoleCommandExecutor
 	
 	private String postToString(Post post)
 	{
-		StringBuilder string = new StringBuilder();
-		string.append(
+		StringBuilder builder = new StringBuilder();
+		builder.append(
 			String.format(format_string, post.title, post.author,
 				post.content, post.positive_ratings.intValue(), post.negative_ratings.intValue())
 		);
 
-		appendComments(string, post);
-		return string.toString();
+		appendComments(builder, post);
+		return builder.toString();
 	}
 	
 	private static String rewin_format_string =
@@ -78,22 +82,22 @@ public class ShowPostExecutor extends ConsoleCommandExecutor
 				
 	private String rewinPostToString(Post post)
 	{
-		StringBuilder string = new StringBuilder();
-		string.append(
+		StringBuilder builder = new StringBuilder();
+		builder.append(
 			String.format(rewin_format_string, post.title, post.author, post.original_postId, post.original_author,
 				post.content, post.positive_ratings.intValue(), post.negative_ratings.intValue())
 		);
 		
-		appendComments(string, post);
-		return string.toString();
+		appendComments(builder, post);
+		return builder.toString();
 	}
 	
-	private void appendComments(StringBuilder string, Post post)
+	private void appendComments(StringBuilder builder, Post post)
 	{
 		for(Post.Comment comment : post.comments)
 		{
-			string.append("\n ");
-			string.append(comment.toString());
+			builder.append("\n ");
+			builder.append(comment.toString());
 		}
 	}
 }

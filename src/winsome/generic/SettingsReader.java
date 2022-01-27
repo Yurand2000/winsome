@@ -30,15 +30,21 @@ public class SettingsReader
 		byte[] data = readFile(filename);
 		if(data.length > 0)
 		{
-			try
-			{
-				return SerializerWrapper.deserialize(data, settings_class);
-			}
-			catch (IOException e) { }
-
-			return null;
+			return deserializeFromData(settings_class, data);
 		}
 		else
+		{
+			return null;
+		}
+	}
+	
+	private static <T extends SettingsReader> T deserializeFromData(Class<T> settings_class, byte[] data)
+	{
+		try
+		{
+			return SerializerWrapper.deserialize(data, settings_class);
+		}
+		catch (IOException e)
 		{
 			return null;
 		}

@@ -24,8 +24,7 @@ public class RewinPostExecutor extends DefaultTaskExecutor
 		RewinPostRequest request = new RewinPostRequest(postId);
 		connection.sendMessage(request);
 		
-		RewinPostAnswer answer = connection.readMessage(RewinPostAnswer.class);
-		
+		RewinPostAnswer answer = connection.readMessage(RewinPostAnswer.class);		
 		newPostId = answer.newPostId;
 	}
 	

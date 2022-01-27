@@ -36,26 +36,6 @@ public class SocketStateImpl implements SocketState
 	}
 
 	@Override
-	public String getClientUser()
-	{
-		return local_socket_user;
-	}
-
-	@Override
-	public void setClientUser(String username)
-	{
-		common_state.setUserLoggedIn(username);
-		this.local_socket_user = username;
-	}
-
-	@Override
-	public void unsetClientUser()
-	{
-		common_state.setUserLoggedOut(local_socket_user);
-		this.local_socket_user = null;
-	}
-
-	@Override
 	public void cleanupSocketState()
 	{
 		try
@@ -65,17 +45,39 @@ public class SocketStateImpl implements SocketState
 		}
 		catch(RuntimeException e) { }
 	}
-
-	@Override
-	public Message getRequestMessage()
-	{
-		return incoming_message;
-	}
 	
 	@Override
 	public void setRequestMessage(Message incoming)
 	{
 		incoming_message = incoming;
+	}
+	
+	
+
+	@Override
+	public String getClientUser()
+	{
+		return local_socket_user;
+	}
+
+	@Override
+	public void setClientUser(String username)
+	{
+		common_state.setUserLoggedIn(username);
+		local_socket_user = username;
+	}
+
+	@Override
+	public void unsetClientUser()
+	{
+		common_state.setUserLoggedOut(local_socket_user);
+		local_socket_user = null;
+	}
+
+	@Override
+	public Message getRequestMessage()
+	{
+		return incoming_message;
 	}
 
 	@Override

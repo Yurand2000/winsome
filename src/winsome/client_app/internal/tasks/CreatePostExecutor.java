@@ -26,8 +26,7 @@ public class CreatePostExecutor extends DefaultTaskExecutor
 		CreatePostRequest request = new CreatePostRequest(title, content);
 		connection.sendMessage(request);
 		
-		CreatePostAnswer answer = connection.readMessage(CreatePostAnswer.class);
-		
+		CreatePostAnswer answer = connection.readMessage(CreatePostAnswer.class);		
 		newPostId = answer.newPostId;
 	}
 	

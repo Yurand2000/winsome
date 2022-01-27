@@ -16,18 +16,9 @@ public class RandomGeneratorImpl implements RandomGenerator
 	public synchronized Double next()
 	{
 		try
-		{			
-			URL request = new URL("https", "www.random.org", request_string);
-			HttpURLConnection connection = (HttpURLConnection) request.openConnection();
-			
-			connection.setRequestMethod("GET");
-			connection.setUseCaches(false);
-			connection.setDoOutput(true);
-
-			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			
-			Double read = Double.parseDouble(reader.readLine()) / 100.0;
-			
+		{
+			HttpURLConnection connection = prepareAndSendRequest();
+			Double read = readGeneratedValue(connection);			
 			connection.disconnect();
 			return read;
 		}
@@ -35,5 +26,23 @@ public class RandomGeneratorImpl implements RandomGenerator
 		{
 			return 1.0;
 		}
+	}
+	
+	private HttpURLConnection prepareAndSendRequest() throws IOException
+	{
+		URL request = new URL("https", "www.random.org", request_string);
+		HttpURLConnection connection = (HttpURLConnection) request.openConnection();
+		
+		connection.setRequestMethod("GET");
+		connection.setUseCaches(false);
+		connection.setDoOutput(true);
+		
+		return connection;
+	}
+	
+	private Double readGeneratedValue(HttpURLConnection connection) throws IOException
+	{
+		BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));			
+		return Double.parseDouble(reader.readLine()) / 100.0;
 	}
 }

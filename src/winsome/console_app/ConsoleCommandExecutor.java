@@ -26,5 +26,6 @@ public class ConsoleCommandExecutor
 	}
 	
 	protected boolean canExecute(String line) { return false; }
+	
 	protected String execute(String line) { throw new UnsupportedOperationException(); }
 }

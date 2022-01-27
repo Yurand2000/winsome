@@ -33,9 +33,9 @@ public class CreatePostExecutor extends ConsoleCommandExecutor
 		matcher.find();
 		String title = matcher.group(1);
 		String content = matcher.group(2);
-		checkTitle(title);
-		checkContent(content);
 		
+		checkTitle(title);
+		checkContent(content);		
 		Integer postId = ClientAppAPI.getLoggedClientAPI().createPost(title, content);
 		return "Post with id: " + postId.toString() + " created successfully.";
 	}

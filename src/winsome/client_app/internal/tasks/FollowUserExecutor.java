@@ -24,9 +24,7 @@ public class FollowUserExecutor extends DefaultTaskExecutor
 		
 		FollowUserRequest request = new FollowUserRequest(user_to_follow);
 		connection.sendMessage(request);
-		
-		@SuppressWarnings("unused")
-		FollowUserAnswer answer = connection.readMessage(FollowUserAnswer.class);
+		connection.readMessage(FollowUserAnswer.class);
 		
 		addUserToFollowingList(api);
 	}

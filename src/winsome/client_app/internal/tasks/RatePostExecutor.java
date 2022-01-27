@@ -23,8 +23,6 @@ public class RatePostExecutor extends DefaultTaskExecutor
 	{		
 		RatePostRequest request = new RatePostRequest(postId, liked);
 		connection.sendMessage(request);
-		
-		@SuppressWarnings("unused")
-		RatePostAnswer answer = connection.readMessage(RatePostAnswer.class);
+		connection.readMessage(RatePostAnswer.class);
 	}
 }

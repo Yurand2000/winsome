@@ -10,7 +10,8 @@ public class SocketReaderImpl implements SocketReader
 	private final SelectionKey key;
 	private final ByteBuffer read_buffer;
 	private byte[] read_data;
-	private int dataSize, executedOperations;
+	private int dataSize;
+	private boolean hasExecutedOperations;
 	
 	public SocketReaderImpl(SelectionKey key)
 	{
@@ -18,7 +19,7 @@ public class SocketReaderImpl implements SocketReader
 		this.read_buffer = ByteBuffer.allocate(512);
 		this.read_data = null;
 		this.dataSize = -1;
-		this.executedOperations = 0;
+		this.hasExecutedOperations = false;
 	}
 	
 	@Override
@@ -29,9 +30,8 @@ public class SocketReaderImpl implements SocketReader
 			tryExecuteReadOperation();
 		}
 		catch (IOException e)
-		{	
-			key.cancel();
-			key.channel().close();
+		{
+			SocketUtils.destroyKey(key);
 			throw e;
 		}
 	}
@@ -42,7 +42,7 @@ public class SocketReaderImpl implements SocketReader
 		
 		do
 		{
-			resetExecutedCounter();
+			hasExecutedOperations = false;
 			if(needsReadingMessageLength())
 			{
 				tryReadMessageLength();
@@ -52,7 +52,7 @@ public class SocketReaderImpl implements SocketReader
 				tryReadMessage();
 			}
 		}
-		while(!hasMessageBeenRetrived() && hasBytesToRead() && hasAnyOperationBeenExecuted());
+		while(!hasMessageBeenRetrived() && hasBytesToRead() && hasExecutedOperations);
 		
 		if(!hasMessageBeenRetrived())
 		{
@@ -68,9 +68,7 @@ public class SocketReaderImpl implements SocketReader
 
 	@Override
 	public byte[] getRetrivedMessage()
-	{
-		assert(hasMessageBeenRetrived());
-		
+	{		
 		byte[] temp = read_data;
 		read_data = null;
 		return temp;
@@ -90,7 +88,8 @@ public class SocketReaderImpl implements SocketReader
 	{
 		if(hasReadAtLeastBytes(Integer.BYTES))			
 		{
-			increaseExecutedCounter();
+			hasExecutedOperations = true;
+			
 			read_buffer.flip();
 			dataSize = read_buffer.getInt();
 			read_buffer.compact();
@@ -101,7 +100,7 @@ public class SocketReaderImpl implements SocketReader
 	{
 		if(hasReadAtLeastBytes(dataSize))
 		{
-			increaseExecutedCounter();
+			hasExecutedOperations = true;
 
 			read_data = new byte[dataSize];
 			read_buffer.flip();
@@ -119,20 +118,5 @@ public class SocketReaderImpl implements SocketReader
 	private boolean hasBytesToRead() throws IOException
 	{
 		return read_buffer.position() > 0;
-	}
-	
-	private boolean hasAnyOperationBeenExecuted()
-	{
-		return executedOperations > 0;
-	}
-	
-	private void resetExecutedCounter()
-	{
-		executedOperations = 0;
-	}
-	
-	private void increaseExecutedCounter()
-	{
-		executedOperations++;
 	}
 }

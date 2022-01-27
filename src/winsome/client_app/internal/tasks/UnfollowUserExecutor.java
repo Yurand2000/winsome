@@ -23,10 +23,8 @@ public class UnfollowUserExecutor extends DefaultTaskExecutor
 		checkNotYetFollowingUser(api);
 		
 		UnfollowUserRequest request = new UnfollowUserRequest(user_to_unfollow);
-		connection.sendMessage(request);
-		
-		@SuppressWarnings("unused")
-		UnfollowUserAnswer answer = connection.readMessage(UnfollowUserAnswer.class);
+		connection.sendMessage(request);		
+		connection.readMessage(UnfollowUserAnswer.class);
 		
 		removeUserFromFollowingList(api);
 	}

@@ -26,7 +26,7 @@ public class FollowerUpdaterRMIHandlerImpl implements FollowerUpdaterRMIHandler
 		this.user = user;
 		this.followers = followers;
 		
-		updater = null;		
+		updater = null;
 		registrator = null;
 	}
 	
@@ -36,9 +36,7 @@ public class FollowerUpdaterRMIHandlerImpl implements FollowerUpdaterRMIHandler
 		{
 			try
 			{
-				registrator = RMIObjectLookup.getStub(hostname, port, FollowerUpdaterRegistrator.class, FollowerUpdaterRMI.getFollowerUpdaterRegistratorName() );
-				updater = new FollowerUpdaterImpl(user, followers);
-				registrator.registerFollowerUpdater(updater);
+				tryRegister();
 			}
 			catch (NotBoundException e)
 			{
@@ -51,6 +49,13 @@ public class FollowerUpdaterRMIHandlerImpl implements FollowerUpdaterRMIHandler
 				throw e;
 			}
 		}
+	}
+	
+	private void tryRegister() throws RemoteException, NotBoundException
+	{
+		registrator = RMIObjectLookup.getStub(hostname, port, FollowerUpdaterRegistrator.class, FollowerUpdaterRMI.getFollowerUpdaterRegistratorName() );
+		updater = new FollowerUpdaterImpl(user, followers);
+		registrator.registerFollowerUpdater(updater);
 	}
 	
 	public void unregisterFollowerUpdater()

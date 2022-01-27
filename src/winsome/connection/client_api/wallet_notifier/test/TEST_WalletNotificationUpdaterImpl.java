@@ -22,11 +22,10 @@ class TEST_WalletNotificationUpdaterImpl
 	@Test
 	void testThrowsOnInvalidMulticastAddress()
 	{
-		assertThrows(RuntimeException.class, () ->
-		{
-			new WalletNotificationUpdaterImpl()
-				.registerWalletUpdateNotifications("unknown address", 8082, () -> { });
-		});
+		assertThrows(RuntimeException.class,
+			() -> new WalletNotificationUpdaterImpl().
+				registerWalletUpdateNotifications( "unknown address", 8082, () -> { } )
+		);
 	}
 	
 	@Test
@@ -37,10 +36,9 @@ class TEST_WalletNotificationUpdaterImpl
 		multicast_address = "224.0.0.128";
 		
 		WalletNotificationUpdaterImpl updater = new WalletNotificationUpdaterImpl();
-		updater.registerWalletUpdateNotifications(multicast_address, 8082,	
-			() -> {
-				notification_received.set(true);
-			});
+		assertDoesNotThrow( () ->
+			updater.registerWalletUpdateNotifications( multicast_address, 8082,	() -> notification_received.set(true) )
+		);
 
 		assertFalse(notification_received.get());
 		
@@ -48,7 +46,7 @@ class TEST_WalletNotificationUpdaterImpl
 
 		while(!notification_received.get() && !Thread.currentThread().isInterrupted())
 		{
-			Thread.sleep(50);
+			Thread.sleep(20);
 			sendDatagram(message);
 			Thread.yield();
 		}

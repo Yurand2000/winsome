@@ -14,7 +14,7 @@ public class ConsoleAppMain
 	{
 		ClientAppAPI.startClient( getWalletNotificationAction() );
 
-		ConsoleExecutor.setExecutorChain(generateExecutorChain());
+		ConsoleExecutor.setExecutorChain( generateExecutorChain() );
 		ConsoleExecutor.startConsoleExecutor();
 		printLine("Winsome Console Client Started.");
 		
@@ -45,7 +45,6 @@ public class ConsoleAppMain
 		chain_executors.add(AddCommentExecutor.class);
 		chain_executors.add(CreatePostExecutor.class);
 		chain_executors.add(DeletePostExecutor.class);
-		chain_executors.add(ExitExecutor.class);
 		chain_executors.add(FollowUserExecutor.class);
 		chain_executors.add(GetWalletExecutor.class);
 		chain_executors.add(GetWalletInBitcoinExecutor.class);
@@ -61,6 +60,7 @@ public class ConsoleAppMain
 		chain_executors.add(ShowPostExecutor.class);
 		chain_executors.add(UnfollowUserExecutor.class);
 		chain_executors.add(ViewBlogExecutor.class);
+		chain_executors.add(ExitExecutor.class);
 		chain_executors.add(HelpExecutor.class);
 		
 		return chain_executors;

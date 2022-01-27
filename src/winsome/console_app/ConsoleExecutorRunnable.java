@@ -29,14 +29,13 @@ public class ConsoleExecutorRunnable implements Runnable
 	@Override
 	public void run()
 	{
-		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+		BufferedReader reader = new BufferedReader( new InputStreamReader(input) );
 		while(!Thread.currentThread().isInterrupted())
 		{
 			try
 			{
-				String line = reader.readLine();
-				
-				if(!Thread.currentThread().isInterrupted() && !line.isEmpty())
+				String line = reader.readLine();				
+				if(canExecuteCommand(line))
 				{
 					executeCommand(line);
 				}
@@ -45,15 +44,20 @@ public class ConsoleExecutorRunnable implements Runnable
 		}
 	}
 	
+	private boolean canExecuteCommand(String line)
+	{
+		return !Thread.currentThread().isInterrupted() && !line.isEmpty();
+	}
+	
 	private void executeCommand(String line)
 	{
 		try
 		{
-			printLine(execute(line));
+			printLine( execute(line) );
 		}
 		catch(APIException | CannotExecuteException e)
 		{
-			printLine(e.getMessage());
+			printLine( e.getMessage() );
 		}
 	}
 	

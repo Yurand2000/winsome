@@ -56,7 +56,8 @@ public class LoginTaskExecutor extends DefaultTaskExecutor
 		api.getWalletNotifier().registerWalletUpdateNotifications(
 			answer.udp_multicast_address,
 			answer.udp_multicast_port,
-			wallet_notification_runnable);
+			wallet_notification_runnable
+		);
 	}
 	
 	private void startFollowerNotificationListener(ApplicationLoggedAPI api) throws RemoteException

@@ -84,13 +84,6 @@ class TEST_RegisterExecutor extends CommandExecutorTest
 	}
 	
 	@Test
-	void testCommandWithTooShortOrTooLongPasswordThrows()
-	{
-		assertThrows(CannotExecuteException.class, () -> command.executeString("register username this_password_is_too_long_to_be_used tag1"));
-		assertThrows(CannotExecuteException.class, () -> command.executeString("register username pwd tag1"));
-	}
-	
-	@Test
 	void testCommandWithAlreadyTakenUsername()
 	{
 		client_api.setUsernameAlreadyTaken();

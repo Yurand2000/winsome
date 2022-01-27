@@ -18,6 +18,7 @@ public class WalletNotificationUpdaterImpl implements WalletNotificationUpdater
 		multicast_port = port;
 	}
 	
+	@Override
 	public void notifyWalletUpdated()
 	{
 		try
@@ -27,11 +28,6 @@ public class WalletNotificationUpdaterImpl implements WalletNotificationUpdater
 			sendDatagram(packet);
 		}
 		catch (IOException e) { throw new RuntimeException(e.toString()); }
-	}
-	
-	public String getMulticastAddress()
-	{
-		return multicast_address;
 	}
 	
 	private DatagramPacket makeWalletNotificationDatagram(InetAddress multicast_address, int port)
@@ -48,6 +44,12 @@ public class WalletNotificationUpdaterImpl implements WalletNotificationUpdater
 		DatagramSocket socket = new DatagramSocket();
 		socket.send(packet);
 		socket.close();
+	}
+
+	@Override
+	public String getMulticastAddress()
+	{
+		return multicast_address;
 	}
 
 	@Override

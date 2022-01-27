@@ -27,21 +27,14 @@ public class RegisterExecutor extends ConsoleCommandExecutor
 	@Override 
 	protected boolean canExecute(String line)
 	{
-		if(line.startsWith("register "))
+		Matcher matcher = regex.matcher(line);
+		if(!matcher.matches())
 		{
-			Matcher matcher = regex.matcher(line);
-			if(!matcher.matches())
-			{
-				throw new CannotExecuteException("wrong command format. Correct format is: register <username> <password> <tags>. Tags is a list of 1 to 5 strings separated by spaces.");
-			}
-			else
-			{
-				return true;
-			}
+			throw new CannotExecuteException("wrong command format. Correct format is: register <username> <password> <tags>. Tags is a list of 1 to 5 strings separated by spaces.");
 		}
 		else
 		{
-			return false;
+			return true;
 		}
 	}
 	
@@ -107,18 +100,13 @@ public class RegisterExecutor extends ConsoleCommandExecutor
 		{
 			throw new CannotExecuteException("password must have only alphanumeric characters and/or underscores.");
 		}
-		
-		if(password.length() < 4 || password.length() > 32)
-		{
-			throw new CannotExecuteException("password length must be between 4 and 32 characters long");
-		}
 	}
 	
 	private void checkTag(String tag)
 	{
 		if(!charset_regex.matcher(tag).matches())
 		{
-			throw new CannotExecuteException("tag must have only alphanumeric characters and/or underscores.");
+			throw new CannotExecuteException("tag must have only lowercase characters.");
 		}
 	}
 }

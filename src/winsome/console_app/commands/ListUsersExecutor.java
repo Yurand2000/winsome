@@ -31,12 +31,25 @@ public class ListUsersExecutor extends ConsoleCommandExecutor
 	protected String execute(String line)
 	{		
 		List<User> users = ClientAppAPI.getLoggedClientAPI().listUsers();
+		return createDisplayString(users);
+	}
+	
+	private String createDisplayString(List<User> users)
+	{
 		StringBuilder string = new StringBuilder();
-		string.append("Users with common tags:");
-		for(User user : users)
+		
+		string.append("Users with common tags:");		
+		if(users.isEmpty())
 		{
-			string.append("\n  ");
-			string.append(user.username);
+			string.append(" there are no users with common tags.");
+		}
+		else
+		{
+			for(User user : users)
+			{
+				string.append("\n  ");
+				string.append(user.username);
+			}
 		}
 		return string.toString();
 	}
