@@ -16,7 +16,7 @@ public class SocketReaderImpl implements SocketReader
 	public SocketReaderImpl(SelectionKey key)
 	{
 		this.key = key;
-		this.read_buffer = ByteBuffer.allocate(512);
+		this.read_buffer = ByteBuffer.allocate(16384);
 		this.read_data = null;
 		this.dataSize = -1;
 		this.hasExecutedOperations = false;

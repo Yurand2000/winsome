@@ -13,7 +13,7 @@ public class SocketWriterImpl implements SocketWriter
 	public SocketWriterImpl(SelectionKey key)
 	{
 		this.key = key;
-		this.write_buffer = ByteBuffer.allocate(512);		
+		this.write_buffer = ByteBuffer.allocate(16384);		
 	}
 	
 	@Override

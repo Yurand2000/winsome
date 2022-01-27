@@ -20,8 +20,8 @@ public class ConnectionHandlerImpl implements ConnectionHandler
 	public ConnectionHandlerImpl(InetSocketAddress server_address)
 	{
 		this.server_address = server_address;
-		this.read_buffer = ByteBuffer.allocate(512);
-		this.write_buffer = ByteBuffer.allocate(512);
+		this.read_buffer = ByteBuffer.allocate(16384);
+		this.write_buffer = ByteBuffer.allocate(16384);
 		this.socket = null;
 	}
 	
