@@ -2,6 +2,10 @@ package winsome.client_app.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * A short description of a given post.
+ * As the Post class, also this class is not synchronized with the server.
+ */
 public class PostShort implements Comparable<PostShort>
 {
 	@JsonProperty public final Integer postId;

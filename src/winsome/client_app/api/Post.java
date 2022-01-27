@@ -7,6 +7,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import static java.util.Collections.unmodifiableList;
 
+/**
+ * The Post class contains a requested post data.
+ * It may not be up to date by the moment it is received, because it is not synchronized with the server.
+ */
 public class Post implements Comparable<Post>
 {
 	@JsonProperty public final Integer postId;

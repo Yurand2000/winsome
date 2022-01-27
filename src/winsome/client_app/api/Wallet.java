@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import static java.util.Collections.unmodifiableList;
 import java.util.Date;
 
+/**
+ * The wallet of a user. It displays the current total amount of wincoins and the list of transactions happened in time.
+ */
 public class Wallet
 {
 	@JsonProperty public final Double current_total;

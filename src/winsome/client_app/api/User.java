@@ -1,5 +1,9 @@
 package winsome.client_app.api;
 
+/**
+ * The user class, containing information retrived about other users.
+ * Currently only displays the username.
+ */
 public class User
 {
 	public final String username;

@@ -1,5 +1,8 @@
 package winsome.client_app.api;
 
+/**
+ * The base class exception that is returned by the application API.
+ */
 public class APIException extends RuntimeException
 {
 	private static final long serialVersionUID = 1L;
