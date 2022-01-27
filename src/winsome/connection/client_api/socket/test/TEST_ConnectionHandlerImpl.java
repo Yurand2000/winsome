@@ -3,6 +3,7 @@ package winsome.connection.client_api.socket.test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -30,10 +31,13 @@ class TEST_ConnectionHandlerImpl
 	private SocketChannel connection = null;
 	
 	@BeforeEach
-	void setup() throws IOException
+	void setup() throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
 	{
-		SerializerWrapper.addDeserializer(MessageTest.class);
-		SerializerWrapper.addDeserializer(RequestExceptionAnswer.class);
+		Field objectMapper_field = SerializerWrapper.class.getDeclaredField("mapper");
+		objectMapper_field.setAccessible(true);
+		objectMapper_field.set(null, null);
+		SerializerWrapper.addDeserializers(MessageTest.class, RequestExceptionAnswer.class);
+		
 		address = new InetSocketAddress( InetAddress.getLocalHost(), 8080 );
 		acceptor = ServerSocketChannel.open();
 		acceptor.bind(address);
@@ -115,7 +119,7 @@ class TEST_ConnectionHandlerImpl
 				MessageTest msg = handler.readMessage(MessageTest.class);
 				assertEquals(msg.message, "test");
 			}
-			catch (IOException e) { fail(); }
+			catch (IOException e) { e.printStackTrace(); fail(); }
 		});
 		t.start();
 		

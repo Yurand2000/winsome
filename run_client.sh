@@ -3,5 +3,5 @@
 cd client_working_directory
 java -jar ../bin/WinsomeClient.jar
 cd ..
-echo Press ENTER to close...
+echo Press ENTER to continue...
 read

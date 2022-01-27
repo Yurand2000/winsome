@@ -8,5 +8,5 @@ cd bin
 jar cfe WinsomeServer.jar winsome.server_app.ServerAppMain @../compile_data/classes_server.txt @../compile_data/com_libs.txt
 jar cfe WinsomeClient.jar winsome.console_app.ConsoleAppMain @../compile_data/classes_client.txt @../compile_data/com_libs.txt
 cd ..
-echo Press ENTER to close...
+echo Press ENTER to continue...
 read
